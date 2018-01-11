@@ -1,15 +1,18 @@
 from tornado.ncss import Server, ncssbook_log
 import tornadotesting
 from template import render_template
+from db.db import User
 
 def view_profile(request):
     """
     >>> tornadotesting.run(view_profile)
-    'My name is Isaac'
+    'My username is sandy'
     """
 
-    template = "My name is {{ name }}"
-    context = {'name':'Isaac'}
+    user = User.get_by_username("sandy")
+    
+    template = "My username is {{ name }}"
+    context = {'name':user.username}
 
     request.write(render_template(template, context))
     
