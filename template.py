@@ -2,11 +2,13 @@ def render_template(string, context):
     """
     >>> render_template("My name is {{ name }}", {"name": "James"})
     'My name is James'
-    >>> render_template("User is {{ age }} years old", {"name": "James", "age" : "25"})
+    >>> render_template("{{ name }} is {{ age }} years old", {"name": "James", "age" : "25"})
+    'James is 25 years old'
+    >>> render_template("User is {{ age }} years old", {"name": "James", "age" : 25})
     'User is 25 years old'
     """
     for variable in context:
-        string = string.replace("{{ "+variable+" }}",context[variable])
+        string = string.replace("{{ "+variable+" }}",str(context[variable]))
     
     return string
 
