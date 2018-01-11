@@ -36,13 +36,19 @@ class GroupNode(Node):
 class PythonNode(Node):
     '''
     >>> a = PythonNode("name")
-    >>> print(a.render({"name":"James","age":"13"}))
+    >>> print(a.render({"name":"James","age":13}))
     James
+    >>> b = PythonNode("age")
+    >>> r = b.render({"name":"James","age":13})
+    >>> print(r)
+    13
+    >>> isinstance(r,str)
+    True
     '''
     def __init__(self,command):
         self.command = command
     def render(self, context):
-        return eval(self.command, context)
+        return str(eval(self.command, context))
 
 class IncludeNode(Node):
     '''
@@ -54,8 +60,26 @@ class IncludeNode(Node):
         self.path = path
     def render(self,context):
         return open(self.path).read()
+
+class IfNode(Node):
+    '''
+    >>> bodyNode = GroupNode([PythonNode("age")])
+    >>> a = IfNode("age > 5",bodyNode)
+    >>> print(a.render({"age":3}))
+    <BLANKLINE>
+    >>> print(a.render({"age":8}))
+    8
+    '''
+    def __init__(self,condition,body):
+        self.body = body
+        self.condition = condition
+
+    def render(self,context):
+        if eval(self.condition,context):
+            return self.body.render(context)
+        return ""
     
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-    print("Tests passed!")
+    print("Tests done!")
