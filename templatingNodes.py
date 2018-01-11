@@ -79,6 +79,28 @@ class IfNode(Node):
             return self.body.render(context)
         return ""
     
+class ForNode(Node):
+    r'''
+    >>> pNode = PythonNode("i")
+    >>> bNode = GroupNode([TextNode("\n"), pNode])
+    >>> a = ForNode("i", "range(3)", bNode)
+    >>> print(a.render({}))
+    <BLANKLINE>
+    0
+    1
+    2
+    '''
+    def __init__(self,variable,collection,body):
+        self.variable = variable
+        self.collection = collection
+        self.body = body
+
+    def render(self,context):
+        output = ""
+        for i in eval(self.collection):
+            context[self.variable] = i
+            output += self.body.render(context)
+        return output
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
