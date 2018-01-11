@@ -1,4 +1,4 @@
-from db import User
+from user import User
 import unittest
 
 class Testing(unittest.TestCase):
