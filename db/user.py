@@ -2,7 +2,12 @@ class User:
 	def __init__(self):
 		self.username = "sandy" 
 	
-	def get_all_users(self):
+	@staticmethod
+	def get_all():
 		return [User()]
+	
+	@staticmethod
+	def get_by_username(username : str):
+		return User()
 	
 	
