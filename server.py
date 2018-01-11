@@ -7,11 +7,10 @@ def render_file(filename, context):
     """
     Reads a template file and pases it through the template engine.
 
-    >>>tornadotesting.run(render_file, 'profile.html', '{"name":"sandy"}')
-    My name is sandy
-
+    >>> render_file('test-render-file.html', {"name":"sandy"})
+    'My name is sandy'
     """
-    with open(filename) as f:
+    with open("templates/" + filename) as f:
 
         template = f.read()
 
@@ -20,8 +19,9 @@ def render_file(filename, context):
 
 def view_profile(request, username):
     """
-    >>> tornadotesting.run(view_profile, 'alice')
-    'My username is sandy'
+    >>> html = tornadotesting.run(view_profile, 'alice')
+    >>> "sandy" in html
+    True
     """
 
     user = User.get_by_username(username)
