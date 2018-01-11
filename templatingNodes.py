@@ -44,6 +44,17 @@ class PythonNode(Node):
     def render(self, context):
         return eval(self.command, context)
 
+class IncludeNode(Node):
+    '''
+    >>> a = IncludeNode("templateTesting/1.html")
+    >>> print(a.render({}).strip())
+    <html> webpage </html>
+    '''
+    def __init__(self,path):
+        self.path = path
+    def render(self,context):
+        return open(self.path).read()
+    
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
