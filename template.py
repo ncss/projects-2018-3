@@ -17,13 +17,10 @@ def render_template(string, context):
     ' x equals y! '
     >>> render_template("{% if x == y %} x equals y! {% end if %}", {'x': 11, 'y': 10})
     ''
-    >>> render_template("{% if x == y %} name: {{ chicken }} {% end if %} break ", {'x': 10, 'y': 10, 'chicken': 'hello'} )
+    >>> render_template("{% if x == y %} name: {{ chicken }} {% end if %}break ", {'x': 10, 'y': 10, 'chicken': 'hello'} )
     ' name: hello break '
     >>> render_template("{% for i in chicken %} {{ i }} {% end for %}", {'chicken': [1,2,3,10]})
-    ' 1 '
-    ' 2 '
-    ' 3 '
-    ' 10 '
+    ' 1  2  3  10 '
     >>> render_template("{% if x == y %} name: {{ chicken }} {% end if %}", {'x': 10, 'y': 10, 'chicken': 'hello'} )
     ' name: hello '
     >>> render_template("{% for i in range(5) %}m{% end for %}h",{})
@@ -132,7 +129,7 @@ class Parser():
         endTag = re.match(r"^{%\s*end\s+for\s*%}", self._characters[self._upto:])
         self.nextn(endTag.end())
       
-        return ForNode(variable,coln,body)
+        return ForNode(variable.strip(),coln,body)
 
     def _parse_include(self):
         r'''
@@ -158,7 +155,7 @@ class Parser():
 
 if __name__ == '__main__':
     import doctest
-    #doctest.testmod()
+    doctest.testmod()
     node = Parser("{% for i in chicken %} {{ i }} {% end for %}")
     context = {'chicken': [1,2,3,10]}
-    #print("All tests passed, you are awesome :)")
+    print("All tests done, you are awesome :)")
