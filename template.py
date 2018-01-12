@@ -31,6 +31,8 @@ def render_template(string, context):
     'my num is 0!my num is 1!my num is 2!my num is 3!'
     >>> render_template("{% for i in range(num) %}{% if i%2==0 %}{{ i }}{% end if %}{% end for %}",{"num":10})
     '02468'
+    >>> render_template("{{            i}}",{"i":42})
+    '42'
     """
     node = Parser(string)._parse_group()
     return node.render(context)
@@ -86,7 +88,7 @@ class Parser():
 
     def _parse_python(self):
         string = self._characters[self._upto:]
-        matched = re.match(r'{{ (\w*) }}', string)
+        matched = re.match(r'^{{\s*(\w*)\s*}}', string)
         variable = matched.group(1)
         self.nextn(matched.end())
         return PythonNode(variable)
