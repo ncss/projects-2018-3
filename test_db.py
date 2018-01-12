@@ -38,6 +38,12 @@ class Testing(unittest.TestCase):
 		user = User()
 		result = User.create(username='James',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png')
 		self.assertEqual(user, result)
+	
+	def test_squad_create(self):
+		squad = Squad()
+		result = Squad.create(name='aaa', capacity=10, event_date='15/1/2018', description='This is a squad', location='Australia', leader=0)
+		self.assertEqual(squad, result)
+
 		
 if __name__ == '__main__':
 	unittest.main()
