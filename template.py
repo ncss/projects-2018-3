@@ -9,6 +9,7 @@ def render_template(string, context):
     'James is 25 years old'
     >>> render_template("User is {{ age }} years old", {"name": "James", "age" : 25})
     'User is 25 years old'
+    >>> render_template("{% if x %} x is True! {% end if %}", {'x': True})
     """
     node = Parser(string)._parse_group()
     return node.render(context)
