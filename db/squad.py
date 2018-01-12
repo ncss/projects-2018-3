@@ -1,17 +1,18 @@
 from .dbObject import DbObject
+from .user import User
 class Squad(DbObject):
-    def __init__(self):
+    def __init__(self, name='aaa', capacity=10, event_date='15/1/2018', description='This is a squad', location='Australia', leader=0):
         '''
         Initialiser for squad object
         '''
         self.id = 0
-        self.name = 'aaa' #Squad names must be unique
-        self.capacity = 10
+        self.name = name #Squad names must be unique
+        self.capacity = capacity
         self.creation_date = '13/1/2018'
-        self.event_date = '15/1/2018' 
-        self.description = 'This is the squad'
-        self.location = 'IT Lab'
-        self.leader = 0
+        self.event_date = event_date
+        self.description = description
+        self.location = location
+        self.leader = leader
 
     @staticmethod
     def get_all():
@@ -30,3 +31,22 @@ class Squad(DbObject):
             Squad object
         '''
         return Squad()
+
+    @staticmethod
+    def create(name: str, capacity: int, event_date:str, description: str, location: str, leader: str):
+        ''' This creates a new squad
+        arguments
+            - name(str)
+            - capacity(int)
+            - event_date(str)
+            - description(str)
+            - location(str)
+            - leader(str)
+
+        returns
+            squad object with inserted parameters (Squad)
+
+        '''
+        return Squad(name, capacity, event_date, description, location, leader) 
+
+        
