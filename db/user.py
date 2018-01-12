@@ -1,4 +1,6 @@
 from dbObject import DbObject
+
+
 class User(DbObject):
 	def __init__(self):
 		self.id = "0"
@@ -26,5 +28,8 @@ class User(DbObject):
 			user object (User)
 		'''
 		return User()
+		
+	def create_new_user():
+		pass
 	
 	

@@ -10,19 +10,19 @@ class Testing(unittest.TestCase):
 		Makes sure that __eq__ method overide works
 		'''
 		user1 = User()
-		user2 = User()
+		user2 = User() 
 		self.assertEqual(user1, user2)
 		
 	def test_get_all(self):
 		user = User()
 		result = User.get_all()
 		#user = User()
-		self.assertEqual(result[0].username, user.username)
+		self.assertListEqual([user],result)
 		
 	def test_get_by_username(self):
 		user = User()
 		result = User.get_by_username('')
-		self.assertEqual(result.username, user.username)
+		self.assertEqual(user, result)
 		
 if __name__ == '__main__':
 	unittest.main()
