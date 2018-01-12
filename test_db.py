@@ -1,5 +1,5 @@
-from user import User
-from squad import Squad
+from db.user import User
+from db.squad import Squad
 import unittest
 
 class Testing(unittest.TestCase):

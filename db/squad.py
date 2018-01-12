@@ -1,4 +1,4 @@
-from dbObject import DbObject
+from .dbObject import DbObject
 class Squad(DbObject):
     def __init__(self):
         '''
