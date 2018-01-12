@@ -2,16 +2,26 @@
 <html>
 	<head>
 		<title>Profile page</title>
-		<!--<link rel='stylesheet' href='profile_layout.css'>-->
+		<link rel='stylesheet' href="../static/styleguide.css">
+		<link rel='stylesheet' href="../static/profile_layout2.css">
+		<link href="https://fonts.googleapis.com/css?family=Audiowide|Encode+Sans+Expanded:600|Kanit:300" rel="stylesheet">	</head>
 	</head>
 	<body>
-		<img src='http://mjhs.ca/adopt-a-cat_files/slideshowImage_186563.jpg' class='left_info' alt='Profile picture'>
-		<h2 class='left_info'>{{ age }}</h2>
-		<h2 class='left_info'>{{ loc }}</h2>
-		<h1 class='main_area'>{{ username }}</h1>
-		<h2 class='main_area'>{{ Description: }}</h2>
-		<p class='main_area'>
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-		</p>
+	<div class="wrapper">
+		<div class="user_img">
+		<img src='http://mjhs.ca/adopt-a-cat_files/slideshowImage_186563.jpg' id='user_img' alt='Profile picture'>
+		</div>
+	<div class="user_bio">
+		<h2>{{ age }}</h2>
+		<h2>{{ loc }}</h2>
+	</div>
+		<h2>{{ username }}</h2>
+		<div class='user_desc'><h2>Description:</h2>
+		<br>
+			<p>
+				{{ description }}
+			</p>
+		</div>
+	</div>
 	</body>
 </html>
