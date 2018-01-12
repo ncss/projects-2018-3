@@ -1,8 +1,8 @@
 from .dbObject import DbObject
 
 class User(DbObject):
-    def __init__(self,id=0,username='',password='',description='',location='',birthdate='',image=''):
-        self.id = id
+    def __init__(self,username='James',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png'):
+        self.id = 0
         self.username = username
         self.password = password
         self.description = description
@@ -29,10 +29,9 @@ class User(DbObject):
         return User()
     
     @staticmethod
-    def create_new_user(id : int, username : str, password : str, description : str, location : str, birthdate : str, image : str):
+    def create(username : str, password : str, description : str, location : str, birthdate : str, image : str):
         ''' This method creates a new user with its profile information
             arguments
-                - id (int)
                 - username (str)
                 - password (str)
                 - description (str)
@@ -42,7 +41,7 @@ class User(DbObject):
             returns
                 user object with inserted parameters (User)
         '''
-        new_user = User(id, username, password, description, location, birthdate, image)
+        new_user = User( username, password, description, location, birthdate, image)
         return new_user
         
     
