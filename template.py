@@ -1,4 +1,5 @@
 from templatingNodes import *
+import re
 
 def render_template(string, context):
     """
@@ -9,9 +10,8 @@ def render_template(string, context):
     >>> render_template("User is {{ age }} years old", {"name": "James", "age" : 25})
     'User is 25 years old'
     """
-
-       
-    return string
+    node = Parser(string)._parse_group()
+    return node.render(context)
 
 
 class Parser():
@@ -26,16 +26,26 @@ class Parser():
     def peek(self):
         return None if self.end() else self._characters[self._upto]
 
+    def peekn(self, number):
+        return None if self.end() else self._characters[self._upto:self._upto + number]    
+
     def next(self):
         if not self.end():
             self._upto += 1
 
+    def nextn(self, number):
+        if self._upto + number <= self._length:
+            self._upto += number
+
     def _parse_group(self):
         nodes = []
-        if self.peek() != '{':
-            # we know this is a text node
-            nodes.append(self._parse_text())
-            print(nodes[0].text)
+        while not self.end():
+            if self.peek() != '{':
+                # we know this is a text node
+                nodes.append(self._parse_text())
+            else:
+                if self.peekn(2) == '{{':
+                    nodes.append(self._parse_python())
         return GroupNode(nodes)
 
     def _parse_text(self):
@@ -45,9 +55,15 @@ class Parser():
             self.next()
         return TextNode(node)
 
+    def _parse_python(self):
+        string = self._characters[self._upto:]
+        matched = re.match(r'{{ (\w*) }}', string)
+        variable = matched.group(1)
+        self.nextn(matched.end())
+        return PythonNode(variable)
+
 if __name__ == '__main__':
-    #import doctest
-    #doctest.testmod()
-    node = Parser("My name is {{ name }}")
-    print(node._characters)
-    print(node._parse_group().nodes)
+    import doctest
+    doctest.testmod()
+    
+    
