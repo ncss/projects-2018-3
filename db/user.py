@@ -1,3 +1,4 @@
+import sqlite3
 from .dbObject import DbObject
 
 class User(DbObject):
@@ -16,6 +17,9 @@ class User(DbObject):
         returns    
             list of user objects (list)
         '''
+		conn = sqlite3.connect('squadify.db')
+		cur = conn.cursor()
+		cur.execute(SELECT * FROM users)
         return [User()]
     
     @staticmethod
@@ -41,7 +45,10 @@ class User(DbObject):
             returns
                 user object with inserted parameters (User)
         '''
-        new_user = User( username, password, description, location, birthdate, image)
+        conn = sqlite3.connect('squadify.db')
+		cur = conn.cursor()
+		##cur.execute(SELECT...)
+		new_user = User( username, password, description, location, birthdate, image)
         return new_user
         
     
