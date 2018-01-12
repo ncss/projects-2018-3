@@ -128,7 +128,11 @@ class Parser():
         self.nextn(match.end())
         return IncludeNode(path)
 
-        
+    def _parse_comment(self):
+        #This function assumes that we are on the first character of a block like this
+        #{% comment %} WOW, THIS LANGUAGE HAS COMMENTS! {% end comment %}
+
+        pass
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
