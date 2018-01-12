@@ -54,6 +54,9 @@ class Parser():
 
     def peekn(self, number):
         return None if self.end() else self._characters[self._upto:self._upto + number]    
+
+    def remaining_text(self):
+        return self._characters[self._upto:]
     
     def next(self):
         if not self.end():
@@ -89,8 +92,7 @@ class Parser():
         return TextNode(node)
 
     def _parse_python(self):
-        string = self._characters[self._upto:]
-        matched = re.match(r'^{{\s*(\w*)\s*}}', string)
+        matched = re.match(r'^{{\s*(\w*)\s*}}', self.remaining_text())
         variable = matched.group(1)
         self.nextn(matched.end())
         return PythonNode(variable)
@@ -111,7 +113,7 @@ class Parser():
         self.next()
         body = self._parse_group()
 
-        endTag = re.match(r"^{%\s*end\s+if\s*%}", self._characters[self._upto:])
+        endTag = re.match(r"^{%\s*end\s+if\s*%}", self.remaining_text())
         self.nextn(endTag.end())
         return IfNode(condition,body)
 
@@ -136,7 +138,7 @@ class Parser():
         #We chould now be on the " " of  " %}"
         self.nextn(2)
         body = self._parse_group()
-        endTag = re.match(r"^{%\s*end\s+for\s*%}", self._characters[self._upto:])
+        endTag = re.match(r"^{%\s*end\s+for\s*%}", self.remaining_text())
         self.nextn(endTag.end())
       
         return ForNode(variable.strip(),coln,body)
@@ -151,8 +153,7 @@ class Parser():
         
         
         #This functions assumes we are on the "{" of a block like this {% include fi.le %}
-        string = self._characters[self._upto:]
-        match = re.match(r'^{%\s*include\s+([\w\/]+\.[\w]+)\s*%}',string)
+        match = re.match(r'^{%\s*include\s+([\w\/]+\.[\w]+)\s*%}', self.remaining_text())
         path = match.group(1)
         self.nextn(match.end())
         return IncludeNode(path)
