@@ -11,6 +11,8 @@ def render_template(string, context):
     'User is 25 years old'
     >>> render_template("{% if x %} x is True! {% end if %}", {'x': True})
     ' x is True! '
+    >>> render_template("{% if chicken %} x is True! {% end if %}", {'chicken': False})
+    ''
     """
     node = Parser(string)._parse_group()
     return node.render(context)
@@ -45,9 +47,12 @@ class Parser():
             if self.peek() != '{':
                 # we know this is a text node
                 nodes.append(self._parse_text())
+            elif self.peekn(2) == '{{':
+                 nodes.append(self._parse_python())
+            elif self.peekn(5) == '{% if':
+                  nodes.append(self._parse_if())
             else:
-                if self.peekn(2) == '{{':
-                    nodes.append(self._parse_python())
+                break
         return GroupNode(nodes)
 
     def _parse_text(self):
@@ -127,4 +132,4 @@ class Parser():
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
- 
+    print("All tests passed, you are awesome :)")
