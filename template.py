@@ -19,6 +19,8 @@ def render_template(string, context):
     ''
     >>> render_template("{% if x == y %} name: {{ chicken }} {% end if %}", {'x': 10, 'y': 10, 'chicken': 'hello'} )
     ' name: hello '
+    >>> render_template("{% for i in range(5) %}m{% end for %}h",{})
+    'mmmmmh'
     """
     node = Parser(string)._parse_group()
     return node.render(context)
