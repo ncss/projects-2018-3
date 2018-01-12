@@ -33,6 +33,12 @@ def render_template(string, context):
     '02468'
     >>> render_template("{{            i}}",{"i":42})
     '42'
+    >>> render_template("My name is{% comment %} please ignore {% end comment %} {{ name }}", {"name": "James"})
+    'My name is James'
+    >>> render_template("{% comment %} VERY IMPORTANT MESSAGE {% end comment %}", {})
+    ''
+    >>> render_template("{% if True %} a {% comment %} very {% end comment %}important word {% end if %}", {})
+    ' a important word '
     """
     node = Parser(string)._parse_group()
     return node.render(context)
@@ -75,6 +81,8 @@ class Parser():
                 nodes.append(self._parse_if())
             elif self.peekn(5) == '{% fo':
                 nodes.append(self._parse_for())
+            elif self.peekn(5) == '{% co':
+                self._parse_comment()
             else:
                 break
         return GroupNode(nodes)
@@ -147,7 +155,6 @@ class Parser():
         folder/file.html
         '''
         
-        
         #This functions assumes we are on the "{" of a block like this {% include fi.le %}
         string = self._characters[self._upto:]
         match = re.match(r'^{%\s*include\s+([\w\/]+\.[\w]+)\s*%}',string)
@@ -158,12 +165,16 @@ class Parser():
     def _parse_comment(self):
         #This function assumes that we are on the first character of a block like this
         #{% comment %} WOW, THIS LANGUAGE HAS COMMENTS! {% end comment %}
-
-        pass
+        while self.peekn(2) != '%}':
+            self.next()
+        #Now we are past the first {% comment %}
+        while self.peekn(2) != '{%':
+            self.next()
+            
+        endTag = re.match(r"^{%\s*end\s+comment\s*%}", self._characters[self._upto:])
+        self.nextn(endTag.end())
 
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
-    node = Parser("{% for i in chicken %} {{ i }} {% end for %}")
-    context = {'chicken': [1,2,3,10]}
     print("All tests done, you are awesome :)")
