@@ -53,6 +53,8 @@ class Parser():
             if self.peek() != '{':
                 # we know this is a text node
                 nodes.append(self._parse_text())
+            elif self.peekn(10) == '{% include':
+                nodes.append(self._parse_include())
             elif self.peekn(2) == '{{':
                  nodes.append(self._parse_python())
             elif self.peekn(5) == '{% if':
