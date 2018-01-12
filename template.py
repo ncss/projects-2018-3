@@ -24,6 +24,10 @@ def render_template(string, context):
     ' 2 '
     ' 3 '
     ' 10 '
+    >>> render_template("{% if x == y %} name: {{ chicken }} {% end if %}", {'x': 10, 'y': 10, 'chicken': 'hello'} )
+    ' name: hello '
+    >>> render_template("{% for i in range(5) %}m{% end for %}h",{})
+    'mmmmmh'
     """
     node = Parser(string)._parse_group()
     return node.render(context)
@@ -58,6 +62,8 @@ class Parser():
             if self.peek() != '{':
                 # we know this is a text node
                 nodes.append(self._parse_text())
+            elif self.peekn(10) == '{% include':
+                nodes.append(self._parse_include())
             elif self.peekn(2) == '{{':
                  nodes.append(self._parse_python())
             elif self.peekn(5) == '{% if':
@@ -97,7 +103,9 @@ class Parser():
         self.next()
         self.next()
         body = self._parse_group()
-        #Relies on ._parse_group breaking if it hits a previously unmatched end tag
+
+        endTag = re.match(r"^{%\s*end\s+if\s*%}", self._characters[self._upto:])
+        self.nextn(endTag.end())
         return IfNode(condition,body)
 
     def _parse_for(self):
@@ -121,8 +129,9 @@ class Parser():
         #We chould now be on the " " of  " %}"
         self.nextn(2)
         body = self._parse_group()
-        
-        #Relies on ._parse_group breaking if it hits a previously unmatched end tag
+        endTag = re.match(r"^{%\s*end\s+for\s*%}", self._characters[self._upto:])
+        self.nextn(endTag.end())
+      
         return ForNode(variable,coln,body)
 
     def _parse_include(self):
