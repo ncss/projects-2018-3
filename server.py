@@ -43,13 +43,30 @@ def view_profile(request, username):
     request.write(render_file('profile.html', context))
 
 
-def create_profile(request):
+def create_profile_page(request):
     """
-    >>> tornadotesting.run(create_profile)
+    >>> tornadotesting.run(create_profile_page)
     'This is the create user page'
     """
+    context={}
+    request.write(render_file("test-register.html", context))
 
-    request.write('This is the create user page')
+def create_profile(request):
+    """
+    >>> tornadotesting.run(create_profile, fields={'username': 'alice'})
+    'This is the create user page'
+    """
+    user_data = {}
+    user_data["username"] = request.get_field("username")
+    user_data["password"] = request.get_field("password")
+    user_data["description"] = request.get_field("description")
+    user_data["location"] = request.get_field("location")
+    user_data["birthdate"] = request.get_field("birthdate")
+    user_data["image"] = request.get_field("image")
+    print(user_data)
+
+    user = User.create(**user_data)
+    request.write("You created a user called {}".format(user.username))
 
 def list_squads(request):
     """
@@ -114,7 +131,7 @@ def apply_to_squad(request, name):
 
 server = Server()
 server.register(r'/profiles/([a-z]+)/', view_profile)
-server.register(r'/register/', create_profile)
+server.register(r'/register/', create_profile_page, post=create_profile)
 server.register(r'/squads/', list_squads, post=create_squad)
 server.register(r'/squads/([a-z]+)/', view_squad)
 server.register(r'/create-squad/', show_create_squad_page)
@@ -124,3 +141,5 @@ server.register(r'/squads/([a-z]+)/apply/', apply_to_squad)
 
 if __name__ == '__main__':
     server.run()
+
+
