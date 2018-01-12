@@ -1,4 +1,5 @@
-from user import User
+from db.user import User
+from db.squad import Squad
 import unittest
 
 class Testing(unittest.TestCase):
@@ -10,23 +11,33 @@ class Testing(unittest.TestCase):
 		Makes sure that __eq__ method overide works
 		'''
 		user1 = User()
-		user2 = User() 
+		user2 = User()
 		self.assertEqual(user1, user2)
 		
-	def test_get_all(self):
+	def test_user_get_all(self):
 		user = User()
 		result = User.get_all()
-		#user = User()
-		self.assertListEqual([user],result)
+		self.assertEqual(result, [user])
 		
-	def test_get_by_username(self):
+	def test_user_get_by_username(self):
 		user = User()
 		result = User.get_by_username('')
-		self.assertEqual(user, result)
-	
+		self.assertEqual(result, user)
+
+	def test_squad_get_all(self):
+		squad = Squad()
+		result = Squad.get_all()
+		self.assertEqual(result, [squad])
+
+	def test_squad_get_by_name(self):
+		squad = Squad()
+		result = Squad.get_by_name('')
+		self.assertEqual(result, squad)
+		
 	def test_create_new_user(self):
 		user = User()
 		result = User.create_new_user(id=0,username='',password='',description='',location='',birthdate='',image='')
 		self.assertEqual(user, result)
+		
 if __name__ == '__main__':
 	unittest.main()

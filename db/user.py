@@ -1,5 +1,4 @@
-from dbObject import DbObject
-
+from .dbObject import DbObject
 
 class User(DbObject):
     def __init__(self,id=0,username='',password='',description='',location='',birthdate='',image=''):
