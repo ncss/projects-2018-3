@@ -101,6 +101,18 @@ class ForNode(Node):
             context[self.variable] = i
             output += self.body.render(context)
         return output
+
+class CommentNode(Node):
+    r'''
+    >>> c = CommentNode()
+    >>> print(c.render({}))
+    <BLANKLINE>
+    '''
+    def __init__(self):
+        pass
+    
+    def render(self,context):
+        return ""
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
