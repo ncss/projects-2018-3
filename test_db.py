@@ -67,6 +67,12 @@ class Testing(unittest.TestCase):
 		status = 'Approved!'
 		result = newmember.change_status(0,'Approved!',0)
 		self.assertEqual(result, status)
+	
+	def test_squad_members_apply(self):
+		newmember = SquadMembers()
+		status = 'Pending...'
+		result = newmember.apply(0,0)
+		self.assertEqual(result, status)
 
 if __name__ == '__main__':
 	unittest.main()
