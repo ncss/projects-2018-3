@@ -17,8 +17,13 @@ def render_template(string, context):
     ' x equals y! '
     >>> render_template("{% if x == y %} x equals y! {% end if %}", {'x': 11, 'y': 10})
     ''
-    >>> render_template("{% if x == y %} name: {{ chicken }} {% end if %}", {'x': 10, 'y': 10, 'chicken': 'hello'} )
-    ' name: hello '
+    >>> render_template("{% if x == y %} name: {{ chicken }} {% end if %} break ", {'x': 10, 'y': 10, 'chicken': 'hello'} )
+    ' name: hello break '
+    >>> render_template("{% for i in chicken %} {{ i }} {% end for %}", {'chicken': [1,2,3,10]})
+    ' 1 '
+    ' 2 '
+    ' 3 '
+    ' 10 '
     """
     node = Parser(string)._parse_group()
     return node.render(context)
@@ -58,7 +63,7 @@ class Parser():
             elif self.peekn(5) == '{% if':
                 nodes.append(self._parse_if())
             elif self.peekn(5) == '{% fo':
-                
+                nodes.append(self._parse_for())
             else:
                 break
         return GroupNode(nodes)
@@ -144,5 +149,7 @@ class Parser():
 
 if __name__ == '__main__':
     import doctest
-    doctest.testmod()
-    print("All tests passed, you are awesome :)")
+    #doctest.testmod()
+    node = Parser("{% for i in chicken %} {{ i }} {% end for %}")
+    context = {'chicken': [1,2,3,10]}
+    #print("All tests passed, you are awesome :)")
