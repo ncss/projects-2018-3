@@ -2,34 +2,49 @@ from dbObject import DbObject
 
 
 class User(DbObject):
-	def __init__(self):
-		self.id = "0"
-		self.username = "sandy" 
-		self.password = "1234"
-		self.description = "sample text"
-		self.location = "Sydney"
-		self.birthdate = "DD/MM/YYYY"
-		self.image = "image.img"
-	
-	@staticmethod
-	def get_all():
-		''' This method gets a list of all users. 
-		returns	
-			list of user objects (list)
-		'''
-		return [User()]
-	
-	@staticmethod
-	def get_by_username(username : str):
-		''' This method gets a user by their username. 
-		arguments
-			- username(str)
-		returns
-			user object (User)
-		'''
-		return User()
-		
-	def create_new_user():
-		pass
-	
-	
+    def __init__(self,id=0,username='',password='',description='',location='',birthdate='',image=''):
+        self.id = id
+        self.username = username
+        self.password = password
+        self.description = description
+        self.location = location
+        self.birthdate = birthdate
+        self.image = image
+    
+    @staticmethod
+    def get_all():
+        ''' This method gets a list of all users. 
+        returns    
+            list of user objects (list)
+        '''
+        return [User()]
+    
+    @staticmethod
+    def get_by_username(username : str):
+        ''' This method gets a user by their username. 
+        arguments
+            - username(str)
+        returns
+            user object (User)
+        '''
+        return User()
+    
+    @staticmethod
+    def create_new_user(id : int, username : str, password : str, description : str, location : str, birthdate : str, image : str):
+        ''' This method creates a new user with its profile information
+            arguments
+                - id (int)
+                - username (str)
+                - password (str)
+                - description (str)
+                - location (str)
+                - birthdate (str)
+                - image (str)
+            returns
+                user object with inserted parameters (User)
+        '''
+        new_user = User(id, username, password, description, location, birthdate, image)
+        return new_user
+        
+    
+    

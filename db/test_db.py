@@ -23,6 +23,10 @@ class Testing(unittest.TestCase):
 		user = User()
 		result = User.get_by_username('')
 		self.assertEqual(user, result)
-		
+	
+	def test_create_new_user(self):
+		user = User()
+		result = User.create_new_user(id=0,username='',password='',description='',location='',birthdate='',image='')
+		self.assertEqual(user, result)
 if __name__ == '__main__':
 	unittest.main()
