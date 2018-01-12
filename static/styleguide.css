@@ -1,0 +1,23 @@
+/* Fonts */
+
+.logo{
+	font-family: Audiowide, cursive;
+	padding: 5px;
+}
+
+.header{
+	
+	font-family: Encode Sans Expanded;
+	color: #336370;
+}
+.para{
+	
+	font-family: Kanit, sans-serif;
+}
+
+/* Colours */
+
+header {
+	background-color: #33343A;
+	color: #70D8A6
+}
