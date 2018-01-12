@@ -21,14 +21,9 @@ def render_file(filename, context):
 def view_profile(request, username):
     """
     >>> html = tornadotesting.run(view_profile, 'alice')
-    >>> "sandy" in html
-    True
-    >>> "42" in html
-    True
-    >>> "Sydney" in html
-    True
-    >>> "sample text" in html
-    True
+    >>> assert "James" in html, html
+    >>> assert "42" in html, html
+    >>> assert "Sydney" in html, html
     """
 
     user = User.get_by_username(username)
@@ -45,8 +40,9 @@ def view_profile(request, username):
 
 def create_profile_page(request):
     """
-    >>> tornadotesting.run(create_profile_page)
-    'This is the create user page'
+    >>> html = tornadotesting.run(create_profile_page)
+    >>> assert "description" in html, html
+    >>> assert "submit" in html, html
     """
     context={}
     request.write(render_file("test-register.html", context))
@@ -141,5 +137,3 @@ server.register(r'/squads/([a-z]+)/apply/', apply_to_squad)
 
 if __name__ == '__main__':
     server.run()
-
-
