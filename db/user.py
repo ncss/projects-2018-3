@@ -1,4 +1,5 @@
-class User:
+from dbObject import DbObject
+class User(DbObject):
 	def __init__(self):
 		self.username = "sandy" 
 	
