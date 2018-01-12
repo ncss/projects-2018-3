@@ -21,11 +21,13 @@ def render_file(filename, context):
 def view_profile(request, username):
     """
     >>> html = tornadotesting.run(view_profile, 'alice')
-    >>> "James" in html
+    >>> "sandy" in html
     True
     >>> "42" in html
     True
     >>> "Sydney" in html
+    True
+    >>> "sample text" in html
     True
     """
 
@@ -52,7 +54,7 @@ def create_profile_page(request):
 def create_profile(request):
     """
     >>> tornadotesting.run(create_profile, fields={'username': 'alice'})
-    'This is the create user page'
+    'You created a user called alice'
     """
     user_data = {}
     user_data["username"] = request.get_field("username")
@@ -61,7 +63,7 @@ def create_profile(request):
     user_data["location"] = request.get_field("location")
     user_data["birthdate"] = request.get_field("birthdate")
     user_data["image"] = request.get_field("image")
-    print(user_data)
+    #print(user_data)
 
     user = User.create(**user_data)
     request.write("You created a user called {}".format(user.username))
