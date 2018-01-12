@@ -1,8 +1,8 @@
 from .dbObject import DbObject
 
 class User(DbObject):
-    def __init__(self,id=0,username='',password='',description='',location='',birthdate='',image=''):
-        self.id = id
+    def __init__(self,username='James',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png'):
+        self.id = 0
         self.username = username
         self.password = password
         self.description = description
