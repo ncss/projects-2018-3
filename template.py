@@ -120,6 +120,28 @@ class Parser():
         #Relies on ._parse_group breaking if it hits a previously unmatched end tag
         return ForNode(variable,coln,body)
 
+    def _parse_include(self):
+        r'''
+        >>> parser = Parser("{% include folder/file.html %} {% include folder2/file2.html %}")
+        >>> node = parser._parse_include()
+        >>> print(node.path)
+        folder/file.html
+        '''
+        
+        
+        #This functions assumes we are on the "{" of a block like this {% include fi.le %}
+        string = self._characters[self._upto:]
+        match = re.match(r'^{%\s*include\s+([\w\/]+\.[\w]+)\s*%}',string)
+        path = match.group(1)
+        self.nextn(match.end())
+        return IncludeNode(path)
+
+    def _parse_comment(self):
+        #This function assumes that we are on the first character of a block like this
+        #{% comment %} WOW, THIS LANGUAGE HAS COMMENTS! {% end comment %}
+
+        pass
+
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
