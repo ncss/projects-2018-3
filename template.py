@@ -25,6 +25,12 @@ def render_template(string, context):
     ' name: hello '
     >>> render_template("{% for i in range(5) %}m{% end for %}h",{})
     'mmmmmh'
+    >>> render_template("{% for i in range(5) %}m{% end for %}h {{ food }}",{"food":"chicken"})
+    'mmmmmh chicken'
+    >>> render_template("{% if do %}{% for i in range(num) %}my num is {{ i }}!{% end for %}{% end if %}",{"do":True,"num":4})
+    'my num is 0!my num is 1!my num is 2!my num is 3!'
+    >>> render_template("{% for i in range(num) %}{% if i%2==0 %}{{ i }}{% end if %}{% end for %}",{"num":10})
+    '02468'
     """
     node = Parser(string)._parse_group()
     return node.render(context)
