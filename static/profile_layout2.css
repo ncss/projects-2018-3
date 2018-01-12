@@ -1,0 +1,39 @@
+body {
+	margin: 0 auto;
+	width: 900p;
+	align-content: center;
+}
+	
+.wrapper {
+	display: grid;
+	grid-template-column: repeat(3, 1fr);
+	grid-gap: 50px;
+	grid-auto-rows: max(100px, auto)
+	margin-right: 50px;
+	margin-left: 50px;
+}
+
+.box {
+	background-colors: #444;
+	color: #ffffff;
+}
+#user_img{
+	max-height: 200px;
+	max-width: 200px;
+}
+.user_img {
+	grid-column: 1;
+	grid-row: 1;
+	max-height: 200px;
+	max-width: 200px;
+}
+
+.user_bio {
+	grid-column: 1;
+	grid-row: 2/5;
+}
+
+.user_desc {
+	grid-column: 2;
+	grid-row: 2/5;
+}
