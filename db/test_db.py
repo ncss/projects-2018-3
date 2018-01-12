@@ -5,6 +5,13 @@ class Testing(unittest.TestCase):
 	#def __init__(self):
 	#	super(unittest.TestCase).__init__()
 	#	pass
+	def test_db_object(self):
+		'''
+		Makes sure that __eq__ method overide works
+		'''
+		user1 = User()
+		user2 = User()
+		self.assertEqual(user1, user2)
 		
 	def test_get_all(self):
 		user = User()
