@@ -33,6 +33,8 @@ def render_template(string, context):
     '02468'
     >>> render_template("{{            i}}",{"i":42})
     '42'
+    >>> render_template('''{% include templateTesting/header.html %} and we can have text from no file and {% include templateTesting/footer.html %}''',{})
+    'we can get stuff from the header and we can have text from no file and we can get stuff from the footer!'
     """
     node = Parser(string)._parse_group()
     return node.render(context)
