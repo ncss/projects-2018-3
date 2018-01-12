@@ -44,6 +44,27 @@ class SquadMembers(DbObject):
 		
 	def change_status(self, user_id : int, new_status : str, event_id : int):
 		''' This method changes the status of the user in a specific squad. 
+		
+		arguments
+			-user_id(int)
+			-new_status (str)
+			-event_id (int)
+			
+		returns
+			the new status (str)
 		'''
 		self.status = new_status
+		return self.status
+	
+	def apply(self, event_id : int, user_id : int):
+		''' This method puts in an application to become a member of a squad.
+		
+		arguments
+			-event_id (int)
+			-user_id(int)
+			
+		returns
+			status of the application (str)
+		'''
+		self.status = 'Pending...'
 		return self.status
