@@ -32,10 +32,19 @@ def view_profile(request, username):
     request.write(render_file('profile.html', context))
 
 
+def create_profile(request):
+    """
+    >>> tornadotesting.run(create_profile)
+    'This is the create user page'
+    
+    """
+    
+    request.write('This is the create user page')
+    
 
-
+server = Server()
+server.register(r'/profiles/([a-z]+)', view_profile)
+server.register(r'/register', create_profile)
 
 if __name__ == '__main__':
-    server = Server()
-    server.register(r'/profiles/([a-z]+)', view_profile)
     server.run()
