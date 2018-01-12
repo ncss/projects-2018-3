@@ -33,10 +33,17 @@ def render_template(string, context):
     '02468'
     >>> render_template("{{            i}}",{"i":42})
     '42'
+    >>> render_template("{% if x %} x is True!", {'x': True})
+    
     """
     node = Parser(string)._parse_group()
     return node.render(context)
 
+class TemplateException(Exception):
+    def __init__(self, name, msg):
+        super().__init__()
+        self.name = name
+        self.msg = msg
 
 class Parser():
     def __init__(self, characters: str):
@@ -110,6 +117,8 @@ class Parser():
         body = self._parse_group()
 
         endTag = re.match(r"^{%\s*end\s+if\s*%}", self._characters[self._upto:])
+        if endTag is None:
+            raise TemplateException('Syntax Error', 'Expecting an end if tag')
         self.nextn(endTag.end())
         return IfNode(condition,body)
 
@@ -160,10 +169,20 @@ class Parser():
         #{% comment %} WOW, THIS LANGUAGE HAS COMMENTS! {% end comment %}
 
         pass
+    
 
 if __name__ == '__main__':
     import doctest
-    doctest.testmod()
+    #doctest.testmod()
     node = Parser("{% for i in chicken %} {{ i }} {% end for %}")
     context = {'chicken': [1,2,3,10]}
     print("All tests done, you are awesome :)")
+
+def asserEx(invalid, context):
+    try:
+        render_template(invalid, context)
+        assert False, "should throw an exception"
+        
+    except TemplateException:
+        
+    
