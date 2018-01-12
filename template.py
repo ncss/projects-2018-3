@@ -13,6 +13,12 @@ def render_template(string, context):
     ' x is True! '
     >>> render_template("{% if chicken %} x is True! {% end if %}", {'chicken': False})
     ''
+    >>> render_template("{% if x == y %} x equals y! {% end if %}", {'x': 10, 'y': 10})
+    ' x equals y! '
+    >>> render_template("{% if x == y %} x equals y! {% end if %}", {'x': 11, 'y': 10})
+    ''
+    >>> render_template("{% if x == y %} name: {{ chicken }} {% end if %}", {'x': 10, 'y': 10, 'chicken': 'hello'} )
+    ' name: hello '
     """
     node = Parser(string)._parse_group()
     return node.render(context)
@@ -50,7 +56,9 @@ class Parser():
             elif self.peekn(2) == '{{':
                  nodes.append(self._parse_python())
             elif self.peekn(5) == '{% if':
-                  nodes.append(self._parse_if())
+                nodes.append(self._parse_if())
+            elif self.peekn(5) == '{% fo':
+                
             else:
                 break
         return GroupNode(nodes)
@@ -71,7 +79,7 @@ class Parser():
 
     def _parse_if(self):
         
-        #This function assumes we are on the "{" of a block that starts with "{%<Whitespace>+if"
+        #This function assumes we are on the "{" of a block that starts with "{%<Whitespace>if"
         while self.peek()!='f':
             self.next()
         self.next()
@@ -89,7 +97,7 @@ class Parser():
 
     def _parse_for(self):
 
-        #This function assumes we are on the "{" of a block that starts with "{%<Whitespace>+for"
+        #This function assums we are on the "{" of a block that starts with "{%<Whitespace>for"
         while self.peek()!='r':
             self.next()
         self.next()
@@ -112,23 +120,6 @@ class Parser():
         #Relies on ._parse_group breaking if it hits a previously unmatched end tag
         return ForNode(variable,coln,body)
 
-    def _parse_include(self):
-        r'''
-        >>> parser = Parser("{% include folder/file.html %} {% include folder2/file2.html %}")
-        >>> node = parser._parse_include()
-        >>> print(node.path)
-        folder/file.html
-        '''
-        
-        
-        #This functions assumes we are on the "{" of a block like this {% include fi.le %}
-        string = self._characters[self._upto:]
-        match = re.match(r'^{%\s*include\s+([\w\/]+\.[\w]+)\s*%}',string)
-        path = match.group(1)
-        self.nextn(match.end())
-        return IncludeNode(path)
-
-        
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
