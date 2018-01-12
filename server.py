@@ -99,10 +99,17 @@ def show_create_squad_page(request):
 def create_squad(request):
     """
     >>> tornadotesting.run(create_squad)
-    'This page creates a squad'
+    'Go Away!'
     """
+    data = request.get_fields()
+    accept_fields = ['name', 'capacity', 'event_date', 'description', 'location', 'leader']
+    if data.keys() != accept_fields:
+        request.write('Go Away!')
+        return
+    squad = Squad.create(**accept_fields)
+    request.write('squad created with name', sqaud.name)
 
-    request.write('This page creates a squad')
+
 
 def accept_squad_member(request, name):
     """
