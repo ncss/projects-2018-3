@@ -95,7 +95,7 @@ class Parser():
         self.next()
         body = self._parse_group()
 
-        endTag = re.match("r^{%\s*end\s+if\s*%}", self._characters[self._upto:])
+        endTag = re.match(r"^{%\s*end\s+if\s*%}", self._characters[self._upto:])
         self.nextn(endTag.end())
         return IfNode(condition,body)
 
@@ -120,8 +120,7 @@ class Parser():
         #We chould now be on the " " of  " %}"
         self.nextn(2)
         body = self._parse_group()
-
-        endTag = re.match("r^{%\s*end\s+for\s*%}", self._characters[self._upto:])
+        endTag = re.match(r"^{%\s*end\s+for\s*%}", self._characters[self._upto:])
         self.nextn(endTag.end())
       
         return ForNode(variable,coln,body)
