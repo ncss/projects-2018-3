@@ -21,13 +21,11 @@ def render_file(filename, context):
 def view_profile(request, username):
     """
     >>> html = tornadotesting.run(view_profile, 'alice')
-    >>> "sandy" in html
+    >>> "James" in html
     True
     >>> "42" in html
     True
     >>> "Sydney" in html
-    True
-    >>> "sample text" in html
     True
     """
 
