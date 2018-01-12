@@ -1,6 +1,6 @@
 body {
 	margin: 0 auto;
-	width: 900p;
+	width: 900px;
 	align-content: center;
 }
 	
@@ -8,14 +8,11 @@ body {
 	display: grid;
 	grid-template-column: repeat(3, 1fr);
 	grid-gap: 50px;
-	grid-auto-rows: max(100px, auto)
-	margin-right: 50px;
-	margin-left: 50px;
+	grid-auto-rows: minmax(100px, auto)
 }
 
 .box {
 	background-colors: #444;
-	color: #ffffff;
 }
 #user_img{
 	max-height: 200px;
