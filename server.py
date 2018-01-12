@@ -82,7 +82,7 @@ def view_squad(request, name):
     """
     squad = Squad.get_by_name(name)
 
-    
+
 
 
     request.write('This is the squad page for {}'.format(squad.name))
@@ -100,14 +100,17 @@ def create_squad(request):
     """
     >>> tornadotesting.run(create_squad)
     'Go Away!'
+    >>> tornadotesting.run(create_squad, fields={'name': 'alice', 'capacity': '4', 'event_date': date.today(), 'description': 'blah', 'location': 'Australia', 'leader': 'sandy'})
+    'squad created with name alice'
+
     """
     data = request.get_fields()
     accept_fields = ['name', 'capacity', 'event_date', 'description', 'location', 'leader']
-    if data.keys() != accept_fields:
+    if sorted(data.keys()) != sorted(accept_fields):
         request.write('Go Away!')
         return
-    squad = Squad.create(**accept_fields)
-    request.write('squad created with name', sqaud.name)
+    squad = Squad.create(**data)
+    request.write('squad created with name {}'.format(squad.name))
 
 
 
