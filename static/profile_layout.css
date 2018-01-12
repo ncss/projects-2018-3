@@ -1,12 +1,12 @@
 body {
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
-	grid-template-rows: repeat(4, 1fr);
-
-	margin: 1fr;
+	grid-template-rows: max(auto);
+	margin: 0 auto;
 	background-color: pink;
+	text-align: center;
 }
-
+/*
 .info {
 	grid-column-start: 2;
 	grid-column-end: 5;
@@ -30,5 +30,7 @@ body {
 	grid-row-start: 1;
 	grid-row-end: 2;
 	}
-
+*/
+.left_info{
+	
 
