@@ -78,11 +78,14 @@ def list_squads(request):
 def view_squad(request, name):
     """
     >>> tornadotesting.run(view_squad, 'ateam')
-    'This is the squad page for ateam'
-
+    'This is the squad page for aaa'
     """
+    squad = Squad.get_by_name(name)
 
-    request.write('This is the squad page for {}'.format(name))
+    
+
+
+    request.write('This is the squad page for {}'.format(squad.name))
 
 
 def show_create_squad_page(request):
