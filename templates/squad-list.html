@@ -8,10 +8,23 @@
 <body>
 <h2> Events </h2>
 	<div>
-		<h2> {{ event_name }} </h2>
-		<p> Date: {{ date }}, Time: {{ time }} </p>
-		<p> Squad needed: {{ squad_numb }} </p>
-		<p> {{ description }} </p>
+		<h2> {% for event in events%}
+				execute
+			{% end for %}
+		</h2>
+		<p> Date: {% for date in events%}
+					execute
+					{% end for %}, 
+			Time: {% for time in events%}
+					execute
+				  {% end for %} </p>
+		<p> Squad needed: {% for squad_number in events%}
+							 execute
+							{% end for %} </p>
+		<p> { % for desciption in events %}
+				execute
+				{% end for % }
+		</p>
 	</div>
 </body>
 </html>
