@@ -37,5 +37,5 @@ def view_profile(request, username):
 
 if __name__ == '__main__':
     server = Server()
-    server.register(r'/profile/([a-z]+)', view_profile)
+    server.register(r'/profiles/([a-z]+)', view_profile)
     server.run()
