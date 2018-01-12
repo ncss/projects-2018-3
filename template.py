@@ -33,6 +33,12 @@ def render_template(string, context):
     '02468'
     >>> render_template("{{            i}}",{"i":42})
     '42'
+    >>> render_template("My name is{% comment %} please ignore {% end comment %} {{ name }}", {"name": "James"})
+    'My name is James'
+    >>> render_template("{% comment %} VERY IMPORTANT MESSAGE {% end comment %}", {})
+    ''
+    >>> render_template("{% if True %} a {% comment %} very {% end comment %}important word {% end if %}", {})
+    ' a important word '
     >>> render_template('''{% include templateTesting/header.html %} and we can have text from no file and {% include templateTesting/footer.html %}''',{})
     'we can get stuff from the header and we can have text from no file and we can get stuff from the footer!'
     """
@@ -54,14 +60,14 @@ class Parser():
 
     def peekn(self, number):
         return None if self.end() else self._characters[self._upto:self._upto + number]    
-
-    def remaining_text(self):
-        return self._characters[self._upto:]
     
     def next(self):
         if not self.end():
             self._upto += 1
-
+    
+    def remaining_text(self):
+        return self._characters[self._upto:]
+    
     def nextn(self, number):
         if self._upto + number <= self._length:
             self._upto += number
@@ -80,6 +86,8 @@ class Parser():
                 nodes.append(self._parse_if())
             elif re.match(r'^{%\s*fo',self.remaining_text()):
                 nodes.append(self._parse_for())
+            elif re.match(r'^{%\s*comment',self.remaining_text()):
+                self._parse_comment()
             else:
                 break
         return GroupNode(nodes)
@@ -151,7 +159,6 @@ class Parser():
         folder/file.html
         '''
         
-        
         #This functions assumes we are on the "{" of a block like this {% include fi.le %}
         match = re.match(r'^{%\s*include\s+([\w\/]+\.[\w]+)\s*%}', self.remaining_text())
         path = match.group(1)
@@ -161,12 +168,16 @@ class Parser():
     def _parse_comment(self):
         #This function assumes that we are on the first character of a block like this
         #{% comment %} WOW, THIS LANGUAGE HAS COMMENTS! {% end comment %}
-
-        pass
+        while self.peekn(2) != '%}':
+            self.next()
+        #Now we are past the first {% comment %}
+        while self.peekn(2) != '{%':
+            self.next()
+            
+        endTag = re.match(r"^{%\s*end\s+comment\s*%}", self._characters[self._upto:])
+        self.nextn(endTag.end())
 
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
-    node = Parser("{% for i in chicken %} {{ i }} {% end for %}")
-    context = {'chicken': [1,2,3,10]}
     print("All tests done, you are awesome :)")
