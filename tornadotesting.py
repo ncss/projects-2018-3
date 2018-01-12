@@ -1,7 +1,7 @@
 from io import StringIO
 
-def run(fn):
+def run(fn, *args):
     request = StringIO()
-    fn(request)
+    fn(request, *args)
     return request.getvalue()
     
