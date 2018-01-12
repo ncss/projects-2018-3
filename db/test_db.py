@@ -1,4 +1,5 @@
 from user import User
+from squad import Squad
 import unittest
 
 class Testing(unittest.TestCase):
@@ -13,16 +14,25 @@ class Testing(unittest.TestCase):
 		user2 = User()
 		self.assertEqual(user1, user2)
 		
-	def test_get_all(self):
+	def test_user_get_all(self):
 		user = User()
 		result = User.get_all()
-		#user = User()
-		self.assertEqual(result[0].username, user.username)
+		self.assertEqual(result, [user])
 		
-	def test_get_by_username(self):
+	def test_user_get_by_username(self):
 		user = User()
 		result = User.get_by_username('')
-		self.assertEqual(result.username, user.username)
+		self.assertEqual(result, user)
+
+	def test_squad_get_all(self):
+		squad = Squad()
+		result = Squad.get_all()
+		self.assertEqual(result, [squad])
+
+	def test_squad_get_by_name(self):
+		squad = Squad()
+		result = Squad.get_by_name('')
+		self.assertEqual(result, squad)
 		
 if __name__ == '__main__':
 	unittest.main()
