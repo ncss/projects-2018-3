@@ -1,3 +1,5 @@
+CREATE DATABASE squadify;
+
 CREATE TABLE users (
     id INTEGER, 
     username TEXT,
