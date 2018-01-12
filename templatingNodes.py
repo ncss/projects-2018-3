@@ -97,7 +97,7 @@ class ForNode(Node):
 
     def render(self,context):
         output = ""
-        for i in eval(self.collection):
+        for i in eval(self.collection,context):
             context[self.variable] = i
             output += self.body.render(context)
         return output
