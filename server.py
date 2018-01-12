@@ -1,7 +1,7 @@
 from tornado.ncss import Server, ncssbook_log
 import tornadotesting
 from template import render_template
-from db import User
+from db import User, Squad
 from datetime import date
 
 def render_file(filename, context):
@@ -51,15 +51,16 @@ def create_profile(request):
 
     request.write('This is the create user page')
 
-
 def list_squads(request):
     """
     >>> tornadotesting.run(list_squads)
-    'This page lists all squads'
+    'aaa'
     """
-
-    request.write('This page lists all squads')
-
+    all_squads = Squad.get_all()
+    names = []
+    for squad in all_squads:
+        names.append(squad.name)
+    request.write(','.join(names))
 
 def view_squad(request, name):
     """
