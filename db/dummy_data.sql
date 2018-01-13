@@ -58,3 +58,17 @@ INSERT INTO squad_messages VALUES (
     'hello everyone.',
     '05:00'
 );
+
+INSERT INTO squad_messages VALUES (
+    'ateam',
+    'emily',
+    'I love Jenga too!',
+    '05:01'
+);
+
+INSERT INTO squad_messages VALUES (
+    'ateam',
+    'james',
+    'omg I have friend',
+    '05:02'
+);

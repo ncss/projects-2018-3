@@ -6,8 +6,7 @@
 	</head>
 	<body>
 		{% include header.html %}
-		<h2> Squads </h2>
-		<div class="wrapper" align="center">
+		<div class="wrapper">
 			<h3>{{ Squad }}</h3>
 			<p> Host: {{ leader }} </p>
 			<p> Date: {{ date }} Time: {{ time }} </p>
@@ -15,6 +14,19 @@
 			<p> Required number of players: {{ required_numbers }} </p>
 			<p> Description: {{ description }} </p>
 			<button name = "Join"/>
+			</button>
+			<div class="messages">
+			{% for m in messages %}
+				<p>
+				<span class="sender">{{ m.sender_username }}</span>
+				<span class="message">{{ m.message }}</span>
+				</p>
+			{% end for %}
+			<div>
+			<input type="text" placeholder="Chat to your friends!" />
+			<input type="submit" value="Send" />
+			</div>
+			</div>
 		</div>
 		{% if leader == current_user %}
 			<h3 class='heading'>Applicants:</h3>
@@ -26,9 +38,6 @@
 			{% end for %}
 			<br><input type='submit' value='Submit'>
 		{% end if %}
-		{% for m in messages %}
-			<p> {{ m.message }} </p>
-		{% end for %}
 		{% include footer.html %}
 	</body>
 </html>
