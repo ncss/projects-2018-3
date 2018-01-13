@@ -84,7 +84,7 @@ def list_squads(request):
         #event_date.append(str(squad.event_date))
         #description.append(squad.description)
     #request.write(','.join(names) +' '+ ','.join(capacity) +' '+ ','.join(event_date) +' '+ ','.join(description))
-    
+
 def view_squad(request, name):
     """
     >>> tornadotesting.run(view_squad, 'ateam')
@@ -164,7 +164,7 @@ server.register(r'/squads/([a-z]+)/', view_squad)
 server.register(r'/create-squad/', show_create_squad_page)
 server.register(r'/squads/([a-z]+)/accept/', accept_squad_member)
 server.register(r'/squads/([a-z]+)/reject/', reject_squad_member)
-server.register(r'/squads/([a-z]+)/apply/', post=apply_to_squad)
+server.register(r'/squads/([a-z]+)/apply/', apply_to_squad)
 
 if __name__ == '__main__':
     server.run()
