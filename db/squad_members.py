@@ -4,11 +4,12 @@ from .squad import Squad
 
 class SquadMembers(DbObject):
 
-	def __init__(self, event_id=0, user_id=0, status='Pending...'):
+	def __init__(self, event_id=0, user_id=0, status=0):
 		self.id = 0
-		self.event_id = 0
-		self.user_id = 0
-		self.status = "Pending..."
+		self.event_id = event_id
+		self.user_id = user_id
+		self.status = status 
+		
 		
 	@staticmethod
 	def get_all(event_id : int):
@@ -27,11 +28,11 @@ class SquadMembers(DbObject):
 		]	
 		
 	@staticmethod
-	def get_by_status(status : str, event_id : int):
+	def get_by_status(status : int, event_id : int):
 		''' This method gets all users of the same status in a specific squad
 		
 		arguments
-			-status (str)
+			-status (int)
 			-event_id (int)
 		
 		returns
@@ -42,16 +43,16 @@ class SquadMembers(DbObject):
 			User.create(username='Tim',password='5678',description='Hi my name is Tim',location='Syd',birthdate='DD/MM/YYYY',image='/file/imag.png')
 		]
 		
-	def change_status(self, user_id : int, new_status : str, event_id : int):
+	def change_status(self, user_id : int, new_status : int, event_id : int):
 		''' This method changes the status of the user in a specific squad. 
 		
 		arguments
 			-user_id(int)
-			-new_status (str)
+			-new_status (int)
 			-event_id (int)
 			
 		returns
-			the new status (str)
+			the new status (int)
 		'''
 		self.status = new_status
 		return self.status
@@ -64,7 +65,7 @@ class SquadMembers(DbObject):
 			-user_id(int)
 			
 		returns
-			status of the application (str)
+			status of the application (int)
 		'''
-		self.status = 'Pending...'
+		self.status = 0
 		return self.status

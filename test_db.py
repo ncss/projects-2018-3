@@ -59,18 +59,18 @@ class Testing(unittest.TestCase):
 			User.create(username='James',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png'),
 			User.create(username='Tim',password='5678',description='Hi my name is Tim',location='Syd',birthdate='DD/MM/YYYY',image='/file/imag.png')
 		]
-		result = SquadMembers.get_by_status('Pending...', 0)
+		result = SquadMembers.get_by_status(0, 0)
 		self.assertListEqual(squad_members, result)
 
 	def test_squad_members_change_status(self):
 		newmember = SquadMembers()
-		status = 'Approved!'
-		result = newmember.change_status(0,'Approved!',0)
+		status = 1
+		result = newmember.change_status(0,1,0)
 		self.assertEqual(result, status)
 	
 	def test_squad_members_apply(self):
 		newmember = SquadMembers()
-		status = 'Pending...'
+		status = 0
 		result = newmember.apply(0,0)
 		self.assertEqual(result, status)
 
