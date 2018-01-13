@@ -51,3 +51,10 @@ INSERT INTO squad_members VALUES (
     1,
     '1/1/2018'
 );
+
+INSERT INTO squad_messages VALUES (
+    'ateam',
+    'james',
+    'hello everyone.',
+    '05:00'
+);

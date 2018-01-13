@@ -26,6 +26,9 @@
 			{% end for %}
 			<br><input type='submit' value='Submit'>
 		{% end if %}
+		{% for m in messages %}
+			<p> {{ m.message }} </p>
+		{% end for %}
 		{% include footer.html %}
 	</body>
 </html>
