@@ -18,10 +18,11 @@ h3 h4{
 	color: #70D8A6;
 	font-family: Kanit, sans-serif;
 	grid-column-end: -1;
-	align-
-items: end;
+	text-align: right;
+	items: end;
 	padding: 0;
-	margin: 0;
+	margin-right: 10px;
+	
 	}
 
 header {
@@ -30,10 +31,12 @@ header {
 	display: grid;
 	height:70%;
 	grid-template-columns: repeat(24, 1fr);
+	
 
 }
-a{
+a {
 	text-decoration:none;
+	color: black;
 }
 
 footer{
@@ -56,7 +59,7 @@ nav{
 	grid-column: 9 /16;
 	border-radius: 10px;
 	grid-row: 1;
-	margin-top: 10px;
+	margin-top: 25px;
 
 }
  nav ul {
@@ -116,4 +119,20 @@ img {
 .messages input[type=submit] {
 	margin-left: auto;
 	width: 10%;
+}
+
+.accept {
+  font-weight: bold;
+	margin-right: 10px;
+}
+
+.reject {
+  font-weight: bold;
+
+}
+
+.applicant {
+	color: #336370;
+	font-weight: bold;
+	font-size: 20px;
 }
