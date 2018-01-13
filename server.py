@@ -50,7 +50,7 @@ def create_profile_page(request):
 def create_profile(request):
     """
     >>> tornadotesting.run(create_profile, fields={'username': 'alice'})
-    'You created a user called alice'
+    Redirect('/profiles/alice/')
     """
     user_data = {}
     user_data["username"] = request.get_field("username")
@@ -62,7 +62,7 @@ def create_profile(request):
     #print(user_data)
 
     user = User.create(**user_data)
-    request.write("You created a user called {}".format(user.username))
+    request.redirect("/profiles/{}/".format(user.username))
 
 def list_squads(request):
     """
