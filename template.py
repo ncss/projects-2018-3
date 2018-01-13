@@ -65,6 +65,18 @@ class TemplateException(Exception):
         self.name = name
         self.msg = msg
 
+    def __str__(self):
+        return self.msg
+
+class FileException(Exception):
+    def __init__(self, name, msg):
+        super().__init__()
+        self.name = name
+        self.msg = msg
+
+    def __str__(self):
+        return self.msg
+
 class Parser():
     def __init__(self, characters: str):
         self._characters = characters
@@ -141,8 +153,9 @@ class Parser():
         body = self._parse_group()
 
         endTag = re.match(r"^{%\s*end\s+if\s*%}", self.remaining_text())
+        #checking for an end tag
         if endTag is None:
-            raise TemplateException('Syntax Error', 'Expecting an end if tag')
+            raise TemplateException('Syntax Error', 'Expecting an "end if" tag')
         self.nextn(endTag.end())
         return IfNode(condition,body)
 
@@ -168,22 +181,30 @@ class Parser():
         self.nextn(2)
         body = self._parse_group()
         endTag = re.match(r"^{%\s*end\s+for\s*%}", self.remaining_text())
+        if endTag is None:
+            raise TemplateException('Syntax Error', 'Expecting an "end for" tag')
         self.nextn(endTag.end())
       
         return ForNode(variable.strip(),coln,body)
 
     def _parse_include(self):
-        r'''
-        >>> parser = Parser("{% include folder/file.html %} {% include folder2/file2.html %}")
-        >>> node = parser._parse_include()
-        >>> print(node.path)
-        folder/file.html
-        '''
+        #Test below no longer work. Paths now have to be valid
+        
+        #r'''
+        #>>> parser = Parser("{% include folder/file.html %} {% include folder2/file2.html %}")
+        #>>> node = parser._parse_include()
+        #>>> print(node.path)
+        #folder/file.html
+        #'''
         
         #This functions assumes we are on the "{" of a block like this {% include fi.le %}
         match = re.match(r'^{%\s*include\s+([\w\/]+\.[\w]+)\s*%}', self.remaining_text())
         path = match.group(1)
         self.nextn(match.end())
+        try:
+            open(path, 'r').close()
+        except OSError:
+            raise FileException('FileException', 'file not found')
         return IncludeNode(path,render_template)
 
     def _parse_comment(self):
@@ -196,10 +217,26 @@ class Parser():
         while self.peekn(2) != '{%':
             self.next()
             
+        if endTag is None:
+            raise TemplateException('Syntax Error', 'Expecting an "end comment" tag')
         endTag = re.match(r"^{%\s*end\s+comment\s*%}", self.remaining_text())
         self.nextn(endTag.end())
 
-    
+def asserEx(invalid, context):
+    #Function that passes if the string is invalid
+    """
+    >>> asserEx('{% if x == y %} x equals y! ', {'x': 10, 'y': 10})
+    >>> asserEx("{% for i in range(5) %}mfor %}h",{})
+    >>> asserEx("{% if True %} a {% comment %} very {% end important word {% end if %}", {})
+    >>> asserEx("{% if True %} a {% comment %} very {% end comment %} important word  if %}", {})
+    >>> asserEx('''{% include templateTesting/headerasd.html %}''',{})
+    """
+    try:
+        render_template(invalid, context)
+        assert False, "should throw an exception, was expecting an invalid string"
+        
+    except (TemplateException, FileException):
+        pass    
 
 if __name__ == '__main__':
     import doctest
@@ -207,12 +244,9 @@ if __name__ == '__main__':
     node = Parser("{% for i in chicken %} {{ i }} {% end for %}")
     context = {'chicken': [1,2,3,10]}
     print("All tests done, you are awesome :)")
+    #render_template("{% if True %} a {% comment %} very {% end comment %} important word  if %}", {})
+    #render_template('''{% include templateTesting/headerasd.html %}''',{})
 
-def asserEx(invalid, context):
-    try:
-        render_template(invalid, context)
-        assert False, "should throw an exception"
-        
-    except TemplateException:
-        pass
     
+
+
