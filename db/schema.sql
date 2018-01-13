@@ -23,10 +23,10 @@ CREATE TABLE IF NOT EXISTS squads (
 );
 
 CREATE TABLE IF NOT EXISTS squad_members (
-    event_name TEXT,
-    user_name TEXT,
+    squadname TEXT,
+    username TEXT,
     status INTEGER,
     application_time TEXT,
-    FOREIGN KEY(event_name) REFERENCES squads (squadname),
-    FOREIGN KEY(user_name) REFERENCES users (username)
+    FOREIGN KEY(squadname) REFERENCES squads (squadname),
+    FOREIGN KEY(username) REFERENCES users (username)
 );

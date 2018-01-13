@@ -39,6 +39,7 @@ class User(DbObject):
             user object (User)
         '''
         result = cls.get_by_column('username', username)
+
         user = None 
 
         if len(result) == 1:

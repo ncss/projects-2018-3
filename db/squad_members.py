@@ -1,6 +1,7 @@
 from .dbObject import DbObject
 from .user import User
 from .squad import Squad
+import sqlite3
 
 
 class SquadMembers(DbObject):
@@ -13,7 +14,8 @@ class SquadMembers(DbObject):
         self.username = username
         self.status = status 
         
-        
+    # TODO def get_by_user()
+
     @staticmethod
     def get_all(squadname : str):
         '''  This method gets all usernames of the users in a specific squad.
@@ -25,10 +27,7 @@ class SquadMembers(DbObject):
             list of user objects (list)
             
         '''
-        return [
-            User.create(username='James',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png'),
-            User.create(username='Tim',password='5678',description='Hi my name is Tim',location='Syd',birthdate='DD/MM/YYYY',image='/file/imag.png')
-        ]    
+        return SquadMembers.get_by_column('squadname', squadname)  
         
     @staticmethod
     def get_by_status(status : int, squadname : str):
@@ -41,10 +40,19 @@ class SquadMembers(DbObject):
         returns
             list of user objects (list)
         '''
-        return [
-            User.create(username='James',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png'),
-            User.create(username='Tim',password='5678',description='Hi my name is Tim',location='Syd',birthdate='DD/MM/YYYY',image='/file/imag.png')
-        ]
+        conn = sqlite3.connect('database.db')
+        cur = conn.cursor()
+        #cur.execute('''SELECT * FROM squad_members WHERE status = ? AND squadname = ?''',(status,squadname))
+        cur.execute("""SELECT username FROM squad_members WHERE squadname = ? AND status = ?;""",(squadname, status))
+        members = []
+        while True:
+            row = cur.fetchone()
+            if not row:
+                break
+            members.append(User.get_by_username(row[0]))
+        return members
+
+         
     
     @staticmethod    
     def change_status(username : str, new_status : int, squadname : str):

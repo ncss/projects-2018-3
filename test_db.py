@@ -66,19 +66,13 @@ class Testing(unittest.TestCase):
 
         
     def test_squad_members_get_all(self):
-        squad_members = [
-            User.create(username='James',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png'),
-            User.create(username='Tim',password='5678',description='Hi my name is Tim',location='Syd',birthdate='DD/MM/YYYY',image='/file/imag.png')
-        ]
-        result = SquadMembers.get_all(0)
+        squad_members = SquadMembers.get_by_column('squadname', 'aaa')
+        result = SquadMembers.get_all('aaa')
         self.assertListEqual(squad_members, result)
         
     def test_squad_members_get_by_status(self):
-        squad_members = [
-            User.create(username='James',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png'),
-            User.create(username='Tim',password='5678',description='Hi my name is Tim',location='Syd',birthdate='DD/MM/YYYY',image='/file/imag.png')
-        ]
-        result = SquadMembers.get_by_status(0, 0)
+        squad_members = [User('Jack', '123456', 'My name is Jack', 'NSW', '17/1/2018', '')]
+        result = SquadMembers.get_by_status(1, 'aaa')
         self.assertListEqual(squad_members, result)
 
     def test_squad_members_apply(self):
@@ -96,7 +90,7 @@ class Testing(unittest.TestCase):
         user = User()
         user.username = 'saam'
 
-        user.save()
+        #user.save()
         user.password = '123456'
         user.save()
         user2 = User.get_by_column("username", user.username)
@@ -115,7 +109,7 @@ class Testing(unittest.TestCase):
         new_user.description = 'lol james'
         new_user.save()
         from_db = User.get_by_column('description', 'lol james')[0]
-        print(from_db)
+        #print(from_db)
         self.assertIsNot(from_db, new_user)
         self.assertEqual(from_db, new_user)
 
