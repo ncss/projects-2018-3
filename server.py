@@ -1,7 +1,7 @@
 from tornado.ncss import Server, ncssbook_log
 import tornadotesting
 from template import render_template
-from db import User, Squad
+from db import User, Squad, DbObject
 from datetime import date
 
 def render_file(filename, context):
@@ -121,4 +121,5 @@ server.register(r'/squads/([a-z]+)/reject/', reject_squad_member)
 server.register(r'/squads/([a-z]+)/apply/', apply_to_squad)
 
 if __name__ == '__main__':
+    DbObject.start_database()
     server.run()

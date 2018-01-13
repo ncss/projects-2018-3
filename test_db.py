@@ -1,6 +1,7 @@
 from db.user import User
 from db.squad import Squad
 import unittest
+import random
 
 class Testing(unittest.TestCase):
 	#def __init__(self):
@@ -44,6 +45,19 @@ class Testing(unittest.TestCase):
 		result = Squad.create(name='aaa', capacity=10, event_date='15/1/2018', description='This is a squad', location='Australia', leader=0)
 		self.assertEqual(squad, result)
 
+	def test_db_save(self):
+		user = User()
+		user.username = 'sam' + str(random.randint(0, 1000000))
+
+		user.save()
+		user.password = '123456'
+		user.save()
+		user2 = User.get_by_column("username", user.username)
+		self.assertEqual(user.id, user2[0].id)
+		self.assertEqual(user.password, user2[0].password)
+
+		user2[0].password = "hello"
+		user2[0].save()
 		
 if __name__ == '__main__':
 	unittest.main()

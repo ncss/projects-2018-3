@@ -1,8 +1,11 @@
 from .dbObject import DbObject
 
 class User(DbObject):
+    columns = ['username', 'password']
+    table_name = 'users'
+
     def __init__(self,username='James',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png'):
-        self.id = 0
+        self.id = None
         self.username = username
         self.password = password
         self.description = description

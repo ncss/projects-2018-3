@@ -1,19 +1,15 @@
-CREATE DATABASE squadify;
 
-CREATE TABLE users (
-    id INTEGER, 
+CREATE TABLE IF NOT EXISTS users (
     username TEXT,
     password TEXT, 
     description TEXT, 
     location TEXT, 
     birthdate TEXT, 
     image TEXT, 
-    PRIMARY KEY(id),
-    UNIQUE(username)
+    PRIMARY KEY(username)
 );
 
-CREATE TABLE squads (
-    id INTEGER, 
+CREATE TABLE IF NOT EXISTS squads (
     name TEXT, 
     capacity INTEGER, 
     creationdate TEXT, 
@@ -21,17 +17,15 @@ CREATE TABLE squads (
     description TEXT, 
     location TEXT, 
     leader INTEGER, 
-    PRIMARY KEY(id), 
-    FOREIGN KEY(leader) REFERENCES users (id)
+    PRIMARY KEY(name), 
+    FOREIGN KEY(leader) REFERENCES users (username)
 );
 
-CREATE TABLE squad_members (
-    id INTEGER,
-    event_id INTEGER,
-    user_id INTEGER,
+CREATE TABLE IF NOT EXISTS squad_members (
+    event_name TEXT,
+    user_name TEXT,
     status TEXT,
     application_time TEXT,
-    PRIMARY KEY(id),
-    FOREIGN KEY(event_id) REFERENCES squads (id),
-    FOREIGN KEY(user_id) REFERENCES users (id)
+    FOREIGN KEY(event_name) REFERENCES squads (name),
+    FOREIGN KEY(user_name) REFERENCES users (username)
 );

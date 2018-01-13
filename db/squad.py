@@ -1,6 +1,8 @@
 from .dbObject import DbObject
 from .user import User
 class Squad(DbObject):
+    columns = ['name', 'capacity', 'creation_date']
+
     def __init__(self, name='aaa', capacity=10, event_date='15/1/2018', description='This is a squad', location='Australia', leader=0):
         '''
         Initialiser for squad object
