@@ -1,13 +1,14 @@
 from .dbObject import DbObject
 from .user import User
 from .squad import Squad
+import sqlite3
 
 
 class SquadMembers(DbObject):
     columns = ['squadname', 'username', 'status']
     table_name = 'squad_members'
 
-    def __init__(self, squadname='game', username='James', status=0):
+    def __init__(self, squadname='game', username='james', status=0):
         self.id = 0
         self.squadname = squadname
         self.username = username
@@ -25,13 +26,10 @@ class SquadMembers(DbObject):
             list of user objects (list)
             
         '''
-        return [
-            User.create(username='ames',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png'),
-            User.create(username='jim',password='5678',description='Hi my name is Tim',location='Syd',birthdate='DD/MM/YYYY',image='/file/imag.png')
-        ]
-
-    @staticmethod
-    def get_by_status(status : int, squadname : str):
+        return SquadMembers.get_by_column('squadname', squadname)  
+        
+    @classmethod
+    def get_by_status(cls, status : int, squadname : str):
         ''' This method gets all users of the same status in a specific squad
 
         arguments
@@ -41,12 +39,20 @@ class SquadMembers(DbObject):
         returns
             list of user objects (list)
         '''
-        return [
-            User.create(username='James',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png'),
-            User.create(username='Tim',password='5678',description='Hi my name is Tim',location='Syd',birthdate='DD/MM/YYYY',image='/file/imag.png')
-        ]
-
-    @staticmethod
+        conn = cls.get_connection()
+        cur = conn.cursor()
+        #cur.execute('''SELECT * FROM squad_members WHERE status = ? AND squadname = ?''',(status,squadname))
+        cur.execute("""SELECT username FROM squad_members WHERE squadname = ? AND status = ?;""",(squadname, status))
+        members = []
+        while True:
+            row = cur.fetchone()
+            if not row:
+                break
+            members.append(User.get_by_username(row[0]))
+        return members
+         
+    
+    @staticmethod    
     def change_status(username : str, new_status : int, squadname : str):
         ''' This method changes the status of the user in a specific squad.
 
