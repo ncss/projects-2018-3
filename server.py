@@ -127,14 +127,12 @@ def create_squad(request):
 def accept_squad_member(request, name):
     """
     >>> tornadotesting.run(accept_squad_member, 'ateam', fields={'username': 'James'})
-    'Acceptedm'
+    'Accepted'
     >>> tornadotesting.run(accept_squad_member, 'ateam', fields={'username': 'bruce'})
     'Insufficient permissions'
     """
 
     squad = Squad.get_by_squadname(name)
-
-    print(squad.leader.username)
 
     data = request.get_fields()
     accept_fields = ['username']
@@ -170,7 +168,7 @@ def apply_to_squad(request, name):
         request.write('Go Away!')
         return
     status = SquadMembers.apply(squadname=name, **data)
-    request.write(status)
+    request.write(str(status))
 
 server = Server()
 server.register(r'/profiles/([a-z]+)/', view_profile)
