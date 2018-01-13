@@ -2,18 +2,20 @@ from .dbObject import DbObject
 from .user import User
 
 class Squad(DbObject):
-    def __init__(self, name='aaa', capacity=10, event_date='15/1/2018', description='This is a squad', location='Australia', leader=0):
+    columns = ['name', 'capacity', 'creation_date']
+    def __init__(self, squadname='aaa', capacity=10, squad_date='15/1/2018', description='This is a squad', location='Australia', leader=User(),squad_time='12:12:12'):
         '''
         Initialiser for squad object
         '''
         self.id = 0
-        self.name = name #Squad names must be unique
+        self.squadname = squadname #Squad names must be unique
         self.capacity = capacity
         self.creation_date = '13/1/2018'
-        self.event_date = event_date
+        self.squad_date = squad_date
         self.description = description
         self.location = location
         self.leader = leader
+        self.squad_time = squad_time
 
     @staticmethod
     def get_all():
@@ -29,10 +31,10 @@ class Squad(DbObject):
         return squads
 
     @staticmethod
-    def get_by_name(name: str):
+    def get_by_squadname(squadname: str):
         ''' This gets a squad by name
         arguments
-            - name(str)
+            - squadname(str)
         returns 
             Squad object
         '''
@@ -45,15 +47,16 @@ class Squad(DbObject):
         return squad
 
     @staticmethod
-    def create(name: str, capacity: int, event_date:str, description: str, location: str, leader: str):
+    def create(squadname: str, capacity: int, squad_date:str, description: str, location: str, leader: str, squad_time : str):
         ''' This creates a new squad
         arguments
-            - name(str)
+            - squadname(str)
             - capacity(int)
-            - event_date(str)
+            - squad_date(str)
             - description(str)
             - location(str)
             - leader(str)
+			- squad_time (str)
 
         returns
             squad object with inserted parameters (Squad)
@@ -62,6 +65,7 @@ class Squad(DbObject):
         conn = sqlite3.connect('squadify.db')
         cur = conn.cursor()
         squad = cur.execute('INSERT INTO squads VALUES(name=?, capacity=?,event_date=?,description=?,location=?,leader=?);',(name, capacity, description, location, leader))
-        return Squad(name, capacity, event_date, description, location, leader) 
+        return Squad(squadname, capacity, squad_date, description, location, leader) 
+
 
         
