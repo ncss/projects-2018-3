@@ -3,6 +3,7 @@ import tornadotesting
 from template import render_template
 from db import User, Squad, DbObject, SquadMembers
 from datetime import date
+import re
 
 def get_form_data(request, fields):
     output = {}
@@ -41,7 +42,7 @@ def view_profile(request, username):
 
 
     context = {'username':user.username,
-               'age':'42',
+               'age':str(user.birthdate),
                'loc':user.location,
                'description':user.description,
                'current_user':get_current_user(request),
@@ -49,14 +50,16 @@ def view_profile(request, username):
 
 
     request.write(render_file('profile.html', context))
-
+#####################################################################################
 def create_profile_page(request):
     """
     >>> html = tornadotesting.run(create_profile_page)
     >>> assert "description" in html, html
     >>> assert "submit" in html, html
     """
-    context={'current_user':get_current_user(request)}
+    context={'message':'', 'current_user':get_current_user(request)}
+    if request.get_field('failure'):
+        context['message'] = "Oh dear, it looks like you've tried to use a unsupported character. Try using lower case ^_^"
     request.write(render_file("register.html", context))
 
 def create_profile(request):
@@ -69,8 +72,12 @@ def create_profile(request):
     accept_fields = ['username', 'password', 'description', 'location', 'birthdate']
     data = get_form_data(request, accept_fields)
     if not data:
-        request.write('You must complete all fields.')
+        request.redirect('/register/?failure=1')
         return
+    if re.match(r'^([a-z]+)$', data['username']) == None:
+        request.redirect('/register/?failure=1')
+        return
+
     data['image'] = ''
     user = User.create(**data)
     request.redirect('/profiles/{}/'.format(user.username))
@@ -83,18 +90,6 @@ def list_squads(request):
     all_squads = Squad.get_all()
     context = {"squads":all_squads, 'current_user':get_current_user(request)}
     request.write(render_file("list_squads.html", context))
-
-
-    #names = []
-    #capacity = []
-    #event_date = []
-    #description = []
-    #for squad in all_squads:
-        #names.append(squad.name)
-        #capacity.append(str(squad.capacity))
-        #event_date.append(str(squad.event_date))
-        #description.append(squad.description)
-    #request.write(','.join(names) +' '+ ','.join(capacity) +' '+ ','.join(event_date) +' '+ ','.join(description))
 
 def view_squad(request, name):
     """
