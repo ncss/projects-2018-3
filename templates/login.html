@@ -7,7 +7,7 @@
 		<link rel='stylesheet' href='/static/login_style.css'>
 	</head>
 	<body>
-		{% include /templates/header.html %}
+		{% include header.html %}
 		<article id='login_pane'>
 			<form method='POST' action='/login/'>
 				<h3>Enter login info:</h3>
@@ -16,6 +16,6 @@
 				<input type='submit' value='Login'>
 			</form>
 		</article>
-		{% include /templates/footer.html %}
+		{% include footer.html %}
 	</body>
 </html>
