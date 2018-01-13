@@ -10,7 +10,7 @@ class Testing(unittest.TestCase):
     # def __init__(self):
     # 	super(unittest.TestCase).__init__()
     # 	self.connection = None
-
+    
     def setUp(self):
         db.dbObject.connection = connection = sqlite3.connect(':memory:')
         connection.row_factory = sqlite3.Row
@@ -20,7 +20,7 @@ class Testing(unittest.TestCase):
 
         with open('db/dummy_data.sql') as f: 
             cursor.executescript(f.read())
-    
+
     def test_db_object(self):
         '''
         Makes sure that __eq__ method overide works
@@ -37,8 +37,8 @@ class Testing(unittest.TestCase):
         self.assertEqual(len(result), 3)
         
     def test_user_get_by_username(self):
-        user = User('James', 'password', 'My name is James', 'NSW', '15/1/2018')
-        result = User.get_by_username('James')
+        user = User('james', 'password', 'My name is James', 'NSW', '15/1/2018')
+        result = User.get_by_username('james')
         
         self.assertEqual(result, user)
 
@@ -48,9 +48,9 @@ class Testing(unittest.TestCase):
         self.assertEqual(result, from_db)
 
     def test_squad_get_by_squadname(self):
-        result = Squad.create(squadname='aaa', capacity=10,squad_date='15/1/2018', description='This is a squad', location='Australia', leader='James', squad_time='12:00')
-        from_db = Squad.get_by_column('squadname','aaa')[0]
-        result = Squad.get_by_squadname('aaa')
+        result = Squad.create(squadname='testjenga', capacity=10,squad_date='15/1/2018', description='This is a squad', location='Australia', leader='James', squad_time='12:00')
+        from_db = Squad.get_by_column('squadname','testjenga')[0]
+        result = Squad.get_by_squadname('testjenga')
         self.assertEqual(result, from_db)
         
         
@@ -60,25 +60,19 @@ class Testing(unittest.TestCase):
         self.assertEqual(from_db, result)
         
     def test_squad_create(self):
-        result = Squad.create(squadname='aaa', capacity=10,squad_date='15/1/2018', description='This is a squad', location='Australia', leader='James', squad_time='12:00')
-        from_db = Squad.get_by_column('squadname', 'aaa')[0]
+        result = Squad.create(squadname='testjenga', capacity=10,squad_date='15/1/2018', description='This is a squad', location='Australia', leader='James', squad_time='12:00')
+        from_db = Squad.get_by_column('squadname', 'testjenga')[0]
         self.assertEqual(from_db, result)
 
         
     def test_squad_members_get_all(self):
-        squad_members = [
-            User.create(username='James',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png'),
-            User.create(username='Tim',password='5678',description='Hi my name is Tim',location='Syd',birthdate='DD/MM/YYYY',image='/file/imag.png')
-        ]
-        result = SquadMembers.get_all(0)
+        squad_members = SquadMembers.get_by_column('squadname', 'jenga')
+        result = SquadMembers.get_all('jenga')
         self.assertListEqual(squad_members, result)
-        
+
     def test_squad_members_get_by_status(self):
-        squad_members = [
-            User.create(username='James',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png'),
-            User.create(username='Tim',password='5678',description='Hi my name is Tim',location='Syd',birthdate='DD/MM/YYYY',image='/file/imag.png')
-        ]
-        result = SquadMembers.get_by_status(0, 0)
+        squad_members = [User('jack', '123456', 'My name is Jack', 'NSW', '17/1/2018', '')]
+        result = SquadMembers.get_by_status(1, 'ateam')
         self.assertListEqual(squad_members, result)
 
     def test_squad_members_apply(self):
@@ -96,7 +90,7 @@ class Testing(unittest.TestCase):
         user = User()
         user.username = 'saam'
 
-        user.save()
+        #user.save()
         user.password = '123456'
         user.save()
         user2 = User.get_by_column("username", user.username)
@@ -115,7 +109,7 @@ class Testing(unittest.TestCase):
         new_user.description = 'lol james'
         new_user.save()
         from_db = User.get_by_column('description', 'lol james')[0]
-        print(from_db)
+        #print(from_db)
         self.assertIsNot(from_db, new_user)
         self.assertEqual(from_db, new_user)
 
