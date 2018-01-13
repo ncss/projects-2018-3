@@ -1,3 +1,5 @@
+import html
+
 class Node:
     def render(self, context):
         raise NotImplementedError("render() should not be called for base node class")
@@ -48,7 +50,7 @@ class PythonNode(Node):
     def __init__(self,command):
         self.command = command
     def render(self, context):
-        return str(eval(self.command, context))
+        return html.escape(str(eval(self.command, context)))
 
 class IncludeNode(Node):
     '''
