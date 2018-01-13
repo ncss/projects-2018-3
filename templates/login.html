@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Login</title>
+		<link rel='stylesheet' href='/static/styleguide.css'>
+		<link href="https://fonts.googleapis.com/css?family=Audiowide|Encode+Sans+Expanded:600|Kanit:300" rel="stylesheet">
+		<link rel='stylesheet' href='/static/login_style.css'>
+	</head>
+	
+	<body>
+
+		{% include header.html %}
+		<article id='login_pane'>
+			<form method='POST' action='/login/'>
+				<h3>Enter login info:</h3>
+				<input name='username' type='text' placeholder='Username' required>
+				<input name='password' type='password' placeholder='Password' required>
+				<input type='submit' value='Login'>
+			</form>
+		</article>
+		{% include footer.html %}
+	</body>
+</html>
