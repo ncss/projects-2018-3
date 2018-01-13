@@ -58,7 +58,7 @@ class IncludeNode(Node):
     <html> webpage </html>
     '''
     def __init__(self,path,render_func):
-        self.path = path
+        self.path = "./templates/"+path
         self.render_func = render_func
     def render(self,context):
         return self.render_func(open(self.path).read(),context)
