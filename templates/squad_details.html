@@ -5,26 +5,17 @@
 <link href="https://fonts.googleapis.com/css?family=Audiowide|Encode+Sans+Expanded:600|Kanit:300" rel="stylesheet">
 </head>
 <body>
+{% include header.html %}
 <h2> Events </h2>
 <div>
 <h3>{{ Squad }}</h3>
-<p> Host: {{ host }} </p>
-<p> Date: {{ date }} Time: {{ time }} </p>
+<p> Host: {{ leader }} </p>
+<p> Date: {{ event_date }} </p>
 <p> Location {{ location }} </p>
-<p> Required number of players {{ required_numbers }} </p>
+<p> Required number of players {{ capacity }} </p>
 <p> Description: {{ description }} </p>
-<button name = "Join"/>
+<button name = "Apply">Apply</button>
 </div>
+{% include footer.html %}
 </body>
-
-
-
-
-
-
-
-
-
-
-
 </html>

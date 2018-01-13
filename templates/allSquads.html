@@ -1,14 +1,15 @@
 <!doctype HTML>
 <html>
 <head>
-<link rel='stylesheet' href="../static/profile_layout2.css">
+<link rel='stylesheet' href="../static/styleguide.css">
 <link href="https://fonts.googleapis.com/css?family=Audiowide|Encode+Sans+Expanded:600|Kanit:300" rel="stylesheet">	</head>
 <title>Squads </title>	
 </head>
 <body>
+{% include header.html %}
 <h2> Squads </h2>
 	<div>
-		 {% for event in events %}
+		 {% for squad in squads %}
 				<h3> {{ squad.name }} </h3>
 		<p> Host:
 			{{ squad.leader }} </p>
@@ -27,5 +28,6 @@
 		</p>
 			{% end for %}
 	</div>
+	{% include footer.html %}
 </body>
 </html>
