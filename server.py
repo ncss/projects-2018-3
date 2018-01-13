@@ -170,7 +170,7 @@ def accept_reject_squad_member(request, name):
         status = 1
 
 
-    status = SquadMembers.change_status(new_status=status, squadname=name, username=username)
+    SquadMembers.change_status(new_status=status, squadname=name, username=username)
     request.redirect('/squads/{}/'.format(squad.squadname))
 
 
@@ -179,8 +179,8 @@ def apply_to_squad(request, name):
     >>> tornadotesting.run(apply_to_squad, 'ateam', fields={'username': 'alice'})
     Redirect('/squads/ateam/')
     """
-    user_placeholder = ''
-    status = SquadMembers.apply(squadname=name, username=user_placeholder)
+    user = get_current_user(request)
+    SquadMembers.apply(squadname=name, username=user)
     request.redirect('/squads/{}/'.format(name))
 
 def redirect_root(request):
