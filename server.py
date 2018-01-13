@@ -100,7 +100,7 @@ def view_squad(request, name):
 
     applicants = SquadMembers.get_all(squad.squadname)
 
-    user_placeholder = 'James'
+    user_placeholder = 'ames'
 
     context = {
         'Squad':name,
@@ -181,7 +181,7 @@ def apply_to_squad(request, name):
     """
     user_placeholder = ''
     status = SquadMembers.apply(squadname=name, username=user_placeholder)
-    request.write(str(status))
+    request.redirect('/squads/{}/'.format(name))
 
 def redirect_root(request):
     """

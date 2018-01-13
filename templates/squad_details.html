@@ -28,13 +28,15 @@
 
 						<input type='radio' value='reject' name='{{applicant.username}}'>	Reject
 						<br>
+
+
 						{% end for %}
 						<br><input type='submit' value='Submit'>
 				</form>
 			{% end if %}
 
 			{% if current_user!=leader%}
-				<a href='/squads/{{ Squad }}/apply/'>Join Group</a>
+				<a href='/squads/{{ Squad }}/apply/'>Join Squad</a>
 
 			{% end if%}
 
