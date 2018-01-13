@@ -12,17 +12,16 @@ class SquadMembers(DbObject):
         self.id = 0
         self.squadname = squadname
         self.username = username
-        self.status = status 
-        
-    # TODO def get_by_user()
+        self.status = status
+
 
     @staticmethod
     def get_all(squadname : str):
         '''  This method gets all usernames of the users in a specific squad.
-        
+
         argument
             -squadname (str)
-        
+
         returns
             list of user objects (list)
             
@@ -32,11 +31,11 @@ class SquadMembers(DbObject):
     @classmethod
     def get_by_status(cls, status : int, squadname : str):
         ''' This method gets all users of the same status in a specific squad
-        
+
         arguments
             -status (int)
             -squadname (str)
-        
+
         returns
             list of user objects (list)
         '''
@@ -55,27 +54,27 @@ class SquadMembers(DbObject):
     
     @staticmethod    
     def change_status(username : str, new_status : int, squadname : str):
-        ''' This method changes the status of the user in a specific squad. 
-        
+        ''' This method changes the status of the user in a specific squad.
+
         arguments
             -username(str)
             -new_status (int)
             -squadname (str)
-            
+
         returns
             the new status (int)
         '''
         status = new_status
         return status
-    
+
     @staticmethod
     def apply(squadname : str, username : str):
         ''' This method puts in an application to become a member of a squad.
-        
+
         arguments
             -squadname (str)
             -username (str)
-            
+
         returns
             status of the application (int)
         '''

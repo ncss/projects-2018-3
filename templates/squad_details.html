@@ -28,16 +28,32 @@
 			</div>
 			</div>
 		</div>
-		{% if leader == current_user %}
-			<h3 class='heading'>Applicants:</h3>
-			{% for applicant in applicants %}
-				<a href='/profile/{{ username }}/'>{{ applicant.name }}</a>:
-				<input type='radio' value='accept' name={{applicant.name}}> Accept
-				<input type='radio' value='reject' name={{applicant.name}}>	Reject
-				<input type='radio' value='pending' name={{applicant.name}}> Pending
-			{% end for %}
-			<br><input type='submit' value='Submit'>
-		{% end if %}
+
+		<div class="wrapper" align="center">
+			{% if current_user==leader%}
+				<h3 class='heading'>Applicants:</h3>
+				<form method="POST" action='/squads/{{Squad}}/accept-reject/'>
+					{% for applicant in applicants %}
+						<a href='/profile/{{ applicant.username }}/'>{{ applicant.username }}</a>:
+
+
+						<input type='radio' value='accept' name='{{applicant.username}}'> Accept
+
+						<input type='radio' value='reject' name='{{applicant.username}}'>	Reject
+						<br>
+
+
+						{% end for %}
+						<br><input type='submit' value='Submit'>
+				</form>
+			{% end if %}
+
+			{% if current_user!=leader%}
+				<a href='/squads/{{ Squad }}/apply/'>Join Squad</a>
+
+			{% end if%}
+
+		</div>
 		{% include footer.html %}
 	</body>
 </html>
