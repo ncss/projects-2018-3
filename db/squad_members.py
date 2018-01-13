@@ -24,10 +24,10 @@ class SquadMembers(DbObject):
 
         returns
             list of user objects (list)
-            
+
         '''
-        return SquadMembers.get_by_column('squadname', squadname)  
-        
+        return SquadMembers.get_by_column('squadname', squadname)
+
     @classmethod
     def get_by_status(cls, status : int, squadname : str):
         ''' This method gets all users of the same status in a specific squad
@@ -50,10 +50,18 @@ class SquadMembers(DbObject):
                 break
             members.append(User.get_by_username(row[0]))
         return members
-         
-    
-    @staticmethod    
-    def change_status(username : str, new_status : int, squadname : str):
+
+
+    @classmethod
+    def get_by_username(cls, squadname : str, username : str):
+        connection = cls.get_connection()
+        cursor = connection.cursor()
+        cursor.execute('''SELECT rowid, * FROM squad_members WHERE squadname = ? AND username = ?''', (squadname, username))
+        for row in cursor.fetchall():
+            return cls.from_row(row)
+
+    @classmethod
+    def change_status(cls, username : str, new_status : int, squadname : str):
         ''' This method changes the status of the user in a specific squad.
 
         arguments
@@ -64,8 +72,9 @@ class SquadMembers(DbObject):
         returns
             the new status (int)
         '''
-        status = new_status
-        return status
+        squad_member = cls.get_by_username(squadname, username)
+        squad_member.status = new_status
+        squad_member.save()
 
     @staticmethod
     def apply(squadname : str, username : str):
@@ -78,5 +87,6 @@ class SquadMembers(DbObject):
         returns
             status of the application (int)
         '''
-        status = 0
-        return status
+        squad_member = SquadMembers(squadname, username, 0)
+        squad_member.save()
+        return squad_member
