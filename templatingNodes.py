@@ -1,5 +1,4 @@
 import html
-
 class Node:
     def render(self, context):
         raise NotImplementedError("render() should not be called for base node class")
@@ -54,14 +53,15 @@ class PythonNode(Node):
 
 class IncludeNode(Node):
     '''
-    >>> a = IncludeNode("templateTesting/1.html")
+    >>> a = IncludeNode("templateTesting/1.html",lambda x,y:x)
     >>> print(a.render({}).strip())
     <html> webpage </html>
     '''
-    def __init__(self,path):
+    def __init__(self,path,render_func):
         self.path = path
+        self.render_func = render_func
     def render(self,context):
-        return open(self.path).read()
+        return self.render_func(open(self.path).read(),context)
 
 class IfNode(Node):
     '''
@@ -91,17 +91,27 @@ class ForNode(Node):
     0
     1
     2
+    >>> bNode = GroupNode([PythonNode("a"), PythonNode("b")])
+    >>> fNode = ForNode("a, b", "[(1,2), (4,8)]", bNode)
+    >>> print(fNode.render({}))
+    1248
     '''
-    def __init__(self,variable,collection,body):
-        self.variable = variable
+    def __init__(self,variable_block,collection,body):
+        self.variable_block = variable_block.split(",")
         self.collection = collection
         self.body = body
 
     def render(self,context):
         output = ""
-        for i in eval(self.collection,context):
-            context[self.variable] = i
-            output += self.body.render(context)
+        for block in eval(self.collection, context):
+            if isinstance(block, int):
+                context[self.variable_block[0]] = block
+                output += self.body.render(context)
+            else:
+                for i in range(len(self.variable_block)):
+                    var = self.variable_block[i].strip()
+                    context[var] = block[i]
+                output += self.body.render(context)
         return output
 
 class CommentNode(Node):
@@ -119,3 +129,4 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod()
     print("Tests done!")
+   
