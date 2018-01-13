@@ -2,7 +2,6 @@ from .dbObject import DbObject
 from .user import User
 from .errors.squadDoesNotExist import SquadDoesNotExist
 
-
 class Squad(DbObject):
     columns = ['squadname', 'capacity', 'squad_date', 'description','location','leader', 'squad_time']
     table_name = 'squads'
@@ -26,7 +25,6 @@ class Squad(DbObject):
         returns 
             list of squad objects (list)
         '''
-
         return Squad.get_by_column(1,1)
 
     @staticmethod
@@ -61,5 +59,6 @@ class Squad(DbObject):
         new_squad = Squad(squadname, capacity, squad_date, description, location, leader, squad_time)
         new_squad.save()
         return new_squad 
+
 
         
