@@ -21,12 +21,9 @@ def render_file(filename, context):
 def view_profile(request, username):
     """
     >>> html = tornadotesting.run(view_profile, 'alice')
-    >>> "James" in html
-    True
-    >>> "42" in html
-    True
-    >>> "Sydney" in html
-    True
+    >>> assert "James" in html, html
+    >>> assert "42" in html, html
+    >>> assert "Sydney" in html, html
     """
 
     user = User.get_by_username(username)
@@ -41,13 +38,31 @@ def view_profile(request, username):
     request.write(render_file('profile.html', context))
 
 
+def create_profile_page(request):
+    """
+    >>> html = tornadotesting.run(create_profile_page)
+    >>> assert "description" in html, html
+    >>> assert "submit" in html, html
+    """
+    context={}
+    request.write(render_file("test-register.html", context))
+
 def create_profile(request):
     """
-    >>> tornadotesting.run(create_profile)
-    'This is the create user page'
+    >>> tornadotesting.run(create_profile, fields={'username': 'alice'})
+    'You created a user called alice'
     """
+    user_data = {}
+    user_data["username"] = request.get_field("username")
+    user_data["password"] = request.get_field("password")
+    user_data["description"] = request.get_field("description")
+    user_data["location"] = request.get_field("location")
+    user_data["birthdate"] = request.get_field("birthdate")
+    user_data["image"] = request.get_field("image")
+    #print(user_data)
 
-    request.write('This is the create user page')
+    user = User.create(**user_data)
+    request.write("You created a user called {}".format(user.username))
 
 def list_squads(request):
     """
@@ -112,7 +127,7 @@ def apply_to_squad(request, name):
 
 server = Server()
 server.register(r'/profiles/([a-z]+)/', view_profile)
-server.register(r'/register/', create_profile)
+server.register(r'/register/', create_profile_page, post=create_profile)
 server.register(r'/squads/', list_squads, post=create_squad)
 server.register(r'/squads/([a-z]+)/', view_squad)
 server.register(r'/create-squad/', show_create_squad_page)
