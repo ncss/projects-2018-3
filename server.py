@@ -2,7 +2,7 @@ from tornado.ncss import Server, ncssbook_log
 import tornadotesting
 from template import render_template
 from db import User, Squad, DbObject, SquadMembers, SquadMessages
-from datetime import date
+from datetime import date, datetime
 import re
 
 def get_form_data(request, fields):
@@ -50,7 +50,7 @@ def view_profile(request, username):
 
 
     request.write(render_file('profile.html', context))
-#####################################################################################
+
 def create_profile_page(request):
     """
     >>> html = tornadotesting.run(create_profile_page)
@@ -108,6 +108,18 @@ def view_squad(request, name):
                 'current_user':get_current_user(request),
                 'messages':squad_messages}
     request.write(render_file('squad_details.html', context))
+
+def send_message(request, name):
+    print(name)
+    squad = Squad.get_by_squadname(name)
+    accept_fields = ['message-text']
+    data = get_form_data(request, accept_fields)
+    if not data:
+        request.write('No form data' + str(data))
+        return
+    sender = get_current_user(request)
+    request.redirect('/squads/{}/'.format(name))
+    sent_message = SquadMessages.create(name,sender,data['message'], datetime.now())
 
 def show_create_squad_page(request):
     """
@@ -251,6 +263,7 @@ server.register(r'/squads/([a-z]+)/apply/?', apply_to_squad)
 server.register(r'/', redirect_root)
 server.register(r'/login/?', login_page, post=process_login )
 server.register(r'/logout/?', logout_page)
+server.register(r'/squads/([a-z]+)/send-message/?', view_squad, post=send_message)
 
 
 DbObject.start_database()

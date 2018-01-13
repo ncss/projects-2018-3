@@ -16,16 +16,25 @@
 			<button name = "Join"/>
 			</button>
 			<div class="messages">
-			{% for m in messages %}
-				<p>
-				<span class="sender">{{ m.sender_username }}</span>
-				<span class="message">{{ m.message }}</span>
-				</p>
-			{% end for %}
-			<div>
-			<input type="text" placeholder="Chat to your friends!" />
+				{% if len(messages) > 5 %}
+					{% for m in messages[:5] %}
+						<p>
+						<span class="sender">{{ m.sender_username }}</span>
+						<span class="message">{{ m.message }}</span>
+						</p>
+					{% end for %}
+				{% else %}
+					{% for m in messages %}
+						<p>
+						<span class="sender">{{ m.sender_username }}</span>
+						<span class="message">{{ m.message }}</span>
+						</p>
+					{% end for %}
+				{% end if %}
+			<form class="form" method="POST" action="/squads/{{ Squad }}/send-message/">
+			<input type="text" name="message-text" placeholder="Chat to your friends!" />
 			<input type="submit" value="Send" />
-			</div>
+			</form>
 			</div>
 		</div>
 		{% if leader == current_user %}
