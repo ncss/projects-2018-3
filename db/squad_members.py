@@ -8,7 +8,7 @@ class SquadMembers(DbObject):
     columns = ['squadname', 'username', 'status']
     table_name = 'squad_members'
 
-    def __init__(self, squadname='game', username='James', status=0):
+    def __init__(self, squadname='game', username='james', status=0):
         self.id = 0
         self.squadname = squadname
         self.username = username
@@ -29,8 +29,8 @@ class SquadMembers(DbObject):
         '''
         return SquadMembers.get_by_column('squadname', squadname)  
         
-    @staticmethod
-    def get_by_status(status : int, squadname : str):
+    @classmethod
+    def get_by_status(cls, status : int, squadname : str):
         ''' This method gets all users of the same status in a specific squad
         
         arguments
@@ -40,7 +40,7 @@ class SquadMembers(DbObject):
         returns
             list of user objects (list)
         '''
-        conn = sqlite3.connect('database.db')
+        conn = cls.get_connection()
         cur = conn.cursor()
         #cur.execute('''SELECT * FROM squad_members WHERE status = ? AND squadname = ?''',(status,squadname))
         cur.execute("""SELECT username FROM squad_members WHERE squadname = ? AND status = ?;""",(squadname, status))
@@ -51,7 +51,6 @@ class SquadMembers(DbObject):
                 break
             members.append(User.get_by_username(row[0]))
         return members
-
          
     
     @staticmethod    

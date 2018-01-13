@@ -6,7 +6,7 @@ class User(DbObject):
     columns = ['username', 'password','description','location','birthdate','image']
     table_name = 'users'
 
-    def __init__(self,username='James',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png'):
+    def __init__(self,username='james',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png'):
         self.id = None
         self.username = username
         self.password = password

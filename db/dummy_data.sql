@@ -39,15 +39,15 @@ INSERT INTO squads VALUES (
 );
 
 INSERT INTO squad_members VALUES (
-    'aaa', --Event id
-    'James', --User id
+    'jenga', --Event id
+    'james', --User id
     0,
     '1/1/2018'
 );
 
 INSERT INTO squad_members VALUES (
-    'aaa',
-    'Jack',
+    'ateam',
+    'jack',
     1,
     '1/1/2018'
 );
