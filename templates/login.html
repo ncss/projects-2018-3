@@ -8,7 +8,7 @@
 	</head>
 	
 	<body>
-		{% include header.html %}
+		{% include /templates/header.html %}
 		<article id='login_pane'>
 			<form method='POST' action='/login/'>
 				<h3>Enter login info:</h3>
@@ -17,6 +17,6 @@
 				<input type='submit' value='Login'>
 			</form>
 		</article>
-		{% include footer.html %}
+		{% include /templates/footer.html %}
 	</body>
 </html>
