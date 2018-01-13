@@ -16,7 +16,8 @@
 			<p> Description: {{ description }} </p>
 			<button name = "Join"/>
 		</div>
-		<!---	Insert if statement for squad manager here -->
+
+		<div class="wrapper" align="center">
 			{% if current_user==leader%}
 				<h3 class='heading'>Applicants:</h3>
 				<form method="POST" action='/squads/{{Squad}}/accept-reject/'>
@@ -40,6 +41,7 @@
 
 			{% end if%}
 
+		</div>
 		{% include footer.html %}
 	</body>
 </html>
