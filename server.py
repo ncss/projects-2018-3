@@ -66,8 +66,8 @@ def create_profile(request):
 
 def list_squads(request):
     """
-    >>> tornadotesting.run(list_squads)
-    'aaa 10 15/1/2018 This is a squad'
+    >>> html = tornadotesting.run(list_squads)
+    assert 'Squads' in html, html
 
     """
     all_squads = Squad.get_all()
