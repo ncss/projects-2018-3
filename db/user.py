@@ -59,9 +59,10 @@ class User(DbObject):
             returns
                 user object with inserted parameters (User)
         '''
+
         user = User(username, password, description, location, birthdate, image)
         user.save()
         return user
-        
+
     
     

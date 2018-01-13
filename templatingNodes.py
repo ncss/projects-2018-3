@@ -57,11 +57,15 @@ class IncludeNode(Node):
     >>> print(a.render({}).strip())
     <html> webpage </html>
     '''
-    def __init__(self,path,render_func):
-        self.path = path
+    def __init__(self,path,render_func,include_context={}):
+        self.path = "./templates/"+path
         self.render_func = render_func
+        self.include_context = include_context
     def render(self,context):
-        return self.render_func(open(self.path).read(),context)
+        newContext = {}
+        newContext.update(context)
+        newContext.update(self.include_context)
+        return self.render_func(open(self.path).read(),newContext)
 
 class IfNode(Node):
     '''
@@ -71,15 +75,22 @@ class IfNode(Node):
     <BLANKLINE>
     >>> print(a.render({"age":8}))
     8
+    >>> a.false_body = TextNode("younger then six")
+    >>> a.render({"age":3})
+    'younger then six'
+    >>> a.render({"age":6})
+    '6'
     '''
-    def __init__(self,condition,body):
-        self.body = body
+    def __init__(self,condition,true_body,false_body=GroupNode([])):
+        self.true_body = true_body
+        self.false_body = false_body
         self.condition = condition
 
     def render(self,context):
         if eval(self.condition,context):
-            return self.body.render(context)
-        return ""
+            return self.true_body.render(context)
+        else:
+            return self.false_body.render(context)
     
 class ForNode(Node):
     r'''
@@ -104,7 +115,7 @@ class ForNode(Node):
     def render(self,context):
         output = ""
         for block in eval(self.collection, context):
-            if isinstance(block, int):
+            if not (isinstance(block, list) or isinstance(block, tuple)) or len(self.variable_block) == 1:
                 context[self.variable_block[0]] = block
                 output += self.body.render(context)
             else:

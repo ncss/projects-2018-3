@@ -2,6 +2,7 @@ from db.user import User
 from db.squad import Squad
 from db.squad_members import SquadMembers
 from db.dbObject import DbObject
+from db.errors.squadDoesNotExist import SquadDoesNotExist
 import db.dbObject
 import unittest, sqlite3
 
@@ -42,24 +43,26 @@ class Testing(unittest.TestCase):
         self.assertEqual(result, user)
 
     def test_squad_get_all(self):
-        squad = Squad()
+        from_db = Squad.get_by_column(1,1)
         result = Squad.get_all()
-        self.assertEqual(result, [squad])
+        self.assertEqual(result, from_db)
 
     def test_squad_get_by_squadname(self):
-        squad = Squad()
-        result = Squad.get_by_squadname('')
-        self.assertEqual(result, squad)
+        result = Squad.create(squadname='aaa', capacity=10,squad_date='15/1/2018', description='This is a squad', location='Australia', leader='James', squad_time='12:00')
+        from_db = Squad.get_by_column('squadname','aaa')[0]
+        result = Squad.get_by_squadname('aaa')
+        self.assertEqual(result, from_db)
+        
         
     def test_user_create(self):
         result = User.create(username='TestUser',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png')
         from_db = User.get_by_column('username', 'TestUser')[0]
         self.assertEqual(from_db, result)
-    
+        
     def test_squad_create(self):
-        squad = Squad()
-        result = Squad.create(squadname='aaa', capacity=10,squad_date='15/1/2018', description='This is a squad', location='Australia', leader=User(), squad_time='12:12:12')
-        self.assertEqual(squad, result)
+        result = Squad.create(squadname='aaa', capacity=10,squad_date='15/1/2018', description='This is a squad', location='Australia', leader='James', squad_time='12:00')
+        from_db = Squad.get_by_column('squadname', 'aaa')[0]
+        self.assertEqual(from_db, result)
 
         
     def test_squad_members_get_all(self):
@@ -78,16 +81,14 @@ class Testing(unittest.TestCase):
         result = SquadMembers.get_by_status(0, 0)
         self.assertListEqual(squad_members, result)
 
-    def test_squad_members_change_status(self):
-        newmember = SquadMembers()
-        status = 1
-        result = newmember.change_status(0,1,0)
-        self.assertEqual(result, status)
-    
     def test_squad_members_apply(self):
-        newmember = SquadMembers()
         status = 0
-        result = newmember.apply(0,0)
+        result = SquadMembers.apply(0,0)
+        self.assertEqual(result, status)
+
+    def test_squad_members_change_status(self):    
+        status = 1
+        result = SquadMembers.change_status(0,1,0)
         self.assertEqual(result, status)
 
 
@@ -104,6 +105,10 @@ class Testing(unittest.TestCase):
 
         user2[0].password = "hello"
         user2[0].save()
+
+    def test_squad_not_found(self):
+        with self.assertRaises(SquadDoesNotExist):
+            from_db = Squad.get_by_squadname('bbb')
 
     def test_user_create_update(self):
         new_user = User(username='Jamess', password='password', description='My name is James!!', location='NSW', birthdate='15/1/2018', image='/file/img.png').save()

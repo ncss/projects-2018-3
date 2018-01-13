@@ -1,13 +1,15 @@
 from .dbObject import DbObject
 from .user import User
+from .errors.squadDoesNotExist import SquadDoesNotExist
 
 class Squad(DbObject):
-    columns = ['name', 'capacity', 'creation_date']
-    def __init__(self, squadname='aaa', capacity=10, squad_date='15/1/2018', description='This is a squad', location='Australia', leader=User(),squad_time='12:12:12'):
+    columns = ['squadname', 'capacity', 'squad_date', 'description','location','leader', 'squad_time']
+    table_name = 'squads'
+    def __init__(self, squadname='aaa', capacity=10, squad_date='15/1/2018', description='This is a squad', location='Australia', leader='James', squad_time = '12:00'):
         '''
         Initialiser for squad object
         '''
-        self.id = 0
+        self.id = None
         self.squadname = squadname #Squad names must be unique
         self.capacity = capacity
         self.creation_date = '13/1/2018'
@@ -23,12 +25,7 @@ class Squad(DbObject):
         returns 
             list of squad objects (list)
         '''
-        conn = sqlite3.connect('squadify.db')
-        cur = conn.cursor()
-        squads = cur.execute('SELECT * FROM squads;')
-        cur.close()
-        conn.close()
-        return squads
+        return Squad.get_by_column(1,1)
 
     @staticmethod
     def get_by_squadname(squadname: str):
@@ -38,16 +35,13 @@ class Squad(DbObject):
         returns 
             Squad object
         '''
-        
-        conn = sqlite3.connect('squadify.db')
-        cur = conn.cursor()
-        squad = cur.execute('SELECT * FROM squads WHERE name=?;',(name,))
-        cur.close()
-        conn.close()
-        return squad
+        try:
+             return Squad.get_by_column('squadname', squadname)[0]
+        except IndexError:
+             raise SquadDoesNotExist()
 
     @staticmethod
-    def create(squadname: str, capacity: int, squad_date:str, description: str, location: str, leader: str, squad_time : str):
+    def create(squadname: str, capacity: int, squad_date:str, description: str, location: str, leader: str, squad_time: str):
         ''' This creates a new squad
         arguments
             - squadname(str)
@@ -62,10 +56,9 @@ class Squad(DbObject):
             squad object with inserted parameters (Squad)
 
         '''
-        conn = sqlite3.connect('squadify.db')
-        cur = conn.cursor()
-        squad = cur.execute('INSERT INTO squads VALUES(name=?, capacity=?,event_date=?,description=?,location=?,leader=?);',(name, capacity, description, location, leader))
-        return Squad(squadname, capacity, squad_date, description, location, leader) 
+        new_squad = Squad(squadname, capacity, squad_date, description, location, leader, squad_time)
+        new_squad.save()
+        return new_squad 
 
 
         

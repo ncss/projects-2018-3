@@ -62,6 +62,12 @@ def render_template(string, context):
     >>> a = {4:3,2:1}
     >>> render_template("{{ a.get(4) }}",{"a":a})
     '3'
+    >>> render_template("{% if x == True %} true {% else %} false {% end if %}", {'x': False})
+    ' false '
+    >>> render_template("{% for i in chicken %} {{ i }} {% end for %}", {"chicken":['yes', 'no', 'yes']})
+    ' yes  no  yes '
+    >>> render_template("{% for i in chicken %} {{ i }} {% end for %}", {"chicken":[[1,2],[3,4]]})
+    ' [1, 2]  [3, 4] '
     """
     node = Parser(string)._parse_group()
     return node.render(context)
@@ -76,13 +82,14 @@ class TemplateException(Exception):
         return self.msg
 
 class FileException(Exception):
-    def __init__(self, name, msg):
+    def __init__(self, name, msg, filename):
         super().__init__()
         self.name = name
         self.msg = msg
+        self.filename = filename
 
     def __str__(self):
-        return self.msg
+        return (self.msg + '\nFile location stated (path): ' + self.filename)
 
 class Parser():
     def __init__(self, characters: str):
@@ -161,11 +168,20 @@ class Parser():
         body = self._parse_group()
 
         endTag = re.match(r"^{%\s*end\s+if\s*%}", self.remaining_text())
+        elseTag = re.match(r"^{%\s*else\s*%}", self.remaining_text())
         #checking for an end tag
-        if endTag is None:
+        if endTag:
+            self.nextn(endTag.end())
+            return IfNode(condition,body)
+        elif elseTag:
+            self.nextn(elseTag.end())
+            elseBody = self._parse_group()
+            endTag = re.match(r"^{%\s*end\s+if\s*%}", self.remaining_text())
+            self.nextn(endTag.end())
+            return IfNode(condition, body, elseBody)
+            
+        else:
             raise TemplateException('Syntax Error', 'Expecting an "end if" tag')
-        self.nextn(endTag.end())
-        return IfNode(condition,body)
 
     def _parse_for(self):
 
@@ -204,16 +220,44 @@ class Parser():
         #>>> print(node.path)
         #folder/file.html
         #'''
+        '''
+        >>> parser = Parser("{% include /templateTesting/templateTest.html x = 1 y = 9 a = 100 %}")
+        >>> node = parser._parse_include()
+        >>> node.render({})
+        '<p> 1 9 100 </p>\\n'
+        >>> parser = Parser("{% include /templateTesting/templateTest.html %}")
+        >>> node = parser._parse_include()
+        >>> node.render({'x':1, 'y':9, 'a':100})
+        '<p> 1 9 100 </p>\\n'
+        >>> parser = Parser("{% include /templateTesting/templateTest.html x = 1 %}")
+        >>> node = parser._parse_include()
+        >>> node.render({'x':10000,'y':9,'a':100})
+        '<p> 1 9 100 </p>\\n'
+        '''
         
         #This functions assumes we are on the "{" of a block like this {% include fi.le %}
-        match = re.match(r'^{%\s*include\s+([\w\/]+\.[\w]+)\s*%}', self.remaining_text())
+        
+        match = re.match(r'^{%\s*include\s+([\w\/]+\.[\w]+)\s+((\s*\w+\s*=\s*\w+\s*)*)\s*%}', self.remaining_text())
         path = match.group(1)
         self.nextn(match.end())
+        all_var = match.group(2)
+        include_context = {}
+        
+        while len(all_var) > 0:
+            assignment = re.match(r'(\s*\w+\s*=\s*\w+\s*)', all_var)
+            all_var = all_var[assignment.end():]
+            assignment = assignment.group(1).split("=")
+            var = assignment[0].strip()
+            val = assignment[1].strip()
+            include_context[var] = val
+        
+        match = re.match(r'', self.remaining_text())
         try:
-            open(path, 'r').close()
+            open("./templates/"+path, 'r').close()
         except OSError:
-            raise FileException('FileException', 'file not found')
-        return IncludeNode(path,render_template)
+            raise FileException('FileException', 'file not found', path)
+        
+        return IncludeNode(path,render_template,include_context)
 
     def _parse_comment(self):
         #This function assumes that we are on the first character of a block like this
@@ -249,6 +293,7 @@ if __name__ == '__main__':
     import doctest
     doctest.testmod()
     print("All tests done, you are awesome :)")
+    
 
     
 
