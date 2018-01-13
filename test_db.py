@@ -36,8 +36,6 @@ class Testing(unittest.TestCase):
     def test_user_get_by_username(self):
         user = User('James', 'password', 'My name is James', 'NSW', '15/1/2018')
         result = User.get_by_username('James')
-        print(repr(user.password))
-        print(repr(result.password))
         
         self.assertEqual(result, user)
 

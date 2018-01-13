@@ -22,7 +22,9 @@ class DbObject:
         b = dict(other.__dict__)
         del a['id']
         del b['id']
+        
         return a == b 
+
         
     def __repr__(self):
         return "<{} {}>".format(self.__class__.__name__,self.__dict__)

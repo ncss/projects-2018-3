@@ -4,7 +4,7 @@ INSERT INTO users VALUES (
     'My name is James',
     'NSW',
     '15/1/2018',
-    ''
+    '/file/img.png'
 );
 
 INSERT INTO users VALUES (
