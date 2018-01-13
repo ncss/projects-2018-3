@@ -1,3 +1,4 @@
+import html
 class Node:
     def render(self, context):
         raise NotImplementedError("render() should not be called for base node class")
@@ -48,18 +49,19 @@ class PythonNode(Node):
     def __init__(self,command):
         self.command = command
     def render(self, context):
-        return str(eval(self.command, context))
+        return html.escape(str(eval(self.command, context)))
 
 class IncludeNode(Node):
     '''
-    >>> a = IncludeNode("templateTesting/1.html")
+    >>> a = IncludeNode("templateTesting/1.html",lambda x,y:x)
     >>> print(a.render({}).strip())
     <html> webpage </html>
     '''
-    def __init__(self,path):
+    def __init__(self,path,render_func):
         self.path = path
+        self.render_func = render_func
     def render(self,context):
-        return open(self.path).read()
+        return self.render_func(open(self.path).read(),context)
 
 class IfNode(Node):
     '''
