@@ -100,6 +100,8 @@ def view_squad(request, name):
 
     applicants = SquadMembers.get_all(squad.squadname)
 
+    user_placeholder = 'James'
+
     context = {
         'Squad':name,
         'leader':squad.leader,
@@ -109,7 +111,8 @@ def view_squad(request, name):
         'required_numbers': str(squad.capacity),
         'description':squad.description,
         'current_user':'alice',
-        'applicants':applicants
+        'applicants':applicants,
+        'current_user':user_placeholder
     }
 
     request.write(render_file('squad_details.html', context))
@@ -176,12 +179,8 @@ def apply_to_squad(request, name):
     >>> tornadotesting.run(apply_to_squad, 'ateam', fields={'username': 'alice'})
     '0'
     """
-    accept_fields = ['username']
-    data = get_form_data(request, accept_fields)
-    if not data:
-        request.write('You must post username.')
-        return
-    status = SquadMembers.apply(squadname=name, **data)
+    user_placeholder = ''
+    status = SquadMembers.apply(squadname=name, username=user_placeholder)
     request.write(str(status))
 
 def redirect_root(request):

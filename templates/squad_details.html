@@ -17,20 +17,27 @@
 			<button name = "Join"/>
 		</div>
 		<!---	Insert if statement for squad manager here -->
-			<h3 class='heading'>Applicants:</h3>
-			<form method="POST" action='/squads/{{Squad}}/accept-reject/'>
-				{% for applicant in applicants %}
-					<a href='/profile/{{ applicant.username }}/'>{{ applicant.username }}</a>:
+			{% if current_user==leader%}
+				<h3 class='heading'>Applicants:</h3>
+				<form method="POST" action='/squads/{{Squad}}/accept-reject/'>
+					{% for applicant in applicants %}
+						<a href='/profile/{{ applicant.username }}/'>{{ applicant.username }}</a>:
 
 
-					<input type='radio' value='accept' name='{{applicant.username}}'> Accept
+						<input type='radio' value='accept' name='{{applicant.username}}'> Accept
 
-					<input type='radio' value='reject' name='{{applicant.username}}'>	Reject
-					<br>
-					{% end for %}
-					<br><input type='submit' value='Submit'>
-			</form>
-			<!-- Insert end if here -->
+						<input type='radio' value='reject' name='{{applicant.username}}'>	Reject
+						<br>
+						{% end for %}
+						<br><input type='submit' value='Submit'>
+				</form>
+			{% end if %}
+
+			{% if current_user!=leader%}
+				<a href='/squads/{{ Squad }}/apply/'>Join Group</a>
+
+			{% end if%}
+
 		{% include footer.html %}
 	</body>
 </html>
