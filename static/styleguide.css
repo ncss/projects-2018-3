@@ -35,6 +35,7 @@ header {
 a{
 	text-decoration:none;
 }
+
 footer{
 	background-color: #33343A;
 	color: #70D8A6;
@@ -54,8 +55,8 @@ h1{
 nav{
 	grid-column: 9 /16;
 	border-radius: 10px;
-	position:relative;
-	top:-90px;
+	grid-row: 1;
+	margin-top: 10px;
 
 }
  nav ul {

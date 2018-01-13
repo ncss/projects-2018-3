@@ -45,6 +45,10 @@ class DbObject:
         connection.commit()
         return cursor
 
+    @staticmethod
+    def get_connection():
+        return connection
+
     @classmethod
     def from_row(cls, row):
         '''
