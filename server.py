@@ -46,6 +46,7 @@ def view_profile(request, username):
                'loc':user.location,
                'description':user.description,
                'current_user':get_current_user(request),
+               'image': user.image,
                }
 
 
@@ -69,7 +70,7 @@ def create_profile(request):
     ...     'birthdate': '15/1/2018'})
     Redirect('/profiles/james/')
     """
-    accept_fields = ['username', 'password', 'description', 'location', 'birthdate']
+    accept_fields = ['username', 'password', 'description', 'location', 'birthdate', 'image']
     data = get_form_data(request, accept_fields)
     if not data:
         request.redirect('/register/?failure=1')
@@ -77,8 +78,6 @@ def create_profile(request):
     if re.match(r'^([a-z]+)$', data['username']) == None:
         request.redirect('/register/?failure=1')
         return
-
-    data['image'] = ''
     user = User.create(**data)
     request.redirect('/profiles/{}/'.format(user.username))
 
