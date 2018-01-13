@@ -7,22 +7,22 @@
 		<link href="https://fonts.googleapis.com/css?family=Audiowide|Encode+Sans+Expanded:600|Kanit:300" rel="stylesheet">
 	</head>
 	<body>
-		{% include /templates/header.html %}
+		{% include header.html %}
 		<article id='sign_in_pane'>
 			<form method='POST' action='/register/'>
-				<h2 class='heading'>Sign up:</h2>
-				<input name="username" type="text" placeholder='Username' class='field'><br>
-				<input name="password" type="password" placeholder='Password' class='field'><br>
-				<input name="location" type="text" placeholder='Location' class='field'><br>
-				<input name="birthdate" type="text" placeholder='Birthdate' class='field'><br>
+				<h3 class='heading' id='main_title'>Sign up</h3>
+				<input name="username" type="text" placeholder='Username' class='field'required><br>
+				<input name="password" type="password" placeholder='Password' class='field'required><br>
+				<input name="location" type="text" placeholder='Location' class='field'required><br>
+				<input name="birthdate" type="text" placeholder='Birthdate' class='field'required><br>
 				<h3 class='heading'>Choose a profile pic:</h3>
-				<input name="image" type="file">
+				<input name="image" type="file" id='choose_image'required>
 				<h3 class='heading'>About you:</h3>
-				<textarea name='description' type='text' placeholder='Your description here' id='description'>
-				</textarea>
+				<textarea name='description' type='text' placeholder='Your description here' id='description'></textarea>
 				<br><input type="submit" value="Join" id='submit'>
 			</form>
+			</div>
 		</article>
-		{% include /templates/footer.html %}
+		{% include footer.html %}
 	</body>
 </html>
