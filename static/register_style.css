@@ -7,7 +7,7 @@
 	margin: 0 auto;
 }
 .field{
-	margin-bottom:6px;
+	margin-bottom:5px;
 }
 .heading{
 	margin-top: 3px;
@@ -18,6 +18,11 @@ body{
 	grid-template-column:repeat(12,1fr);
 }
 #submit{
-	width:150px;
+	width:170px;
 	height:25px;
+}
+#description{
+	overflow:hidden;
+	width:170px;
+	height:50px;
 }

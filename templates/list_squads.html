@@ -1,14 +1,16 @@
 <!doctype HTML>
 <html>
 <head>
+
 <link rel='stylesheet' href="/static/styleguide.css">
 <link href="https://fonts.googleapis.com/css?family=Audiowide|Encode+Sans+Expanded:600|Kanit:300" rel="stylesheet">	</head>
 <title>Squads </title>	
 </head>
 <body>
-{% include header.html %}
-<h2> Squads </h2>
-	<div>
+{% include /templates/header.html %}
+	<div align="center" class="wrapper">
+	<h2 class="page_heading"> Squads </h2>
+
 		 {% for squad in squads %}
 				<h3> <a href="/squads/{{ squadname }}">{{ squad.name }} </a></h3>
 		<p> Host:
@@ -25,8 +27,11 @@
 			Description:
 			{{ squad.description }}
 		</p>
+				{% if is_creator %}
+					pass
+				{% end if %}
 			{% end for %}
 	</div>
-	{% include footer.html %}
+{% include /templates/footer.html %}
 </body>
 </html>
