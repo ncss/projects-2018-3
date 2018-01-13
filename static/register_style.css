@@ -3,6 +3,8 @@
 	width:180px;
 	margin-left:10px;
 	margin-top:10px;
+	position:relative;
+	top:48px;
 	padding:5px;
 	margin: 0 auto;
 	background-color:#33343A;
