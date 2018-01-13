@@ -52,23 +52,23 @@ def create_profile_page(request):
     >>> assert "submit" in html, html
     """
     context={}
-    request.write(render_file("test-register.html", context))
+    request.write(render_file("register.html", context))
 
 def create_profile(request):
     """
     >>> tornadotesting.run(create_profile, fields={'username': 'alice',
     ...     'password': 'test', 'description': 'test', 'location': 'test',
-    ...     'birthdate': 'test', 'image': 'test'})
-    'You created a user called alice'
+    ...     'birthdate': 'test'})
+    Redirect('/profiles/alice/')
     """
-    accept_fields = ['username', 'password', 'description', 'location', 'birthdate', 'image']
+    accept_fields = ['username', 'password', 'description', 'location', 'birthdate']
     data = get_form_data(request, accept_fields)
     if not data:
         request.write('You must complete all fields.')
         return
-
+    data['image'] = ''
     user = User.create(**data)
-    request.write("You created a user called {}".format(user.username))
+    request.redirect('/profiles/{}/'.format(user.username))
 
 def list_squads(request):
     """
