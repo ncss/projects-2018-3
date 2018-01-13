@@ -26,7 +26,6 @@ def render_file(filename, context):
 
         return render_template(template, context)
 
-
 def view_profile(request, username):
     """
     >>> html = tornadotesting.run(view_profile, 'alice')
@@ -45,7 +44,6 @@ def view_profile(request, username):
 
 
     request.write(render_file('profile.html', context))
-
 
 def create_profile_page(request):
     """
@@ -102,7 +100,6 @@ def view_squad(request, name):
 
     request.write('This is the squad page for {}'.format(squad.squadname))
 
-
 def show_create_squad_page(request):
     """
     >>> tornadotesting.run(show_create_squad_page)
@@ -130,8 +127,6 @@ def create_squad(request):
         return
     squad = Squad.create(**data)
     request.write('squad created with name {}'.format(squad.squadname))
-
-
 
 def accept_squad_member(request, name):
     """
@@ -180,7 +175,6 @@ def reject_squad_member(request, name):
     status = SquadMembers.change_status(new_status=1, squadname=name, **data)
     request.write("Rejected")
 
-
 def apply_to_squad(request, name):
     """
     >>> tornadotesting.run(apply_to_squad, 'ateam', fields={'username': 'alice'})
@@ -194,7 +188,6 @@ def apply_to_squad(request, name):
     status = SquadMembers.apply(squadname=name, **data)
     request.write(str(status))
 
-
 def redirect_root(request):
     """
     >>> tornadotesting.run(redirect_root)
@@ -202,16 +195,15 @@ def redirect_root(request):
     """
     request.redirect('/squads/')
 
-
 server = Server()
-server.register(r'/profiles/([a-z]+)/', view_profile)
-server.register(r'/register/', create_profile_page, post=create_profile)
-server.register(r'/squads/', list_squads, post=create_squad)
-server.register(r'/squads/([a-z]+)/', view_squad)
-server.register(r'/create-squad/', show_create_squad_page)
-server.register(r'/squads/([a-z]+)/accept/', accept_squad_member)
-server.register(r'/squads/([a-z]+)/reject/', reject_squad_member)
-server.register(r'/squads/([a-z]+)/apply/', apply_to_squad)
+server.register(r'/profiles/([a-z]+)/?', view_profile)
+server.register(r'/register/?', create_profile_page, post=create_profile)
+server.register(r'/squads/?', list_squads, post=create_squad)
+server.register(r'/squads/([a-z]+)/?', view_squad)
+server.register(r'/create-squad/?', show_create_squad_page)
+server.register(r'/squads/([a-z]+)/accept/?', accept_squad_member)
+server.register(r'/squads/([a-z]+)/reject/?', reject_squad_member)
+server.register(r'/squads/([a-z]+)/apply/?', apply_to_squad)
 server.register(r'/', redirect_root)
 
 if __name__ == '__main__':
