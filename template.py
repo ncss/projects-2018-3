@@ -132,6 +132,7 @@ class Parser():
             elif re.match(r'^{%\s*fo',self.remaining_text()):
                 nodes.append(self._parse_for())
             elif re.match(r'^{%\s*comment',self.remaining_text()):
+
                 self._parse_comment()
             else:
                 break
@@ -220,15 +221,15 @@ class Parser():
         #folder/file.html
         #'''
         '''
-        >>> parser = Parser("{% include templateTest.html x = 1 y = 9 a = 100 %}")
+        >>> parser = Parser("{% include /templateTesting/templateTest.html x = 1 y = 9 a = 100 %}")
         >>> node = parser._parse_include()
         >>> node.render({})
         '<p> 1 9 100 </p>\\n'
-        >>> parser = Parser("{% include templateTest.html %}")
+        >>> parser = Parser("{% include /templateTesting/templateTest.html %}")
         >>> node = parser._parse_include()
         >>> node.render({'x':1, 'y':9, 'a':100})
         '<p> 1 9 100 </p>\\n'
-        >>> parser = Parser("{% include templateTest.html x = 1 %}")
+        >>> parser = Parser("{% include /templateTesting/templateTest.html x = 1 %}")
         >>> node = parser._parse_include()
         >>> node.render({'x':10000,'y':9,'a':100})
         '<p> 1 9 100 </p>\\n'
@@ -252,7 +253,7 @@ class Parser():
         
         match = re.match(r'', self.remaining_text())
         try:
-            open(path, 'r').close()
+            open("./templates/"+path, 'r').close()
         except OSError:
             raise FileException('FileException', 'file not found', path)
         
@@ -261,7 +262,6 @@ class Parser():
     def _parse_comment(self):
         #This function assumes that we are on the first character of a block like this
         #{% comment %} WOW, THIS LANGUAGE HAS COMMENTS! {% end comment %}
-
         while self.peekn(2) != '%}':
             self.next()
         #Now we are past the first {% comment %}

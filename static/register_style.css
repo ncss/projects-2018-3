@@ -1,0 +1,23 @@
+#sign_in_pane{
+	box-shadow: -3px 3px 10px black;
+	width:180px;
+	margin-left:10px;
+	margin-top:10px;
+	padding:5px;
+	margin: 0 auto;
+}
+.field{
+	margin-bottom:6px;
+}
+.heading{
+	margin-top: 3px;
+	margin-bottom: 3px;
+}
+body{
+	display:grid;
+	grid-template-column:repeat(12,1fr);
+}
+#submit{
+	width:150px;
+	height:25px;
+}

@@ -1,0 +1,59 @@
+/* Fonts */
+body{
+	font-family: Kanit, sans-serif;
+	margin: 0 auto;
+}
+ h2 h3 h4{
+	color: #336370;
+}
+.username {
+	color: #70D8A6;
+	font-family: Kanit, sans-serif;	
+	grid-column-end: -1;
+	align-items: end;
+	}
+/* Colours */
+
+header {
+	background-color: #33343A;
+	padding: 5px;
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	
+}
+footer{
+	background-color: #33343A;
+	color: #70D8A6;
+	font-family: Kanit, sans-serif;
+	padding: 5px;
+	position: absolute;
+	right:0;
+	bottom:0;
+	left:0;
+	text-align:center;
+	
+}
+h1{
+	color: #70D8A6;
+	font-family: Audiowide, cursive;
+}
+ nav ul {
+  list-style: none;
+  background-color: #70D8A6;
+  text-align: center;
+  padding: 10px 0;
+  margin: 0px;
+  font-family: Kanit, sans-serif;
+ 
+  display: grid;
+  
+ 
+}
+img {
+	height: 50px;
+	width: 50px;
+	border-radius: 50%;
+	grid-column-end: -1;
+	align-items: end;
+	
+	}

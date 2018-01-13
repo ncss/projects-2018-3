@@ -52,13 +52,13 @@ class PythonNode(Node):
         return html.escape(str(eval(self.command, context)))
 
 class IncludeNode(Node):
-    #'''
-    #>>> a = IncludeNode("templateTesting/1.html",lambda x,y:x)
-    #>>> print(a.render({}).strip())
-    #<html> webpage </html>
-    #'''
-    def __init__(self,path,render_func,include_context):
-        self.path = path
+    '''
+    >>> a = IncludeNode("templateTesting/1.html",lambda x,y:x)
+    >>> print(a.render({}).strip())
+    <html> webpage </html>
+    '''
+    def __init__(self,path,render_func,include_context={}):
+        self.path = "./templates/"+path
         self.render_func = render_func
         self.include_context = include_context
     def render(self,context):
