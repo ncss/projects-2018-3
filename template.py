@@ -53,6 +53,8 @@ def render_template(string, context):
     '02468'
     >>> render_template("{{x}}", {'x':'<script> alert("hacked"); </script>'})
     '&lt;script&gt; alert(&quot;hacked&quot;); &lt;/script&gt;'
+    >>> render_template("{% include templateTesting/renderTest.txt %}",{"company_name":"google"})
+    '<head><title>google</title></head>'
     """
     node = Parser(string)._parse_group()
     return node.render(context)
@@ -182,7 +184,7 @@ class Parser():
         match = re.match(r'^{%\s*include\s+([\w\/]+\.[\w]+)\s*%}', self.remaining_text())
         path = match.group(1)
         self.nextn(match.end())
-        return IncludeNode(path)
+        return IncludeNode(path,render_template)
 
     def _parse_comment(self):
         #This function assumes that we are on the first character of a block like this
