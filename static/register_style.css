@@ -15,6 +15,7 @@
 	width:175px;
 	margin-bottom:5px;
 	border-radius:5px;
+	font-family:Kanit;
 }
 .heading{
 	margin-top: 3px;
@@ -45,4 +46,5 @@
 }
 #choose_image{
 	font-family:Kanit;
+	width:100%;
 }
