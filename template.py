@@ -39,10 +39,29 @@ def render_template(string, context):
     ''
     >>> render_template("{% if True %} a {% comment %} very {% end comment %}important word {% end if %}", {})
     ' a important word '
+    >>> render_template('''{% include templateTesting/header.html %} and we can have text from no file and {% include templateTesting/footer.html %}''',{})
+    'we can get stuff from the header and we can have text from no file and we can get stuff from the footer!'
+    >>> render_template('''{% if show_header %}the header: {% include templateTesting/header.html %}. I think that is {{ description }}{%end if%}''',{"show_header":True,"description":"cool"})
+    'the header: we can get stuff from the header. I think that is cool'
+    >>> render_template("{%                      for i in range(5)%}m{%  end for     %}h",{})
+    'mmmmmh'
+    >>> render_template("{%for      i    in range(5)      %}m{%  end for   %}h {{food }}",{"food":"chicken"})
+    'mmmmmh chicken'
+    >>> render_template("{%if    do    %}{% for i in range(num) %}my num is {{ i }}!{% end for %}{% end if %}",{"do":True,"num":4})
+    'my num is 0!my num is 1!my num is 2!my num is 3!'
+    >>> render_template("{% for i in range(num) %}{%       if       i%2==0      %}{{i }}{% end if%}{% end      for   %}",{"num":10})
+    '02468'
+    >>> render_template("{{x}}", {'x':'<script> alert("hacked"); </script>'})
+    '&lt;script&gt; alert(&quot;hacked&quot;); &lt;/script&gt;'
     """
     node = Parser(string)._parse_group()
     return node.render(context)
 
+class TemplateException(Exception):
+    def __init__(self, name, msg):
+        super().__init__()
+        self.name = name
+        self.msg = msg
 
 class Parser():
     def __init__(self, characters: str):
@@ -62,7 +81,10 @@ class Parser():
     def next(self):
         if not self.end():
             self._upto += 1
-
+    
+    def remaining_text(self):
+        return self._characters[self._upto:]
+    
     def nextn(self, number):
         if self._upto + number <= self._length:
             self._upto += number
@@ -73,15 +95,16 @@ class Parser():
             if self.peek() != '{':
                 # we know this is a text node
                 nodes.append(self._parse_text())
-            elif self.peekn(10) == '{% include':
+            elif re.match(r'^{%\s*include',self.remaining_text()):
                 nodes.append(self._parse_include())
             elif self.peekn(2) == '{{':
                  nodes.append(self._parse_python())
-            elif self.peekn(5) == '{% if':
+            elif re.match(r'^{%\s*if',self.remaining_text()):
                 nodes.append(self._parse_if())
-            elif self.peekn(5) == '{% fo':
+            elif re.match(r'^{%\s*fo',self.remaining_text()):
                 nodes.append(self._parse_for())
-            elif self.peekn(5) == '{% co':
+            elif re.match(r'^{%\s*comment',self.remaining_text()):
+
                 self._parse_comment()
             else:
                 break
@@ -95,8 +118,7 @@ class Parser():
         return TextNode(node)
 
     def _parse_python(self):
-        string = self._characters[self._upto:]
-        matched = re.match(r'^{{\s*(\w*)\s*}}', string)
+        matched = re.match(r'^{{\s*(\w*)\s*}}', self.remaining_text())
         variable = matched.group(1)
         self.nextn(matched.end())
         return PythonNode(variable)
@@ -117,7 +139,9 @@ class Parser():
         self.next()
         body = self._parse_group()
 
-        endTag = re.match(r"^{%\s*end\s+if\s*%}", self._characters[self._upto:])
+        endTag = re.match(r"^{%\s*end\s+if\s*%}", self.remaining_text())
+        if endTag is None:
+            raise TemplateException('Syntax Error', 'Expecting an end if tag')
         self.nextn(endTag.end())
         return IfNode(condition,body)
 
@@ -142,7 +166,7 @@ class Parser():
         #We chould now be on the " " of  " %}"
         self.nextn(2)
         body = self._parse_group()
-        endTag = re.match(r"^{%\s*end\s+for\s*%}", self._characters[self._upto:])
+        endTag = re.match(r"^{%\s*end\s+for\s*%}", self.remaining_text())
         self.nextn(endTag.end())
       
         return ForNode(variable.strip(),coln,body)
@@ -156,8 +180,7 @@ class Parser():
         '''
         
         #This functions assumes we are on the "{" of a block like this {% include fi.le %}
-        string = self._characters[self._upto:]
-        match = re.match(r'^{%\s*include\s+([\w\/]+\.[\w]+)\s*%}',string)
+        match = re.match(r'^{%\s*include\s+([\w\/]+\.[\w]+)\s*%}', self.remaining_text())
         path = match.group(1)
         self.nextn(match.end())
         return IncludeNode(path)
@@ -171,10 +194,21 @@ class Parser():
         while self.peekn(2) != '{%':
             self.next()
             
-        endTag = re.match(r"^{%\s*end\s+comment\s*%}", self._characters[self._upto:])
+        endTag = re.match(r"^{%\s*end\s+comment\s*%}", self.remaining_text())
         self.nextn(endTag.end())
+
+    
 
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
     print("All tests done, you are awesome :)")
+
+def asserEx(invalid, context):
+    try:
+        render_template(invalid, context)
+        assert False, "should throw an exception"
+        
+    except TemplateException:
+        pass
+    
