@@ -40,12 +40,18 @@ def view_profile(request, username):
     #Age code for when DB sends an actual date object
     #age = date.today().year - user.birthdate.year
 
-
+    logged_in = get_current_user(request)
+    if logged_in:
+        logged_in_user = User.get_by_username(logged_in)
+        profile_image = logged_in_user.image
+    else:
+        profile_image = ''
     context = {'username':user.username,
                'age':str(user.birthdate),
                'loc':user.location,
                'description':user.description,
-               'current_user':get_current_user(request),
+               'current_user': logged_in,
+               'profile_image': profile_image,
                'image': user.image,
                }
 
@@ -88,7 +94,17 @@ def list_squads(request):
     >>> assert 'Squads' in html, html
     """
     all_squads = Squad.get_all()
-    context = {"squads":all_squads, 'current_user':get_current_user(request)}
+    logged_in = get_current_user(request)
+    if logged_in:
+        logged_in_user = User.get_by_username(logged_in)
+        profile_image = logged_in_user.image
+    else:
+        profile_image = ''
+    context = {"squads":all_squads,
+    'current_user': logged_in,
+    'profile_image': profile_image,
+    }
+
     request.write(render_file("list_squads.html", context))
 
 def view_squad(request, name):
@@ -98,6 +114,12 @@ def view_squad(request, name):
     """
     squad = Squad.get_by_squadname(name)
     squad_messages = SquadMessages.get_by_squadname(name)
+    logged_in = get_current_user(request)
+    if logged_in:
+        logged_in_user = User.get_by_username(logged_in)
+        profile_image = logged_in_user.image
+    else:
+        profile_image = ''
     context = {'Squad':name,
                 'leader':squad.leader,
                 'date':squad.squad_date,
@@ -106,7 +128,10 @@ def view_squad(request, name):
                 'required_numbers': str(squad.capacity),
                 'description':squad.description,
                 'current_user':get_current_user(request),
-                'messages':squad_messages}
+                'messages':squad_messages,
+                'current_user': logged_in,
+                'profile_image': profile_image,
+                }
     request.write(render_file('squad_details.html', context))
 
 def show_create_squad_page(request):
@@ -114,7 +139,14 @@ def show_create_squad_page(request):
     >>> html = tornadotesting.run(show_create_squad_page)
     >>> assert 'name' in html, html
     """
-    context={'current_user':get_current_user(request)}
+    logged_in = get_current_user(request)
+    if logged_in:
+        logged_in_user = User.get_by_username(logged_in)
+        profile_image = logged_in_user.image
+    else:
+        profile_image = ''
+    context={'current_user': logged_in,
+    'profile_image': profile_image}
     request.write(render_file("create_squad.html", context))
 
 def create_squad(request):
@@ -209,7 +241,7 @@ def login_page(request):
     if get_current_user(request):
         request.redirect(r'/squads/')
     else:
-        context = {'message':'', 'current_user':get_current_user(request)}
+        context = {'message':'', 'current_user': '', 'profile_image': ''}
         if request.get_field('failure'):
             context['message']="Aww, too bad, your username or password was incorrect, maybe try agian? or sign up if you're trying to sign up on the login page like a gumbo."
         request.write(render_file('login.html', context))
