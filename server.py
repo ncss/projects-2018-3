@@ -1,7 +1,7 @@
 from tornado.ncss import Server, ncssbook_log
 import tornadotesting
 from template import render_template
-from db import User, Squad, DbObject, SquadMembers
+from db import User, Squad, DbObject, SquadMembers, SquadMessages
 from datetime import date
 import re
 
@@ -97,6 +97,7 @@ def view_squad(request, name):
     >>> assert 'ateam' in html, html
     """
     squad = Squad.get_by_squadname(name)
+    squad_messages = SquadMessages.get_by_squadname(name)
     context = {'Squad':name,
                 'leader':squad.leader,
                 'date':squad.squad_date,
@@ -104,7 +105,8 @@ def view_squad(request, name):
                 'location':squad.location,
                 'required_numbers': str(squad.capacity),
                 'description':squad.description,
-                'current_user':get_current_user(request)}
+                'current_user':get_current_user(request),
+                'messages':squad_messages}
     request.write(render_file('squad_details.html', context))
 
 def show_create_squad_page(request):

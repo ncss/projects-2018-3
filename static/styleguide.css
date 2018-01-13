@@ -81,11 +81,38 @@ img {
 	}
 
 .wrapper {
-	text-align: center;
 	border: 3px;
 	box-shadow: 0 0 10px 5px #336370;
 	width: 500px;
-	margin: 0 auto;
-	padding: 10px;
-	padding-top: 0px;
+	margin: 40px auto;
+	padding: 20px;
+	padding-top: 10px;
+}
+
+.wrapper h3 {
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
+.messages {
+	margin-top: 3ex;
+	border-top: solid 2px #ccc;
+}
+
+.messages .sender {
+	font-weight: bold;
+}
+
+.messages .sender::after {
+	content: ":";
+}
+
+.messages input[type=text] {
+	width: 85%;
+}
+
+.messages input[type=submit] {
+	margin-left: auto;
+	width: 10%;
 }
