@@ -97,7 +97,21 @@ def view_squad(request, name):
     >>> assert 'ateam' in html, html
     """
     squad = Squad.get_by_squadname(name)
-    context = {'Squad':name, 'leader':squad.leader, 'date':squad.squad_date, 'time':squad.squad_time, 'location':squad.location, 'required_numbers': str(squad.capacity), 'description':squad.description, 'current_user':'alice'}
+
+    applicants = SquadMembers.get_all(squad.squadname)
+
+    context = {
+        'Squad':name,
+        'leader':squad.leader,
+        'date':squad.squad_date,
+        'time':squad.squad_time,
+        'location':squad.location,
+        'required_numbers': str(squad.capacity),
+        'description':squad.description,
+        'current_user':'alice',
+        'applicants':applicants
+    }
+
     request.write(render_file('squad_details.html', context))
 
 def show_create_squad_page(request):
@@ -128,7 +142,7 @@ def create_squad(request):
     squad = Squad.create(**data)
     request.write('squad created with name {}'.format(squad.squadname))
 
-def accept_squad_member(request, name):
+def accept_reject_squad_member(request, name):
     """
     >>> tornadotesting.run(accept_squad_member, 'ateam', fields={'username': 'James'})
     'Accepted'
@@ -138,42 +152,24 @@ def accept_squad_member(request, name):
 
     squad = Squad.get_by_squadname(name)
 
-    accept_fields = ['username']
-    data = get_form_data(request, accept_fields)
-    if not data:
-        request.write('Must post username')
-        return
+    print(request.get_fields())
 
-    if squad.leader != data['username']:
-        request.write('Insufficient permissions')
-        return
+    form_data = request.get_fields()
 
-    status = SquadMembers.change_status(new_status=2, squadname=name, **data)
-    request.write("Accepted")
+    username = sorted(form_data.keys())[0]
 
-def reject_squad_member(request, name):
-    """
-    >>> tornadotesting.run(reject_squad_member, 'ateam', fields={'username': 'James'})
-    'Rejected'
-    >>> tornadotesting.run(reject_squad_member, 'ateam', fields={'username': 'bruce'})
-    'Insufficient permissions'
-    """
+    status = 0
 
-    squad = Squad.get_by_squadname(name)
+    if form_data[username][0] == "accept":
+        status = 2
+
+    if form_data[username][0] == "reject":
+        status = 1
 
 
-    accept_fields = ['username']
-    data = get_form_data(request, accept_fields)
-    if not data:
-        request.write('Must post username')
-        return
+    status = SquadMembers.change_status(new_status=status, squadname=name, username=username)
+    request.redirect('/squads/{}/'.format(squad.squadname))
 
-    if squad.leader != data['username']:
-        request.write('Insufficient permissions')
-        return
-
-    status = SquadMembers.change_status(new_status=1, squadname=name, **data)
-    request.write("Rejected")
 
 def apply_to_squad(request, name):
     """
@@ -224,14 +220,14 @@ def is_logged_in(request):
     else:
         return False
 
+
 server = Server()
 server.register(r'/profiles/([a-z]+)/?', view_profile)
 server.register(r'/register/?', create_profile_page, post=create_profile)
 server.register(r'/squads/?', list_squads, post=create_squad)
 server.register(r'/squads/([a-z]+)/?', view_squad)
 server.register(r'/create-squad/?', show_create_squad_page)
-server.register(r'/squads/([a-z]+)/accept/?', accept_squad_member)
-server.register(r'/squads/([a-z]+)/reject/?', reject_squad_member)
+server.register(r'/squads/([a-z]+)/accept-reject/?', accept_reject_squad_member)
 server.register(r'/squads/([a-z]+)/apply/?', apply_to_squad)
 server.register(r'/', redirect_root)
 server.register(r'/login/?', login_page, post=process_login )
