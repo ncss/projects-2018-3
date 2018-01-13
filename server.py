@@ -95,12 +95,12 @@ def list_squads(request):
 
 def view_squad(request, name):
     """
-    >>> tornadotesting.run(view_squad, 'ateam')
-    'This is the squad page for aaa'
+    >>> html = tornadotesting.run(view_squad, 'ateam')
+    >>> assert 'ateam' in html, html
     """
     squad = Squad.get_by_squadname(name)
-
-    request.write('This is the squad page for {}'.format(squad.squadname))
+    context = {'Squad':name, 'leader':squad.leader, 'date':squad.squad_date, 'time':squad.squad_time, 'location':squad.location, 'required_numbers': str(squad.capacity), 'description':squad.description, 'current_user':'alice'}
+    request.write(render_file('squad_details.html', context))
 
 
 def show_create_squad_page(request):
