@@ -73,7 +73,7 @@ def create_profile(request):
 def list_squads(request):
     """
     >>> html = tornadotesting.run(list_squads)
-    assert 'Squads' in html, html
+    >>> assert 'Squads' in html, html
     """
     all_squads = Squad.get_all()
     context = {"squads":all_squads}
