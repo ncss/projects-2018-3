@@ -73,7 +73,7 @@ def create_profile(request):
 def list_squads(request):
     """
     >>> html = tornadotesting.run(list_squads)
-    assert 'Squads' in html, html
+    >>> assert 'Squads' in html, html
     """
     all_squads = Squad.get_all()
     context = {"squads":all_squads}
@@ -144,7 +144,7 @@ def accept_squad_member(request, name):
         request.write('Must post username')
         return
 
-    if squad.leader.username != data['username']:
+    if squad.leader != data['username']:
         request.write('Insufficient permissions')
         return
 
@@ -168,7 +168,7 @@ def reject_squad_member(request, name):
         request.write('Must post username')
         return
 
-    if squad.leader.username != data['username']:
+    if squad.leader != data['username']:
         request.write('Insufficient permissions')
         return
 
@@ -236,6 +236,7 @@ server.register(r'/squads/([a-z]+)/apply/?', apply_to_squad)
 server.register(r'/', redirect_root)
 server.register(r'/login/?', login_page, post=process_login )
 
+DbObject.start_database()
+
 if __name__ == '__main__':
-    DbObject.start_database()
     server.run()
