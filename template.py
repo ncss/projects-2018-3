@@ -216,10 +216,10 @@ class Parser():
         #Now we are past the first {% comment %}
         while self.peekn(2) != '{%':
             self.next()
-            
+
+        endTag = re.match(r"^{%\s*end\s+comment\s*%}", self.remaining_text())
         if endTag is None:
             raise TemplateException('Syntax Error', 'Expecting an "end comment" tag')
-        endTag = re.match(r"^{%\s*end\s+comment\s*%}", self.remaining_text())
         self.nextn(endTag.end())
 
 def asserEx(invalid, context):
