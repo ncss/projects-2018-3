@@ -70,7 +70,7 @@ def list_squads(request):
     assert 'Squads' in html, html
     """
     all_squads = Squad.get_all()
-    context = {"events":all_squads}
+    context = {"squads":all_squads}
     request.write(render_file("allSquads.html", context))
 
 
@@ -164,7 +164,7 @@ server.register(r'/squads/([a-z]+)/', view_squad)
 server.register(r'/create-squad/', show_create_squad_page)
 server.register(r'/squads/([a-z]+)/accept/', accept_squad_member)
 server.register(r'/squads/([a-z]+)/reject/', reject_squad_member)
-server.register(r'/squads/([a-z]+)/apply/', post=apply_to_squad)
+server.register(r'/squads/([a-z]+)/apply/', apply_to_squad)
 
 if __name__ == '__main__':
     server.run()
