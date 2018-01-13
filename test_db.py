@@ -16,6 +16,9 @@ class Testing(unittest.TestCase):
         cursor = connection.cursor()
         with open('db/schema.sql') as f: 
             cursor.executescript(f.read())
+
+        with open('db/dummy_data.sql') as f: 
+            cursor.executescript(f.read())
     
     def test_db_object(self):
         '''
@@ -31,8 +34,11 @@ class Testing(unittest.TestCase):
         self.assertEqual(result, [user])
         
     def test_user_get_by_username(self):
-        user = User()
-        result = User.get_by_username('')
+        user = User('James', 'password', 'My name is James', 'NSW', '15/1/2018')
+        result = User.get_by_username('James')
+        print(repr(user.password))
+        print(repr(result.password))
+        
         self.assertEqual(result, user)
 
     def test_squad_get_all(self):

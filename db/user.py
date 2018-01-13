@@ -26,19 +26,20 @@ class User(DbObject):
         all = cur.execute('SELECT * FROM users')
         return all
     
-    @staticmethod
-    def get_by_username(username : str):
+    @classmethod
+    def get_by_username(cls, username : str):
         ''' This method gets a user by their username. 
         arguments
             - username(str)
         returns
             user object (User)
         '''
-        conn = sqlite3.connect('squadify.db')
-        cur = conn.cursor()
-        user = cur.execute('SELECT * FROM users WHERE username=?;',(username,))
-        cur.close()
-        conn.close()
+        result = cls.get_by_column('username', username)
+        user = None 
+
+        if len(result) == 1:
+            user = result[0]
+        
         return user
     
     @staticmethod

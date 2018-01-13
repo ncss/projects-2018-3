@@ -18,7 +18,14 @@ class DbObject:
         '''
         if not isinstance(other, self.__class__):
             return False
-        return self.__dict__  == other.__dict__
+        a = dict(self.__dict__)
+        b = dict(other.__dict__)
+        del a['id']
+        del b['id']
+        return a == b 
+        
+    def __repr__(self):
+        return "<{} {}>".format(self.__class__.__name__,self.__dict__)
 
     @staticmethod
     def start_database():
