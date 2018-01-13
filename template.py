@@ -128,6 +128,7 @@ class Parser():
             elif re.match(r'^{%\s*fo',self.remaining_text()):
                 nodes.append(self._parse_for())
             elif re.match(r'^{%\s*comment',self.remaining_text()):
+
                 self._parse_comment()
             else:
                 break
@@ -229,7 +230,6 @@ class Parser():
     def _parse_comment(self):
         #This function assumes that we are on the first character of a block like this
         #{% comment %} WOW, THIS LANGUAGE HAS COMMENTS! {% end comment %}
-
         while self.peekn(2) != '%}':
             self.next()
         #Now we are past the first {% comment %}

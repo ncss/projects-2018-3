@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Profile page</title>
+		<link rel='stylesheet' href="/static/styleguide.css">
+		<link rel='stylesheet' href="/static/profile_layout2.css">
+		<link href="https://fonts.googleapis.com/css?family=Audiowide|Encode+Sans+Expanded:600|Kanit:300" rel="stylesheet">	</head>
+	</head>
+	<body>
+	{% include /templates/header.html %}
+	<div class="wrapper">
+		<div class="box user_img">
+		<img src='http://mjhs.ca/adopt-a-cat_files/slideshowImage_186563.jpg' id='user_img' alt='Profile picture'>
+		</div>
+	<div class="box user_bio">
+		<h2>{{ age }}</h2>
+		<h2>{{ loc }}</h2>
+	</div>
+		<h2>{{ username }}</h2>
+		<div class='box user_desc'><h2>Description:</h2>
+		<br>
+			<p>
+				{{ description }}
+			</p>
+		</div>
+	</div>
+	{% include /templates/footer.html %}
+	</body>
+</html>
