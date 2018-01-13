@@ -2,23 +2,23 @@
 <html>
 	<head>
 		<title>Sign up</title>
-		<link rel='stylesheet' href='../static/styleguide.css'>
-		<link rel='stylesheet' href='../static/register_style.css'>
+		<link rel='stylesheet' href='/static/styleguide.css'>
+		<link rel='stylesheet' href='/static/register_style.css'>
 		<link href="https://fonts.googleapis.com/css?family=Audiowide|Encode+Sans+Expanded:600|Kanit:300" rel="stylesheet">
 	</head>
 	<body>
 		{% include /templates/header.html %}
 		<article id='sign_in_pane'>
 			<form method='POST' action='/register/'>
-				<h3 class='heading'>Sign up:</h3>
+				<h2 class='heading'>Sign up:</h2>
 				<input name="username" type="text" placeholder='Username' class='field'><br>
 				<input name="password" type="password" placeholder='Password' class='field'><br>
 				<input name="location" type="text" placeholder='Location' class='field'><br>
 				<input name="birthdate" type="text" placeholder='Birthdate' class='field'><br>
-				<h4 class='heading'>Choose a profile pic:</h4>
+				<h3 class='heading'>Choose a profile pic:</h3>
 				<input name="image" type="file">
-				<h4 class='heading'>About you:</h4>
-				<textarea name='description' type='text' placeholder='Your description here'>
+				<h3 class='heading'>About you:</h3>
+				<textarea name='description' type='text' placeholder='Your description here' id='description'>
 				</textarea>
 				<br><input type="submit" value="Join" id='submit'>
 			</form>

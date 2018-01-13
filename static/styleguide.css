@@ -3,9 +3,18 @@ body{
 	font-family: Kanit, sans-serif;
 	margin: 0 auto;
 }
- h2 h3 h4{
+h2{
 	color: #336370;
 }
+
+.page_heading {
+	text-align: center;
+}
+
+h3 h4{
+	color: #336370;
+}
+
 .username {
 	color: #70D8A6;
 	font-family: Kanit, sans-serif;	
