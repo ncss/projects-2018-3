@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<link rel='stylesheet' href="/static/styleguide.css">
+		<link rel='stylesheet' href="/static/squadDetails.css">
 		<link href="https://fonts.googleapis.com/css?family=Audiowide|Encode+Sans+Expanded:600|Kanit:300" rel="stylesheet">
 	</head>
 	<body>
@@ -36,17 +37,17 @@
 		</div>
 
 		<div class="wrapper" align="center">
-			{% if current_user==leader%}
+			{% if current_user==leader %}
 				<h3 class='heading'>Applicants:</h3>
 				<form method="POST" action='/squads/{{Squad}}/accept-reject/'>
 					{% for applicant in applicants %}
 					  {% if applicant.status == 0 %}
-						<a href='/profiles/{{ applicant.username }}/'>{{ applicant.username }}</a>:
+						<a href='/profiles/{{ applicant.username }}/'><span class="applicant">{{ applicant.username }}</span></a>:
 
 
-						<input type='radio' value='accept' name='{{applicant.username}}'> Accept
+						<input type='radio' value='accept' id="accept" name='{{applicant.username}}'><span class="accept"> Accept </span></input>
 
-						<input type='radio' value='reject' name='{{applicant.username}}'>	Reject
+						<input type='radio' value='reject' id="reject" name='{{applicant.username}}'><span class="reject">	Reject </span></input>
 						<br>
 
 						{% end if %}
@@ -55,7 +56,7 @@
 				</form>
 			{% end if %}
 
-			{% if current_user!=leader%}
+			{% if current_user!=leader %}
 				<a href='/squads/{{ Squad }}/apply/'>Join Squad</a>
 
 			{% end if%}
