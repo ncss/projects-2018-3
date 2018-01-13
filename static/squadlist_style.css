@@ -7,6 +7,8 @@
 	margin-bottom: 5px;
 }
 
+.wrapper a { color: white; }
+
 .wrapper h3:not(:first-child) {
 	margin-top: 10px;
 	border-top: solid 1px #70d8a6;
