@@ -2,7 +2,7 @@
 	<a href='/squads/'><h1>Squadify</h1></a>
 	{% if current_user %}
 	<img src='{{ profile_image }}'>
-	<h3 class = "username" >{{ current_user }}</h3>
+	<a href='/profiles/{{ current_user }}/'><h3 class = "username" >{{ current_user }}</h3>
 	{% end if %}
 <nav>
 <ul>
