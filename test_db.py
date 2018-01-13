@@ -30,9 +30,9 @@ class Testing(unittest.TestCase):
 		result = Squad.get_all()
 		self.assertEqual(result, [squad])
 
-	def test_squad_get_by_name(self):
+	def test_squad_get_by_squadname(self):
 		squad = Squad()
-		result = Squad.get_by_name('')
+		result = Squad.get_by_squadname('')
 		self.assertEqual(result, squad)
 		
 	def test_user_create(self):
@@ -42,7 +42,7 @@ class Testing(unittest.TestCase):
 	
 	def test_squad_create(self):
 		squad = Squad()
-		result = Squad.create(name='aaa', capacity=10, event_date='15/1/2018', description='This is a squad', location='Australia', leader=0)
+		result = Squad.create(squadname='aaa', capacity=10,squad_date='15/1/2018', description='This is a squad', location='Australia', leader=User())
 		self.assertEqual(squad, result)
 
 		
