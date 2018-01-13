@@ -3,6 +3,7 @@ INSERT INTO users VALUES (
     'password',
     'My name is James',
     'NSW',
+    '15/1/2012',
     '/file/img.png'
 );
 
