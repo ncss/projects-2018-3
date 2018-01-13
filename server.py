@@ -1,7 +1,7 @@
 from tornado.ncss import Server, ncssbook_log
 import tornadotesting
 from template import render_template
-from db import User, Squad#, SquadMembers
+from db import User, Squad, SquadMembers
 from datetime import date
 
 def render_file(filename, context):
@@ -45,12 +45,12 @@ def create_profile_page(request):
     >>> assert "submit" in html, html
     """
     context={}
-    request.write(render_file("register.html", context))
+    request.write(render_file("test-register.html", context))
 
 def create_profile(request):
     """
     >>> tornadotesting.run(create_profile, fields={'username': 'alice'})
-    Redirect('/profiles/alice/')
+    'You created a user called alice'
     """
     user_data = {}
     user_data["username"] = request.get_field("username")
@@ -62,19 +62,17 @@ def create_profile(request):
     #print(user_data)
 
     user = User.create(**user_data)
-    request.redirect("/profiles/{}/".format(user.username))
+    request.write("You created a user called {}".format(user.username))
 
 def list_squads(request):
     """
     >>> tornadotesting.run(list_squads)
     'aaa 10 15/1/2018 This is a squad'
-
+    
     """
     all_squads = Squad.get_all()
     context = {"events":all_squads}
-    request.write(render_file("squad-list.html", context))
-
-
+    request.write(render_file("allSquads.html", context))
 
 
     #names = []
@@ -87,7 +85,7 @@ def list_squads(request):
         #event_date.append(str(squad.event_date))
         #description.append(squad.description)
     #request.write(','.join(names) +' '+ ','.join(capacity) +' '+ ','.join(event_date) +' '+ ','.join(description))
-
+    
 def view_squad(request, name):
     """
     >>> tornadotesting.run(view_squad, 'ateam')
@@ -157,7 +155,6 @@ def apply_to_squad(request, name):
     request.write(status)
 
 server = Server()
-#server.register(r'/')
 server.register(r'/profiles/([a-z]+)/', view_profile)
 server.register(r'/register/', create_profile_page, post=create_profile)
 server.register(r'/squads/', list_squads, post=create_squad)
@@ -165,7 +162,7 @@ server.register(r'/squads/([a-z]+)/', view_squad)
 server.register(r'/create-squad/', show_create_squad_page)
 server.register(r'/squads/([a-z]+)/accept/', accept_squad_member)
 server.register(r'/squads/([a-z]+)/reject/', reject_squad_member)
-server.register(r'/squads/([a-z]+)/apply/', apply_to_squad)
+server.register(r'/squads/([a-z]+)/apply/', post=apply_to_squad)
 
 if __name__ == '__main__':
     server.run()
