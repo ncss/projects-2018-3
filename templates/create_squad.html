@@ -11,15 +11,15 @@
 
 		<h2> Create Squad </h2>
 		<form class="form" method="POST" action="/squads/">
-			<label> Name: </label> <input id="name" type="text" name="squadname">
+			<label> Name: </label> <input id="name" type="text" name="squadname" class='field'required>
 			<br>
-			<label> Date/Time: </label><input id="date" type="text" name="squad_date">
+			<label> Date/Time: </label><input id="date" type="text" name="squad_date" class='field'required>
 			<br>
-			<label> Location: </label><input id="location" type="text" name="location">
+			<label> Location: </label><input id="location" type="text" name="location" class='field'required>
 			<br>
-			<label> Requred Number of Players: </label><input id="player_number_required" type="number" min="2" name="capacity">
+			<label> Requred Number of Players: </label><input id="player_number_required" type="number" min="2" name="capacity" class='field'required>
 			<br>
-			<label> Description: </label><input id="description" type="text" name="description">
+			<label> Description: </label><input id="description" type="text" name="description" class='field'required>
 			<br>
 			<input type = "submit" value = "create">
 			<input type = "reset" value = "clear" >
