@@ -18,3 +18,11 @@
 .page_heading {
 	text-align: center;
 }
+
+.wrapper a {
+	color: white !important;
+}
+
+.wrapper a:hover {
+	color: #70d8a6 !important;
+}
