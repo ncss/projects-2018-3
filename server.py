@@ -142,15 +142,15 @@ def reject_squad_member(request, name):
 
 def apply_to_squad(request, name):
     """
-    >>> tornadotesting.run(apply_to_squad, fields={'current_user': 'alice'})
-    'Pending...'
+    >>> tornadotesting.run(apply_to_squad, 'ateam', fields={'username': 'alice'})
+    '0'
     """
     data = request.get_fields()
-    accept_fields = ['current_user']
+    accept_fields = ['username']
     if sorted(data.keys()) != sorted(accept_fields):
         request.write('Go Away!')
         return
-    status = SquadMembers.apply(name, **data)
+    status = SquadMembers.apply(squadname=name, **data)
     request.write(status)
 
 server = Server()
