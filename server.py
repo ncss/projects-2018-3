@@ -201,7 +201,7 @@ def login_page(request):
         request.redirect(r'/squads/')
     else:
         context = {}
-        request.write(render_file('test-login.html', context))
+        request.write(render_file('login.html', context))
 
 def process_login(request):
     luser = request.get_field('username')
