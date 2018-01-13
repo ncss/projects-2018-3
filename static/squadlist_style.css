@@ -25,3 +25,7 @@
 .wrapper a:hover {
 	color: #70d8a6 !important;
 }
+body{
+	padding-bottom: 240px;
+	position: relative;
+}
