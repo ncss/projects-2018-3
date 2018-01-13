@@ -144,7 +144,7 @@ def accept_squad_member(request, name):
         request.write('Must post username')
         return
 
-    if squad.leader.username != data['username']:
+    if squad.leader != data['username']:
         request.write('Insufficient permissions')
         return
 
@@ -168,7 +168,7 @@ def reject_squad_member(request, name):
         request.write('Must post username')
         return
 
-    if squad.leader.username != data['username']:
+    if squad.leader != data['username']:
         request.write('Insufficient permissions')
         return
 
