@@ -72,18 +72,16 @@ class Testing(unittest.TestCase):
         result = SquadMembers.get_by_status(0, 0)
         self.assertListEqual(squad_members, result)
 
-    def test_squad_members_change_status(self):
-        newmember = SquadMembers()
-        status = 1
-        result = newmember.change_status(0,1,0)
-        self.assertEqual(result, status)
-    
     def test_squad_members_apply(self):
-        newmember = SquadMembers()
         status = 0
-        result = newmember.apply(0,0)
+        result = SquadMembers.apply(0,0)
         self.assertEqual(result, status)
 
+    def test_squad_members_change_status(self):    
+        status = 1
+        result = SquadMembers.change_status(0,1,0)
+        self.assertEqual(result, status)
+    
 
     def test_db_save(self):
         user = User()
