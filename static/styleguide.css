@@ -32,8 +32,9 @@ header {
 	grid-template-columns: repeat(24, 1fr);
 
 }
-a{
+a {
 	text-decoration:none;
+	color: black;
 }
 
 footer{
@@ -116,4 +117,20 @@ img {
 .messages input[type=submit] {
 	margin-left: auto;
 	width: 10%;
+}
+
+.accept {
+  font-weight: bold;
+	margin-right: 10px;
+}
+
+.reject {
+  font-weight: bold;
+
+}
+
+.applicant {
+	color: #336370;
+	font-weight: bold;
+	font-size: 20px;
 }
