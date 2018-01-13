@@ -114,11 +114,14 @@ class ForNode(Node):
 
     def render(self,context):
         output = ""
+        # taking each object in the list
         for block in eval(self.collection, context):
+            # if it can't be unpacked
             if not (isinstance(block, list) or isinstance(block, tuple)) or len(self.variable_block) == 1:
                 context[self.variable_block[0]] = block
                 output += self.body.render(context)
             else:
+            # tuple unpacking
                 for i in range(len(self.variable_block)):
                     var = self.variable_block[i].strip()
                     context[var] = block[i]
