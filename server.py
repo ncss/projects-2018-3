@@ -4,6 +4,15 @@ from template import render_template
 from db import User, Squad, DbObject, SquadMembers
 from datetime import date
 
+def get_form_data(request, fields):
+    output = {}
+    for field in fields:
+        if not request.get_field(field):
+            return
+        output[field] = request.get_field(field)
+
+    return output
+
 def render_file(filename, context):
     """
     Reads a template file and pases it through the template engine.
@@ -49,19 +58,28 @@ def create_profile_page(request):
 
 def create_profile(request):
     """
-    >>> tornadotesting.run(create_profile, fields={'username': 'alice'})
+    >>> tornadotesting.run(create_profile, fields={'username': 'alice',
+    ...     'password': 'test', 'description': 'test', 'location': 'test',
+    ...     'birthdate': 'test', 'image': 'test'})
     'You created a user called alice'
     """
-    user_data = {}
+    '''user_data = {}
     user_data["username"] = request.get_field("username")
     user_data["password"] = request.get_field("password")
     user_data["description"] = request.get_field("description")
     user_data["location"] = request.get_field("location")
     user_data["birthdate"] = request.get_field("birthdate")
     user_data["image"] = request.get_field("image")
-    #print(user_data)
+    #print(user_data)'''
 
-    user = User.create(**user_data)
+
+    accept_fields = ['username', 'password', 'description', 'location', 'birthdate', 'image']
+    data = get_form_data(request, accept_fields)
+    if not data:
+        request.write('You must complete all fields.')
+        return
+
+    user = User.create(**data)
     request.write("You created a user called {}".format(user.username))
 
 def list_squads(request):
