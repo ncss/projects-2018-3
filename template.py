@@ -68,6 +68,13 @@ def render_template(string, context):
     ' yes  no  yes '
     >>> render_template("{% for i in chicken %} {{ i }} {% end for %}", {"chicken":[[1,2],[3,4]]})
     ' [1, 2]  [3, 4] '
+    >>> render_template("{% if x == y %} {% for i in range(x) %}{{ i }}{% end for %} {% else %}{{ y }}{% end if %}", {"x":10, "y":10})
+    ' 0123456789 '
+    >>> render_template("{% if x == y %} {% for i in range(x) %}{{ i }}{% end for %} {% else %}{{ y }}{% end if %}", {"x":10, "y":3})
+    '3'
+    >>> render_template("{% if x >= y %} {{ x }} is more {% else %} {{ y }} is more {% end if %}", {"x": 8.2, "y": 8.19})
+    ' 8.2 is more '
+
     """
     node = Parser(string)._parse_group()
     return node.render(context)
