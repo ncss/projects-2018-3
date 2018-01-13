@@ -214,7 +214,7 @@ def process_login(request):
                 is_valid_user = True
     if is_valid_user:
         request.set_secure_cookie('squadify-login', 'Logged In')
-        request.write('You have successfully logged in! Well done! Good on you! Is the sarcasm obvious yet?')
+        request.redirect(r'/squads/')
     else:
         request.write("Aww, too bad, your username or password was incorrect, maybe try agian? or sign up if you're trying to sign up on the login page like a gumbo.")
 
