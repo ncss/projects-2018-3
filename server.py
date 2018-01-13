@@ -78,8 +78,8 @@ def list_squads(request):
     assert 'Squads' in html, html
     """
     all_squads = Squad.get_all()
-    context = {"events":all_squads}
-    request.write(render_file("allSquads.html", context))
+    context = {"squads":all_squads}
+    request.write(render_file("list_squads.html", context))
 
 
     #names = []
