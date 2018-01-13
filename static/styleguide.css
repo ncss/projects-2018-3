@@ -35,6 +35,8 @@ header {
 a{
 	text-decoration:none;
 }
+.wrapper a { color: white; }
+
 footer{
 	background-color: #33343A;
 	color: #70D8A6;
