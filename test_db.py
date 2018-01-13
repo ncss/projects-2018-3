@@ -50,9 +50,9 @@ class Testing(unittest.TestCase):
         self.assertEqual(result, squad)
         
     def test_user_create(self):
-        user = User()
-        result = User.create(username='James',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png')
-        self.assertEqual(user, result)
+        result = User.create(username='TestUser',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png')
+        from_db = User.get_by_column('username', 'TestUser')[0]
+        self.assertEqual(from_db, result)
     
     def test_squad_create(self):
         squad = Squad()
@@ -93,7 +93,7 @@ class Testing(unittest.TestCase):
         user = User()
         user.username = 'saam'
 
-        # user.save()
+        user.save()
         user.password = '123456'
         user.save()
         user2 = User.get_by_column("username", user.username)
@@ -102,6 +102,15 @@ class Testing(unittest.TestCase):
 
         user2[0].password = "hello"
         user2[0].save()
+
+    def test_user_create_update(self):
+        new_user = User(username='Jamess', password='password', description='My name is James!!', location='NSW', birthdate='15/1/2018', image='/file/img.png').save()
+        new_user.description = 'lol james'
+        new_user.save()
+        from_db = User.get_by_column('description', 'lol james')[0]
+        print(from_db)
+        self.assertIsNot(from_db, new_user)
+        self.assertEqual(from_db, new_user)
 
 if __name__ == '__main__':
     unittest.main()
