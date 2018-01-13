@@ -116,7 +116,7 @@ def show_create_squad_page(request):
     >>> html = tornadotesting.run(show_create_squad_page)
     >>> assert 'name' in html, html
     """
-    context={}
+    context={'current_user':get_current_user(request)}
     request.write(render_file("create_squad.html", context))
 
 def create_squad(request):
@@ -201,14 +201,14 @@ def process_login(request):
             if user.password ==lpass:
                 is_valid_user = True
     if is_valid_user:
-        request.set_secure_cookie('squadify-login', 'Logged In')
+        request.set_secure_cookie('squadify-login', luser)
         request.redirect(r'/squads/')
     else:
         request.redirect(r'/login/?failure=1')
 
 def get_current_user(request):
     if request.get_secure_cookie('squadify-login'):
-        return "James"
+        return request.get_secure_cookie('squadify-login').decode('utf-8')
     else:
         return None
 
