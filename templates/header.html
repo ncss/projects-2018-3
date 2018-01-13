@@ -1,13 +1,19 @@
 <header>
 	<a href='/squads/'><h1>Squadify</h1></a>
+	{% if current_user %}
 	<img src='https://cdn-images-1.medium.com/max/1280/1*eFjpoz8lhNKyd8XcSWv2OA.jpeg'>
-	<h3 class = "username" >username</h3>
-	
+	<h3 class = "username" >{{ current_user }}</h3>
+	{% end if %}
 <nav>
 <ul>
     <li><a href="/squads/">Squad List</a></li>
     <li><a href="/create-squad/">Create</a></li>
-	<li><a href="">Logout</a></li>
+		{% if current_user is not None  %}
+			<li><a href="/logout/">Logout</a></li>
+		{% end if %}
+		{% if current_user is None  %}
+			<li><a href="/login/">Login / Register</a></li>
+		{% end if %}
   </ul>
 </nav>
 </header>
