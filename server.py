@@ -28,10 +28,10 @@ def render_file(filename, context):
 
 def view_profile(request, username):
     """
-    >>> html = tornadotesting.run(view_profile, 'alice')
+    >>> html = tornadotesting.run(view_profile, 'James')
     >>> assert "James" in html, html
     >>> assert "42" in html, html
-    >>> assert "Sydney" in html, html
+    >>> assert "NSW" in html, html
     """
 
     user = User.get_by_username(username)
@@ -56,10 +56,10 @@ def create_profile_page(request):
 
 def create_profile(request):
     """
-    >>> tornadotesting.run(create_profile, fields={'username': 'alice',
-    ...     'password': 'test', 'description': 'test', 'location': 'test',
-    ...     'birthdate': 'test'})
-    Redirect('/profiles/alice/')
+    >>> tornadotesting.run(create_profile, fields={'username': 'james',
+    ...     'password': 'password', 'description': 'My name is James', 'location': 'NSW',
+    ...     'birthdate': '15/1/2018'})
+    Redirect('/profiles/james/')
     """
     accept_fields = ['username', 'password', 'description', 'location', 'birthdate']
     data = get_form_data(request, accept_fields)
@@ -102,11 +102,11 @@ def view_squad(request, name):
 
 def show_create_squad_page(request):
     """
-    >>> tornadotesting.run(show_create_squad_page)
-    'This page creates a "create a squad" form'
+    >>> html = tornadotesting.run(show_create_squad_page)
+    >>> assert 'name' in html, html
     """
-
-    request.write('This page creates a "create a squad" form')
+    context={}
+    request.write(render_file("create_squad.html", context))
 
 def create_squad(request):
     """
@@ -114,19 +114,20 @@ def create_squad(request):
     'You must complete all fields.'
     >>> tornadotesting.run(create_squad, fields={
     ...     'squadname': 'alice', 'capacity': '4', 'squad_date': date.today(),
-    ...     'description': 'blah', 'location': 'Australia', 'leader': 'sandy',
-    ...     'squad_time': '6:33' })
+    ...     'description': 'blah', 'location': 'Australia'})
     'squad created with name alice'
 
     """
 
-    accept_fields = ['squadname', 'capacity', 'squad_date', 'description', 'location', 'leader', 'squad_time']
+    accept_fields = ['squadname', 'capacity', 'squad_date', 'description', 'location']
     data = get_form_data(request, accept_fields)
+    data['squad_time'] = 'EST'
+    data['leader'] = 'placeholder name' # TODO get_current_user()
     if not data:
         request.write('You must complete all fields.')
         return
     squad = Squad.create(**data)
-    request.write('squad created with name {}'.format(squad.squadname))
+    request.redirect('/squads/{}/'.format(squad.squadname))
 
 def accept_squad_member(request, name):
     """
@@ -194,7 +195,6 @@ def redirect_root(request):
     Redirect('/squads/')
     """
     request.redirect('/squads/')
-
 
 def login_page(request):
     if is_logged_in(request):
