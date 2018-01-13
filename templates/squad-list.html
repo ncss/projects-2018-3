@@ -1,0 +1,30 @@
+<!doctype HTML>
+<html>
+<head>
+<link rel='stylesheet' href="../static/profile_layout2.css">
+<link href="https://fonts.googleapis.com/css?family=Audiowide|Encode+Sans+Expanded:600|Kanit:300" rel="stylesheet">	</head>
+<title>Squads </title>	
+</head>
+<body>
+<h2> Events </h2>
+	<div>
+		<h2> {% for event in events%}
+				execute
+			{% end for %}
+		</h2>
+		<p> Date: {% for date in events%}
+					execute
+					{% end for %}, 
+			Time: {% for time in events%}
+					execute
+				  {% end for %} </p>
+		<p> Squad needed: {% for squad_number in events%}
+							 execute
+							{% end for %} </p>
+		<p> { % for desciption in events %}
+				execute
+				{% end for % }
+		</p>
+	</div>
+</body>
+</html>
