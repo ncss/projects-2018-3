@@ -9,7 +9,8 @@
 	<body>
 		{% include header.html %}
 		<article id='sign_in_pane'>
-			<form method='POST' action='/register/'>
+		<div class="wrapper">
+			<form class="form" method='POST' action='/register/'>
 				<h2 class='heading'>Sign up:</h2>
 				<input name="username" type="text" placeholder='Username' class='field'><br>
 				<input name="password" type="password" placeholder='Password' class='field'><br>
@@ -22,6 +23,7 @@
 				</textarea>
 				<br><input type="submit" value="Join" id='submit'>
 			</form>
+			</div>
 		</article>
 		{% include footer.html %}
 	</body>
