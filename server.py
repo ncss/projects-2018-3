@@ -200,8 +200,10 @@ def login_page(request):
     if is_logged_in(request):
         request.redirect(r'/squads/')
     else:
-        context = {}
-        request.write(render_file('test-login.html', context))
+        context = {'message':''}
+        if request.get_field('failure'):
+            context['message']="Aww, too bad, your username or password was incorrect, maybe try agian? or sign up if you're trying to sign up on the login page like a gumbo."
+        request.write(render_file('login.html', context))
 
 def process_login(request):
     luser = request.get_field('username')
@@ -216,7 +218,7 @@ def process_login(request):
         request.set_secure_cookie('squadify-login', 'Logged In')
         request.redirect(r'/squads/')
     else:
-        request.write("Aww, too bad, your username or password was incorrect, maybe try agian? or sign up if you're trying to sign up on the login page like a gumbo.")
+        request.redirect(r'/login/?failure=1')
 
 def is_logged_in(request):
     if request.get_secure_cookie('squadify-login'):
