@@ -3,7 +3,7 @@ from .user import User
 
 
 class Squad(DbObject):
-    def __init__(self, squadname='aaa', capacity=10, squad_date='15/1/2018', description='This is a squad', location='Australia', leader=User()):
+    def __init__(self, squadname='aaa', capacity=10, squad_date='15/1/2018', description='This is a squad', location='Australia', leader=User(),squad_time='12:12:12'):
         '''
         Initialiser for squad object
         '''
@@ -15,6 +15,7 @@ class Squad(DbObject):
         self.description = description
         self.location = location
         self.leader = leader
+        self.squad_time = squad_time
 
     @staticmethod
     def get_all():
@@ -35,7 +36,7 @@ class Squad(DbObject):
         return Squad()
 
     @staticmethod
-    def create(squadname: str, capacity: int, squad_date:str, description: str, location: str, leader: str):
+    def create(squadname: str, capacity: int, squad_date:str, description: str, location: str, leader: str, squad_time : str):
         ''' This creates a new squad
         arguments
             - squadname(str)
@@ -44,6 +45,7 @@ class Squad(DbObject):
             - description(str)
             - location(str)
             - leader(str)
+			- squad_time (str)
 
         returns
             squad object with inserted parameters (Squad)
