@@ -69,9 +69,8 @@ class Testing(unittest.TestCase):
 		self.assertEqual(result, status)
 	
 	def test_squad_members_apply(self):
-		newmember = SquadMembers()
 		status = 'Pending...'
-		result = newmember.apply(0,0)
+		result = SquadMembers().apply(0,0)
 		self.assertEqual(result, status)
 
 if __name__ == '__main__':

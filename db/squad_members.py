@@ -41,8 +41,9 @@ class SquadMembers(DbObject):
 			User.create(username='James',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png'),
 			User.create(username='Tim',password='5678',description='Hi my name is Tim',location='Syd',birthdate='DD/MM/YYYY',image='/file/imag.png')
 		]
-		
-	def change_status(self, user_id : int, new_status : str, event_id : int):
+	
+	@staticmethod
+	def change_status(user_id : int, new_status : str, event_id : int):
 		''' This method changes the status of the user in a specific squad. 
 		
 		arguments
@@ -53,10 +54,11 @@ class SquadMembers(DbObject):
 		returns
 			the new status (str)
 		'''
-		self.status = new_status
-		return self.status
+		status = new_status
+		return status
 	
-	def apply(self, event_id : int, user_id : int):
+	@staticmethod
+	def apply(event_id : int, user_id : int):
 		''' This method puts in an application to become a member of a squad.
 		
 		arguments
@@ -66,5 +68,5 @@ class SquadMembers(DbObject):
 		returns
 			status of the application (str)
 		'''
-		self.status = 'Pending...'
-		return self.status
+		status = 'Pending...'
+		return status
