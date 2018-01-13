@@ -142,15 +142,12 @@ def create_squad(request):
 
 def accept_reject_squad_member(request, name):
     """
-    >>> tornadotesting.run(accept_squad_member, 'ateam', fields={'username': 'James'})
-    'Accepted'
-    >>> tornadotesting.run(accept_squad_member, 'ateam', fields={'username': 'bruce'})
-    'Insufficient permissions'
+    >>> tornadotesting.run(accept_reject_squad_member, 'ateam', fields={'username': 'James'})
+    Redirect('/squads/ateam/')
+
     """
 
     squad = Squad.get_by_squadname(name)
-
-    print(request.get_fields())
 
     form_data = request.get_fields()
 
@@ -172,7 +169,7 @@ def accept_reject_squad_member(request, name):
 def apply_to_squad(request, name):
     """
     >>> tornadotesting.run(apply_to_squad, 'ateam', fields={'username': 'alice'})
-    '0'
+    Redirect('/squads/ateam/')
     """
     user_placeholder = ''
     status = SquadMembers.apply(squadname=name, username=user_placeholder)
