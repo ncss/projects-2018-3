@@ -76,13 +76,14 @@ class TemplateException(Exception):
         return self.msg
 
 class FileException(Exception):
-    def __init__(self, name, msg):
+    def __init__(self, name, msg, filename):
         super().__init__()
         self.name = name
         self.msg = msg
+        self.filename = filename
 
     def __str__(self):
-        return self.msg
+        return (self.msg + '\nFile location stated (path): ' + self.filename)
 
 class Parser():
     def __init__(self, characters: str):
@@ -211,7 +212,7 @@ class Parser():
         try:
             open(path, 'r').close()
         except OSError:
-            raise FileException('FileException', 'file not found')
+            raise FileException('FileException', 'file not found', path)
         return IncludeNode(path,render_template)
 
     def _parse_comment(self):
