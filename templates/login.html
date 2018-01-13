@@ -8,7 +8,8 @@
 	</head>
 	<body>
 		{% include header.html %}
-		<article id='login_pane'>
+		<div class="wrapper">
+		<article>
 			<form method='POST' action='/login/'>
 				<h3>Enter login info:</h3>
 				<p> {{ message }} </p>
@@ -17,6 +18,7 @@
 				<input type='submit' value='Login'>
 			</form>
 		</article>
+	</div>
 		{% include footer.html %}
 	</body>
 </html>
