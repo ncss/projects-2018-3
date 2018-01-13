@@ -8,14 +8,18 @@
 	</head>
 	<body>
 		{% include header.html %}
-		<article id='login_pane'>
+		<div class="wrapper">
+		<article>
 			<form method='POST' action='/login/'>
 				<h3>Enter login info:</h3>
+				<p> {{ message }} </p>
 				<input name='username' type='text' placeholder='Username' required>
 				<input name='password' type='password' placeholder='Password' required>
 				<input type='submit' value='Login'>
+				<p> Don't have an account? <a href="/register/">Register here!</a> </p>
 			</form>
 		</article>
+	</div>
 		{% include footer.html %}
 	</body>
 </html>

@@ -10,16 +10,16 @@
 	<div class="wrapper">
 
 		<h2> Create Squad </h2>
-		<form class="form" method="POST" action="/create_squad/">
-			<label> Name: </label> <input id="name" type="text" name="name">
+		<form class="form" method="POST" action="/squads/">
+			<label> Name: </label> <input id="name" type="text" name="squadname">
 			<br>
-			<label> Date/Time: </label><input id="date" type="text" name="date">
+			<label> Date/Time: </label><input id="date" type="text" name="squad_date">
 			<br>
 			<label> Location: </label><input id="location" type="text" name="location">
 			<br>
-			<label> Requred Number of Players: </label><input id="player_number_required" type="number" min="2" name="player number required">
+			<label> Requred Number of Players: </label><input id="player_number_required" type="number" min="2" name="capacity">
 			<br>
-			<label> Description: </label><input id="description" type="text">
+			<label> Description: </label><input id="description" type="text" name="description">
 			<br>
 			<input type = "submit" value = "create">
 			<input type = "reset" value = "clear" >
