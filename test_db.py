@@ -29,9 +29,11 @@ class Testing(unittest.TestCase):
         self.assertEqual(user1, user2)
         
     def test_user_get_all(self):
-        user = User()
         result = User.get_all()
-        self.assertEqual(result, [user])
+        self.assertEqual(len(result), 2)
+        user = User('Jamesss', 'password', 'My name is James', 'NSW', '15/1/2018').save()
+        result = User.get_all()
+        self.assertEqual(len(result), 3)
         
     def test_user_get_by_username(self):
         user = User('James', 'password', 'My name is James', 'NSW', '15/1/2018')

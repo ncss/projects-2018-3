@@ -47,6 +47,9 @@ class DbObject:
 
     @classmethod
     def from_row(cls, row):
+        '''
+        takes a <Sqlite.row> object and instantiates a DbObject based on this
+        '''
         kwargs = {}
         for column in cls.columns:
             if column in row.keys():
@@ -57,6 +60,9 @@ class DbObject:
 
     @classmethod
     def get_by_column(cls, column, value):
+        '''
+        
+        '''
         cursor = connection.cursor()
         cursor.execute('''
             SELECT rowid, * FROM {} WHERE {} = ?;
@@ -68,6 +74,12 @@ class DbObject:
         return rows
 
     def save(self):
+        '''
+        if the object is new insert it into the database
+        if not, update with the new values
+
+        uses super special magic double formatttting
+        '''
         cursor = connection.cursor()
         string = []
         update_string = []

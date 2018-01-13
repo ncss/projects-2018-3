@@ -21,10 +21,14 @@ class User(DbObject):
         returns    
             list of user objects (list)
         '''
-        conn = sqlite3.connect('squadify.db')
-        cur = conn.cursor()
-        all = cur.execute('SELECT * FROM users')
-        return all
+        all_user = User.get_by_column(1,1)
+
+        return all_user
+
+        # conn = sqlite3.connect('squadify.db')
+        # cur = conn.cursor()
+        # all = cur.execute('SELECT * FROM users')
+        # return all
     
     @classmethod
     def get_by_username(cls, username : str):
