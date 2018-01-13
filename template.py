@@ -41,6 +41,10 @@ def render_template(string, context):
     ' a important word '
     >>> render_template('''{% include templateTesting/header.html %} and we can have text from no file and {% include templateTesting/footer.html %}''',{})
     'we can get stuff from the header and we can have text from no file and we can get stuff from the footer!'
+    >>> render_template("{% for a, b in list %} {{ a }} {{ b }} {% end for %}", {'list': [[1,2], [8,9]]})
+    ' 1 2  8 9 '
+    >>> render_template("{% for a,b,c in [(1,4,9),(2,4,6),(1,2,3)] %}{{ a }}{{ b }}{{ c }} {% end for %}", {})
+    '149 246 123 '
     >>> render_template('''{% if show_header %}the header: {% include templateTesting/header.html %}. I think that is {{ description }}{%end if%}''',{"show_header":True,"description":"cool"})
     'the header: we can get stuff from the header. I think that is cool'
     >>> render_template("{%                      for i in range(5)%}m{%  end for     %}h",{})
@@ -53,6 +57,11 @@ def render_template(string, context):
     '02468'
     >>> render_template("{{x}}", {'x':'<script> alert("hacked"); </script>'})
     '&lt;script&gt; alert(&quot;hacked&quot;); &lt;/script&gt;'
+    >>> render_template("{% include templateTesting/renderTest.txt %}",{"company_name":"google"})
+    '<head><title>google</title></head>'
+    >>> a = {4:3,2:1}
+    >>> render_template("{{ a.get(4) }}",{"a":a})
+    '3'
     """
     node = Parser(string)._parse_group()
     return node.render(context)
@@ -62,6 +71,18 @@ class TemplateException(Exception):
         super().__init__()
         self.name = name
         self.msg = msg
+
+    def __str__(self):
+        return self.msg
+
+class FileException(Exception):
+    def __init__(self, name, msg):
+        super().__init__()
+        self.name = name
+        self.msg = msg
+
+    def __str__(self):
+        return self.msg
 
 class Parser():
     def __init__(self, characters: str):
@@ -118,7 +139,7 @@ class Parser():
         return TextNode(node)
 
     def _parse_python(self):
-        matched = re.match(r'^{{\s*(\w*)\s*}}', self.remaining_text())
+        matched = re.match(r'^{{\s*(.*?)\s*}}', self.remaining_text())
         variable = matched.group(1)
         self.nextn(matched.end())
         return PythonNode(variable)
@@ -140,8 +161,9 @@ class Parser():
         body = self._parse_group()
 
         endTag = re.match(r"^{%\s*end\s+if\s*%}", self.remaining_text())
+        #checking for an end tag
         if endTag is None:
-            raise TemplateException('Syntax Error', 'Expecting an end if tag')
+            raise TemplateException('Syntax Error', 'Expecting an "end if" tag')
         self.nextn(endTag.end())
         return IfNode(condition,body)
 
@@ -167,23 +189,31 @@ class Parser():
         self.nextn(2)
         body = self._parse_group()
         endTag = re.match(r"^{%\s*end\s+for\s*%}", self.remaining_text())
+        if endTag is None:
+            raise TemplateException('Syntax Error', 'Expecting an "end for" tag')
         self.nextn(endTag.end())
       
         return ForNode(variable.strip(),coln,body)
 
     def _parse_include(self):
-        r'''
-        >>> parser = Parser("{% include folder/file.html %} {% include folder2/file2.html %}")
-        >>> node = parser._parse_include()
-        >>> print(node.path)
-        folder/file.html
-        '''
+        #Test below no longer work. Paths now have to be valid
+        
+        #r'''
+        #>>> parser = Parser("{% include folder/file.html %} {% include folder2/file2.html %}")
+        #>>> node = parser._parse_include()
+        #>>> print(node.path)
+        #folder/file.html
+        #'''
         
         #This functions assumes we are on the "{" of a block like this {% include fi.le %}
         match = re.match(r'^{%\s*include\s+([\w\/]+\.[\w]+)\s*%}', self.remaining_text())
         path = match.group(1)
         self.nextn(match.end())
-        return IncludeNode(path)
+        try:
+            open(path, 'r').close()
+        except OSError:
+            raise FileException('FileException', 'file not found')
+        return IncludeNode(path,render_template)
 
     def _parse_comment(self):
         #This function assumes that we are on the first character of a block like this
@@ -193,22 +223,33 @@ class Parser():
         #Now we are past the first {% comment %}
         while self.peekn(2) != '{%':
             self.next()
-            
+
         endTag = re.match(r"^{%\s*end\s+comment\s*%}", self.remaining_text())
+        if endTag is None:
+            raise TemplateException('Syntax Error', 'Expecting an "end comment" tag')
         self.nextn(endTag.end())
 
-    
+def asserEx(invalid, context):
+    #Function that passes if the string is invalid
+    """
+    >>> asserEx('{% if x == y %} x equals y! ', {'x': 10, 'y': 10})
+    >>> asserEx("{% for i in range(5) %}mfor %}h",{})
+    >>> asserEx("{% if True %} a {% comment %} very {% end important word {% end if %}", {})
+    >>> asserEx("{% if True %} a {% comment %} very {% end comment %} important word  if %}", {})
+    >>> asserEx('''{% include templateTesting/headerasd.html %}''',{})
+    """
+    try:
+        render_template(invalid, context)
+        assert False, "should throw an exception, was expecting an invalid string"
+        
+    except (TemplateException, FileException):
+        pass    
 
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
     print("All tests done, you are awesome :)")
 
-def asserEx(invalid, context):
-    try:
-        render_template(invalid, context)
-        assert False, "should throw an exception"
-        
-    except TemplateException:
-        pass
     
+
+
