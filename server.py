@@ -67,14 +67,21 @@ def create_profile(request):
 def list_squads(request):
     """
     >>> tornadotesting.run(list_squads)
-    'aaa'
+    'aaa 10 15/1/2018 This is a squad'
+    
     """
     all_squads = Squad.get_all()
     names = []
+    capacity = []
+    event_date = []
+    description = []
     for squad in all_squads:
         names.append(squad.name)
-    request.write(','.join(names))
-
+        capacity.append(str(squad.capacity))
+        event_date.append(str(squad.event_date))
+        description.append(squad.description)
+    request.write(','.join(names) +' '+ ','.join(capacity) +' '+ ','.join(event_date) +' '+ ','.join(description))
+    
 def view_squad(request, name):
     """
     >>> tornadotesting.run(view_squad, 'ateam')
