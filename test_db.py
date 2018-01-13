@@ -36,14 +36,15 @@ class Testing(unittest.TestCase):
         self.assertEqual(result, user)
 
     def test_squad_get_all(self):
-        squad = Squad()
+        from_db = Squad.get_by_column(1,1)
         result = Squad.get_all()
-        self.assertEqual(result, [squad])
+        self.assertEqual(result, from_db)
 
     def test_squad_get_by_squadname(self):
-        squad = Squad()
-        result = Squad.get_by_squadname('')
-        self.assertEqual(result, squad)
+        result = Squad.create(squadname='aaa', capacity=10,squad_date='15/1/2018', description='This is a squad', location='Australia', leader='James')
+        from_db = Squad.get_by_column('squadname','aaa')[0]
+        result = Squad.get_by_squadname('aaa')
+        self.assertEqual(result, from_db)
         
     def test_user_create(self):
         user = User()
@@ -51,9 +52,9 @@ class Testing(unittest.TestCase):
         self.assertEqual(user, result)
     
     def test_squad_create(self):
-        squad = Squad()
-        result = Squad.create(squadname='aaa', capacity=10,squad_date='15/1/2018', description='This is a squad', location='Australia', leader=User(), squad_time='12:12:12')
-        self.assertEqual(squad, result)
+        result = Squad.create(squadname='aaa', capacity=10,squad_date='15/1/2018', description='This is a squad', location='Australia', leader='James')
+        from_db = Squad.get_by_column('squadname', 'aaa')[0]
+        self.assertEqual(from_db, result)
 
         
     def test_squad_members_get_all(self):

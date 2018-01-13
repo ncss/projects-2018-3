@@ -3,12 +3,13 @@ from .user import User
 
 
 class Squad(DbObject):
-    columns = ['name', 'capacity', 'creation_date']
-    def __init__(self, squadname='aaa', capacity=10, squad_date='15/1/2018', description='This is a squad', location='Australia', leader=User(),squad_time='12:12:12'):
+    columns = ['squadname', 'capacity', 'squad_date', 'description','location','leader']
+    table_name = 'squads'
+    def __init__(self, squadname='aaa', capacity=10, squad_date='15/1/2018', description='This is a squad', location='Australia', leader='James'):
         '''
         Initialiser for squad object
         '''
-        self.id = 0
+        self.id = None
         self.squadname = squadname #Squad names must be unique
         self.capacity = capacity
         self.creation_date = '13/1/2018'
@@ -16,7 +17,7 @@ class Squad(DbObject):
         self.description = description
         self.location = location
         self.leader = leader
-        self.squad_time = squad_time
+        #self.squad_time = squad_time
 
     @staticmethod
     def get_all():
@@ -24,7 +25,8 @@ class Squad(DbObject):
         returns 
             list of squad objects (list)
         '''
-        return [Squad()] 
+
+        return Squad.get_by_column(1,1)
 
     @staticmethod
     def get_by_squadname(squadname: str):
@@ -34,10 +36,10 @@ class Squad(DbObject):
         returns 
             Squad object
         '''
-        return Squad()
+        return Squad.get_by_column('squadname', squadname)[0]
 
     @staticmethod
-    def create(squadname: str, capacity: int, squad_date:str, description: str, location: str, leader: str, squad_time : str):
+    def create(squadname: str, capacity: int, squad_date:str, description: str, location: str, leader: str):
         ''' This creates a new squad
         arguments
             - squadname(str)
@@ -52,6 +54,8 @@ class Squad(DbObject):
             squad object with inserted parameters (Squad)
 
         '''
-        return Squad(squadname, capacity, squad_date, description, location, leader) 
+        new_squad = Squad(squadname, capacity, squad_date, description, location, leader)
+        new_squad.save()
+        return new_squad 
 
         
