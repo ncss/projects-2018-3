@@ -3,20 +3,20 @@
 <head>
 
 <link rel='stylesheet' href="/static/styleguide.css">
+<link rel='stylesheet' href="/static/squadlist_style.css">
 <link href="https://fonts.googleapis.com/css?family=Audiowide|Encode+Sans+Expanded:600|Kanit:300" rel="stylesheet">	</head>
 <title>Squads </title>	
 </head>
 <body>
 {% include header.html %}
-	<div align="center" class="wrapper">
 	<h2 class="page_heading"> Squads </h2>
-
-		 {% for squad in squads %}
-				<h3> <a href="/squads/{{ squadname }}">{{ squad.name }} </a></h3>
+	<div align="center" class="wrapper div">
+		{% for squad in squads %}
+				<h3> <a href="/squads/{{ squad.squadname }}/">{{ squad.squadname }} </a></h3>
 		<p> Host:
 			{{ squad.leader }} </p>
 		<p> Date: 
-			{{ squad.event_date }}	
+			{{ squad.squad_date }}	
 		</p>
 		<p> Squad needed: 
 			{{ squad.capacity }}				 				 
@@ -26,7 +26,7 @@
 		<p> 
 			Description:
 			{{ squad.description }}
-		</p>	
+		</p>
 		{% end for %}
 	</div>
 {% include footer.html %}

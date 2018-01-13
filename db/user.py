@@ -45,7 +45,7 @@ class User(DbObject):
             returns
                 user object with inserted parameters (User)
         '''
-        new_user = User( username, password, description, location, birthdate, image)
+        new_user = User(username, password, description, location, birthdate, image)
         return new_user
         
     

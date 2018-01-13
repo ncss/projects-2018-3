@@ -57,11 +57,15 @@ class IncludeNode(Node):
     >>> print(a.render({}).strip())
     <html> webpage </html>
     '''
-    def __init__(self,path,render_func):
+    def __init__(self,path,render_func,include_context={}):
         self.path = "./templates/"+path
         self.render_func = render_func
+        self.include_context = include_context
     def render(self,context):
-        return self.render_func(open(self.path).read(),context)
+        newContext = {}
+        newContext.update(context)
+        newContext.update(self.include_context)
+        return self.render_func(open(self.path).read(),newContext)
 
 class IfNode(Node):
     '''
@@ -111,7 +115,7 @@ class ForNode(Node):
     def render(self,context):
         output = ""
         for block in eval(self.collection, context):
-            if isinstance(block, int):
+            if not (isinstance(block, list) or isinstance(block, tuple)) or len(self.variable_block) == 1:
                 context[self.variable_block[0]] = block
                 output += self.body.render(context)
             else:
