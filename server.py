@@ -93,12 +93,12 @@ def list_squads(request):
 
 def view_squad(request, name):
     """
-    >>> tornadotesting.run(view_squad, 'ateam')
-    'This is the squad page for aaa'
+    >>> html = tornadotesting.run(view_squad, 'ateam')
+    >>> assert 'ateam' in html, html
     """
     squad = Squad.get_by_squadname(name)
-
-    request.write('This is the squad page for {}'.format(squad.squadname))
+    context = {'Squad':name, 'leader':squad.leader, 'date':squad.squad_date, 'time':squad.squad_time, 'location':squad.location, 'required_numbers': str(squad.capacity), 'description':squad.description, 'current_user':'alice'}
+    request.write(render_file('squad_details.html', context))
 
 def show_create_squad_page(request):
     """
@@ -195,6 +195,35 @@ def redirect_root(request):
     """
     request.redirect('/squads/')
 
+
+def login_page(request):
+    if is_logged_in(request):
+        request.redirect(r'/squads/')
+    else:
+        context = {}
+        request.write(render_file('test-login.html', context))
+
+def process_login(request):
+    luser = request.get_field('username')
+    lpass = request.get_field('password')
+    users = User.get_all()
+    is_valid_user = False
+    for user in users:
+        if user.username == luser:
+            if user.password ==lpass:
+                is_valid_user = True
+    if is_valid_user:
+        request.set_secure_cookie('squadify-login', 'Logged In')
+        request.write('You have successfully logged in! Well done! Good on you! Is the sarcasm obvious yet?')
+    else:
+        request.write("Aww, too bad, your username or password was incorrect, maybe try agian? or sign up if you're trying to sign up on the login page like a gumbo.")
+
+def is_logged_in(request):
+    if request.get_secure_cookie('squadify-login'):
+        return True
+    else:
+        return False
+
 server = Server()
 server.register(r'/profiles/([a-z]+)/?', view_profile)
 server.register(r'/register/?', create_profile_page, post=create_profile)
@@ -205,6 +234,7 @@ server.register(r'/squads/([a-z]+)/accept/?', accept_squad_member)
 server.register(r'/squads/([a-z]+)/reject/?', reject_squad_member)
 server.register(r'/squads/([a-z]+)/apply/?', apply_to_squad)
 server.register(r'/', redirect_root)
+server.register(r'/login/?', login_page, post=process_login )
 
 if __name__ == '__main__':
     DbObject.start_database()
