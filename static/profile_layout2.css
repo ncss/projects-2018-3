@@ -1,14 +1,12 @@
-body {
-	margin: 0 auto;
-	width: 900px;
-	align-content: center;
-}
-	
+
 .wrapper {
 	display: grid;
 	grid-template-column: repeat(3, 1fr);
 	grid-gap: 50px;
 	grid-auto-rows: minmax(100px, auto)
+	margin: 0 auto;
+	width: 900px;
+	align-content: center;
 }
 
 .box {
