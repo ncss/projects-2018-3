@@ -2,26 +2,28 @@
 <html>
 	<head>
 		<title>Sign up</title>
-		<link rel='stylesheet' href='../static/styleguide.css'>
+		<link rel='stylesheet' href='/static/styleguide.css'>
 		<link rel='stylesheet' href='/static/register_style.css'>
 		<link href="https://fonts.googleapis.com/css?family=Audiowide|Encode+Sans+Expanded:600|Kanit:300" rel="stylesheet">
 	</head>
 	<body>
-	{% include header.html %}
+	{% include /templates/header.html %}
 		<article id='sign_in_pane'>
 			<form method='POST' action='/register/'>
-				<h3>Sign up:</h3>
-				<input name="username" type="text" placeholder='Username'>
-				<input name="password" type="password" placeholder='Password'><br><br>
-				<input name="location" type="text" placeholder='Location'>
-				<input name="birthdate" type="text" placeholder='Birthdate'><br>
-				Choose a profile pic: <input name="image" type="file">
-				<h4>About you:</h4>
-				<textarea name='description' type='text' placeholder='Your description here'>
-				</textarea>
-				<input type="submit" value="Join">
+				<h2 class='heading'>Sign up:</h2>
+				<input name="username" type="text" placeholder='Username' class='field'><br>
+				<input name="password" type="password" placeholder='Password' class='field'><br>
+				<input name="location" type="text" placeholder='Location' class='field'><br>
+				<input name="birthdate" type="text" placeholder='Birthdate' class='field'><br>
+				<h3 class='heading'>Choose a profile pic:</h3>
+				<input name="image" type="file">
+				<h3 class='heading'>About you:</h3>
+				<textarea name='description' type='text' placeholder='Your description here' id='desc_input'>
+					
+				</textarea><br>
+				<input type="submit" value="Join" id='submit'>
 			</form>
 		</article>
-		{% include footer.html %}
+		{% include /templates/footer.html %}
 	</body>
 </html>
