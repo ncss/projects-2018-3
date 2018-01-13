@@ -41,6 +41,10 @@ def render_template(string, context):
     ' a important word '
     >>> render_template('''{% include templateTesting/header.html %} and we can have text from no file and {% include templateTesting/footer.html %}''',{})
     'we can get stuff from the header and we can have text from no file and we can get stuff from the footer!'
+    >>> render_template("{% for a, b in list %} {{ a }} {{ b }} {% end for %}", {'list': [[1,2], [8,9]]})
+    ' 1 2  8 9 '
+    >>> render_template("{% for a,b,c in [(1,4,9),(2,4,6),(1,2,3)] %}{{ a }}{{ b }}{{ c }} {% end for %}", {})
+    '149 246 123 '
     """
     node = Parser(string)._parse_group()
     return node.render(context)

@@ -89,17 +89,27 @@ class ForNode(Node):
     0
     1
     2
+    >>> bNode = GroupNode([PythonNode("a"), PythonNode("b")])
+    >>> fNode = ForNode("a, b", "[(1,2), (4,8)]", bNode)
+    >>> print(fNode.render({}))
+    1248
     '''
-    def __init__(self,variable,collection,body):
-        self.variable = variable
+    def __init__(self,variable_block,collection,body):
+        self.variable_block = variable_block.split(",")
         self.collection = collection
         self.body = body
 
     def render(self,context):
         output = ""
-        for i in eval(self.collection,context):
-            context[self.variable] = i
-            output += self.body.render(context)
+        for block in eval(self.collection, context):
+            if isinstance(block, int):
+                context[self.variable_block[0]] = block
+                output += self.body.render(context)
+            else:
+                for i in range(len(self.variable_block)):
+                    var = self.variable_block[i].strip()
+                    context[var] = block[i]
+                output += self.body.render(context)
         return output
 
 class CommentNode(Node):
@@ -117,3 +127,4 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod()
     print("Tests done!")
+   
