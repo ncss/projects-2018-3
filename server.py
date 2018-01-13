@@ -80,6 +80,7 @@ def create_profile(request):
 
     data['image'] = ''
     user = User.create(**data)
+    request.set_secure_cookie('squadify-login', user.username)
     request.redirect('/profiles/{}/'.format(user.username))
 
 def list_squads(request):
