@@ -17,7 +17,7 @@
 			<ul>
 				{% for applicant in applicants %}
 				{% if applicant.status == 2 %}
-				<li><a href='/profile/{{ applicant.username }}/'>{{ applicant.username }}</a>
+				<li><a href='/profiles/{{ applicant.username }}/'>{{ applicant.username }}</a>
 				{% end if %}
 				{% end for %}
 		  </ul>
@@ -41,7 +41,7 @@
 				<form method="POST" action='/squads/{{Squad}}/accept-reject/'>
 					{% for applicant in applicants %}
 					  {% if applicant.status == 0 %}
-						<a href='/profile/{{ applicant.username }}/'>{{ applicant.username }}</a>:
+						<a href='/profiles/{{ applicant.username }}/'>{{ applicant.username }}</a>:
 
 
 						<input type='radio' value='accept' name='{{applicant.username}}'> Accept
