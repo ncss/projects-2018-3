@@ -16,7 +16,7 @@
 			<p> Members:
 			<ul>
 				{% for applicant in applicants %}
-				{% if applicant.status == 0 %}
+				{% if applicant.status == 2 %}
 				<li><a href='/profile/{{ applicant.username }}/'>{{ applicant.username }}</a>
 				{% end if %}
 				{% end for %}
@@ -40,7 +40,7 @@
 				<h3 class='heading'>Applicants:</h3>
 				<form method="POST" action='/squads/{{Squad}}/accept-reject/'>
 					{% for applicant in applicants %}
-					  {% if applicant.status != 0 %}
+					  {% if applicant.status == 0 %}
 						<a href='/profile/{{ applicant.username }}/'>{{ applicant.username }}</a>:
 
 
