@@ -71,15 +71,22 @@ class IfNode(Node):
     <BLANKLINE>
     >>> print(a.render({"age":8}))
     8
+    >>> a.false_body = TextNode("younger then six")
+    >>> a.render({"age":3})
+    'younger then six'
+    >>> a.render({"age":6})
+    '6'
     '''
-    def __init__(self,condition,body):
-        self.body = body
+    def __init__(self,condition,true_body,false_body=GroupNode([])):
+        self.true_body = true_body
+        self.false_body = false_body
         self.condition = condition
 
     def render(self,context):
         if eval(self.condition,context):
-            return self.body.render(context)
-        return ""
+            return self.true_body.render(context)
+        else:
+            return self.false_body.render(context)
     
 class ForNode(Node):
     r'''
