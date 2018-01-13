@@ -236,6 +236,7 @@ server.register(r'/squads/([a-z]+)/apply/?', apply_to_squad)
 server.register(r'/', redirect_root)
 server.register(r'/login/?', login_page, post=process_login )
 
+DbObject.start_database()
+
 if __name__ == '__main__':
-    DbObject.start_database()
     server.run()
