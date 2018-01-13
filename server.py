@@ -238,6 +238,10 @@ def get_current_user(request):
     else:
         return None
 
+def logout_page(request):
+    request.set_secure_cookie('squadify-login', '')
+    request.redirect('/')
+
 server = Server()
 server.register(r'/profiles/([a-z]+)/?', view_profile)
 server.register(r'/register/?', create_profile_page, post=create_profile)
@@ -249,6 +253,8 @@ server.register(r'/squads/([a-z]+)/reject/?', reject_squad_member)
 server.register(r'/squads/([a-z]+)/apply/?', apply_to_squad)
 server.register(r'/', redirect_root)
 server.register(r'/login/?', login_page, post=process_login )
+server.register(r'/logout/?', logout_page)
+
 
 DbObject.start_database()
 
