@@ -7,7 +7,7 @@
 		<link href="https://fonts.googleapis.com/css?family=Audiowide|Encode+Sans+Expanded:600|Kanit:300" rel="stylesheet">
 	</head>
 	<body>
-	{% include /templates/header.html %}
+		{% include /templates/header.html %}
 		<article id='sign_in_pane'>
 			<form method='POST' action='/register/'>
 				<h2 class='heading'>Sign up:</h2>
@@ -18,10 +18,9 @@
 				<h3 class='heading'>Choose a profile pic:</h3>
 				<input name="image" type="file">
 				<h3 class='heading'>About you:</h3>
-				<textarea name='description' type='text' placeholder='Your description here' id='desc_input'>
-					
-				</textarea><br>
-				<input type="submit" value="Join" id='submit'>
+				<textarea name='description' type='text' placeholder='Your description here' id='description'>
+				</textarea>
+				<br><input type="submit" value="Join" id='submit'>
 			</form>
 		</article>
 		{% include /templates/footer.html %}
