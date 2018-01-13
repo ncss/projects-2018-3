@@ -5,9 +5,17 @@
 	padding: 10px;
 	margin-top: 5px;
 	margin-bottom: 5px;
+}
 
-]
 
 .page_heading {
 	text-align: center;
+}
+
+.wrapper a {
+	color: white !important;
+}
+
+.wrapper a:hover {
+	color: #70d8a6 !important;
 }
