@@ -1,0 +1,14 @@
+/* home page css */
+
+.wrapper {
+	text-align: center;
+	border: 3px;
+	box-shadow: 0 0 10px 5px #336370;
+	width: 500px;
+	margin: 0 auto;
+}
+
+.form {
+	text-align: left;
+	display: grid;
+}

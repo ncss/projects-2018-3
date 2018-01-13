@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel='stylesheet' href="../static/styleguide.css">
+<<<<<<< HEAD
+<link rel='stylesheet' href="/static/styleguide.css">
 <link href="https://fonts.googleapis.com/css?family=Audiowide|Encode+Sans+Expanded:600|Kanit:300" rel="stylesheet">
 </head>
 <body>
-{% include /templates/header.html %}
+{% include header.html %}
 <h2> Create Squad </h2>
-<form>
+<form method="POST" action="/create_squad/">
 Name: <input id="name" type="text" name="name">
 <br>
 Date/Time: <input id="date" type="text" name="date">
 <br>
 Location: <input id="location" type="text" name="location">
 <br>
-Player number required: <input id="player_number_required" type="text" name="player number required">
+Requred Number of Players: <input id="player_number_required" type="number" min="2" name="player number required">
 <br>
 Description: <input id="description" type="text">
 <br>
 <input type = "submit" value = "create">
 <input type = "reset" value = "clear" >
 </form>
-{% include /templates/footer.html %}
+{% include footer.html %}
 </body>
 </html>
