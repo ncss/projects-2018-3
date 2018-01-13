@@ -149,7 +149,8 @@ def send_message(request, name):
         return
     sender = get_current_user(request)
     request.redirect('/squads/{}/'.format(name))
-    sent_message = SquadMessages.create(name,sender,data['message-text'], datetime.now())
+    
+    sent_message = SquadMessages.create(name,sender,data['message-text'], datetime.now().isoformat()[11:19])
 
 def show_create_squad_page(request):
     """

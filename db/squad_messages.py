@@ -30,7 +30,7 @@ class SquadMessages(DbObject):
     def get_most_recent_5(cls, squadname):
         connection = cls.get_connection()
         cursor = connection.cursor()
-        cursor.execute('''SELECT rowid, * FROM squad_messages WHERE squadname=? ORDER BY time_sent LIMIT 5;''', (squadname,))
+        cursor.execute('''SELECT rowid, * FROM squad_messages WHERE squadname=? ORDER BY time_sent DESC LIMIT 5;''', (squadname,))
         rows = []
         for row in cursor.fetchall():
             rows.append(cls.from_row(row))
