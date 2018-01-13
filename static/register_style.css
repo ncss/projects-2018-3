@@ -5,24 +5,42 @@
 	margin-top:10px;
 	padding:5px;
 	margin: 0 auto;
+	background-color:#33343A;
+	color:#70D8A6;
+	border-radius:5px;
 }
 .field{
+	width:175px;
 	margin-bottom:5px;
+	border-radius:5px;
 }
 .heading{
 	margin-top: 3px;
 	margin-bottom: 3px;
 }
-body{
-	display:grid;
-	grid-template-column:repeat(12,1fr);
-}
 #submit{
-	width:170px;
-	height:25px;
+	width:180px;
+	height:40;
+	background-color:#336370;
+	color:#70D8A6;
+	font-family:Kanit;
+	font-weight:bold;
+	font-size:170%;
+	border-radius:5px;
+	border-color:#336370;
+	padding:0px;
 }
 #description{
 	overflow:hidden;
-	width:170px;
+	width:177px;
 	height:50px;
+	border-radius:5px;
+	padding:0px;
+}
+#main_title{
+	font-size:25px;
+	text-align: center;
+}
+#choose_image{
+	font-family:Kanit;
 }
