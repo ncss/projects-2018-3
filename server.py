@@ -71,16 +71,22 @@ def list_squads(request):
     
     """
     all_squads = Squad.get_all()
-    names = []
-    capacity = []
-    event_date = []
-    description = []
-    for squad in all_squads:
-        names.append(squad.name)
-        capacity.append(str(squad.capacity))
-        event_date.append(str(squad.event_date))
-        description.append(squad.description)
-    request.write(','.join(names) +' '+ ','.join(capacity) +' '+ ','.join(event_date) +' '+ ','.join(description))
+    context = {"events":all_squads}
+    request.write(render_file("squad-list.html", context))
+
+
+
+
+    #names = []
+    #capacity = []
+    #event_date = []
+    #description = []
+    #for squad in all_squads:
+        #names.append(squad.name)
+        #capacity.append(str(squad.capacity))
+        #event_date.append(str(squad.event_date))
+        #description.append(squad.description)
+    #request.write(','.join(names) +' '+ ','.join(capacity) +' '+ ','.join(event_date) +' '+ ','.join(description))
     
 def view_squad(request, name):
     """
