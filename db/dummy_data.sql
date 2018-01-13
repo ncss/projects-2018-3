@@ -51,3 +51,24 @@ INSERT INTO squad_members VALUES (
     1,
     '1/1/2018'
 );
+
+INSERT INTO squad_messages VALUES (
+    'jenga',
+    'james',
+    'hello everyone.',
+    '05:00'
+);
+
+INSERT INTO squad_messages VALUES (
+    'jenga',
+    'emily',
+    'I love Jenga too!',
+    '05:01'
+);
+
+INSERT INTO squad_messages VALUES (
+    'jenga',
+    'james',
+    'omg I have friend',
+    '05:02'
+);

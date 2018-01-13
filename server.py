@@ -1,7 +1,7 @@
 from tornado.ncss import Server, ncssbook_log
 import tornadotesting
 from template import render_template
-from db import User, Squad, DbObject, SquadMembers
+from db import User, Squad, DbObject, SquadMembers, SquadMessages
 from datetime import date
 import re
 
@@ -80,6 +80,7 @@ def create_profile(request):
 
     data['image'] = ''
     user = User.create(**data)
+    request.set_secure_cookie('squadify-login', user.username)
     request.redirect('/profiles/{}/'.format(user.username))
 
 def list_squads(request):
@@ -97,6 +98,7 @@ def view_squad(request, name):
     >>> assert 'ateam' in html, html
     """
     squad = Squad.get_by_squadname(name)
+    squad_messages = SquadMessages.get_by_squadname(name)
     context = {'Squad':name,
                 'leader':squad.leader,
                 'date':squad.squad_date,
@@ -104,7 +106,8 @@ def view_squad(request, name):
                 'location':squad.location,
                 'required_numbers': str(squad.capacity),
                 'description':squad.description,
-                'current_user':get_current_user(request)}
+                'current_user':get_current_user(request),
+                'messages':squad_messages}
     request.write(render_file('squad_details.html', context))
 
 def show_create_squad_page(request):
@@ -112,7 +115,7 @@ def show_create_squad_page(request):
     >>> html = tornadotesting.run(show_create_squad_page)
     >>> assert 'name' in html, html
     """
-    context={}
+    context={'current_user':get_current_user(request)}
     request.write(render_file("create_squad.html", context))
 
 def create_squad(request):
@@ -222,14 +225,14 @@ def process_login(request):
             if user.password ==lpass:
                 is_valid_user = True
     if is_valid_user:
-        request.set_secure_cookie('squadify-login', 'Logged In')
+        request.set_secure_cookie('squadify-login', luser)
         request.redirect(r'/squads/')
     else:
         request.redirect(r'/login/?failure=1')
 
 def get_current_user(request):
     if request.get_secure_cookie('squadify-login'):
-        return "James"
+        return request.get_secure_cookie('squadify-login').decode('utf-8')
     else:
         return None
 
