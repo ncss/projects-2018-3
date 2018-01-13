@@ -1,5 +1,6 @@
 from .dbObject import DbObject
 from .user import User
+
 class Squad(DbObject):
     def __init__(self, name='aaa', capacity=10, event_date='15/1/2018', description='This is a squad', location='Australia', leader=0):
         '''
@@ -16,11 +17,16 @@ class Squad(DbObject):
 
     @staticmethod
     def get_all():
-        ''' This gets a list of all the available squads			
-		returns 
-			list of squad objects (list)
+        ''' This gets a list of all the available squads            
+        returns 
+            list of squad objects (list)
         '''
-        return [Squad()] 
+        conn = sqlite3.connect('squadify.db')
+        cur = conn.cursor()
+        squads = cur.execute('SELECT * FROM squads;')
+        cur.close()
+        conn.close()
+        return squads
 
     @staticmethod
     def get_by_name(name: str):
@@ -30,7 +36,13 @@ class Squad(DbObject):
         returns 
             Squad object
         '''
-        return Squad()
+        
+        conn = sqlite3.connect('squadify.db')
+        cur = conn.cursor()
+        squad = cur.execute('SELECT * FROM squads WHERE name=?;',(name,))
+        cur.close()
+        conn.close()
+        return squad
 
     @staticmethod
     def create(name: str, capacity: int, event_date:str, description: str, location: str, leader: str):
@@ -47,6 +59,9 @@ class Squad(DbObject):
             squad object with inserted parameters (Squad)
 
         '''
+        conn = sqlite3.connect('squadify.db')
+        cur = conn.cursor()
+        squad = cur.execute('INSERT INTO squads VALUES(name=?, capacity=?,event_date=?,description=?,location=?,leader=?);',(name, capacity, description, location, leader))
         return Squad(name, capacity, event_date, description, location, leader) 
 
         

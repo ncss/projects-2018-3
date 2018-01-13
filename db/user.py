@@ -17,10 +17,10 @@ class User(DbObject):
         returns    
             list of user objects (list)
         '''
-		conn = sqlite3.connect('squadify.db')
-		cur = conn.cursor()
-		cur.execute(SELECT * FROM users)
-        return [User()]
+        conn = sqlite3.connect('squadify.db')
+        cur = conn.cursor()
+        all = cur.execute('SELECT * FROM users')
+        return all
     
     @staticmethod
     def get_by_username(username : str):
@@ -30,7 +30,12 @@ class User(DbObject):
         returns
             user object (User)
         '''
-        return User()
+        conn = sqlite3.connect('squadify.db')
+        cur = conn.cursor()
+        user = cur.execute('SELECT * FROM users WHERE username=?;',(username,))
+        cur.close()
+        conn.close()
+        return user
     
     @staticmethod
     def create(username : str, password : str, description : str, location : str, birthdate : str, image : str):
@@ -46,9 +51,10 @@ class User(DbObject):
                 user object with inserted parameters (User)
         '''
         conn = sqlite3.connect('squadify.db')
-		cur = conn.cursor()
-		##cur.execute(SELECT...)
-		new_user = User( username, password, description, location, birthdate, image)
+        cur = conn.cursor()
+        new_user = cur.execute('INSERT INTO users VALUES (username=?, password=?, description=?, location=?, birthdate=?, image=?);',(username,password,description,location,birthdate,image))
+        cur.close()
+        conn.close()
         return new_user
         
     
