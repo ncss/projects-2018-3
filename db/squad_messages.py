@@ -26,6 +26,18 @@ class SquadMessages(DbObject):
 
         return result
 
+    @classmethod
+    def get_most_recent_5(cls):
+        cursor = connection.cursor()
+        cursor.execute('''
+            SELECT rowid, * FROM squad_messages WHERE squadname=? LIMIT 5 ORDER BY time_sent;
+            ''', (squad.squadname)
+        )
+        rows = []
+        for row in cursor.fetchall():
+            rows.append(cls.from_row())
+        return rows()
+
 
     @staticmethod
     def create(squadname : str, sender_username : str, message : str, time_sent : str):

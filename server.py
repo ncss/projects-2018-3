@@ -97,7 +97,10 @@ def view_squad(request, name):
     >>> assert 'ateam' in html, html
     """
     squad = Squad.get_by_squadname(name)
-    squad_messages = SquadMessages.get_by_squadname(name)
+
+
+
+    squad_messages = SquadMessages.get_most_recent_5()
     context = {'Squad':name,
                 'leader':squad.leader,
                 'date':squad.squad_date,
