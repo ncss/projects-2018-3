@@ -59,6 +59,9 @@ def render_template(string, context):
     '&lt;script&gt; alert(&quot;hacked&quot;); &lt;/script&gt;'
     >>> render_template("{% include templateTesting/renderTest.txt %}",{"company_name":"google"})
     '<head><title>google</title></head>'
+    >>> a = {4:3,2:1}
+    >>> render_template("{{ a.get(4) }}",{"a":a})
+    '3'
     """
     node = Parser(string)._parse_group()
     return node.render(context)
@@ -135,7 +138,7 @@ class Parser():
         return TextNode(node)
 
     def _parse_python(self):
-        matched = re.match(r'^{{\s*(\w*)\s*}}', self.remaining_text())
+        matched = re.match(r'^{{\s*(.*?)\s*}}', self.remaining_text())
         variable = matched.group(1)
         self.nextn(matched.end())
         return PythonNode(variable)
