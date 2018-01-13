@@ -140,8 +140,6 @@ def accept_squad_member(request, name):
         request.write('Go Away!')
         return
 
-
-
     if squad.leader.username != data['username']:
         request.write('Insufficient permissions')
         return
@@ -151,11 +149,27 @@ def accept_squad_member(request, name):
 
 def reject_squad_member(request, name):
     """
-    >>> tornadotesting.run(reject_squad_member, 'ateam')
-    'This page reject ateam'
+    >>> tornadotesting.run(reject_squad_member, 'ateam', fields={'username': 'James'})
+    'Rejected'
+    >>> tornadotesting.run(reject_squad_member, 'ateam', fields={'username': 'bruce'})
+    'Insufficient permissions'
     """
 
-    request.write('This page reject {}'.format(name))
+    squad = Squad.get_by_squadname(name)
+
+    data = request.get_fields()
+    reject_fields = ['username']
+    if sorted(data.keys()) != sorted(reject_fields):
+        request.write('Go Away!')
+        return
+
+    if squad.leader.username != data['username']:
+        request.write('Insufficient permissions')
+        return
+
+    status = SquadMembers.change_status(new_status=1, squadname=name, **data)
+    request.write("Rejected")
+
 
 def apply_to_squad(request, name):
     """
