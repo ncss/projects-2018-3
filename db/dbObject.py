@@ -18,7 +18,16 @@ class DbObject:
         '''
         if not isinstance(other, self.__class__):
             return False
-        return self.__dict__  == other.__dict__
+        a = dict(self.__dict__)
+        b = dict(other.__dict__)
+        del a['id']
+        del b['id']
+        
+        return a == b 
+
+        
+    def __repr__(self):
+        return "<{} {}>".format(self.__class__.__name__,self.__dict__)
 
     @staticmethod
     def start_database():
@@ -38,6 +47,9 @@ class DbObject:
 
     @classmethod
     def from_row(cls, row):
+        '''
+        takes a <Sqlite.row> object and instantiates a DbObject based on this
+        '''
         kwargs = {}
         for column in cls.columns:
             if column in row.keys():
@@ -48,6 +60,9 @@ class DbObject:
 
     @classmethod
     def get_by_column(cls, column, value):
+        '''
+        
+        '''
         cursor = connection.cursor()
         cursor.execute('''
             SELECT rowid, * FROM {} WHERE {} = ?;
@@ -59,6 +74,12 @@ class DbObject:
         return rows
 
     def save(self):
+        '''
+        if the object is new insert it into the database
+        if not, update with the new values
+
+        uses super special magic double formatttting
+        '''
         cursor = connection.cursor()
         string = []
         update_string = []
@@ -67,8 +88,8 @@ class DbObject:
             values.append(getattr(self, column))
             string.append('?')
             update_string.append(column + '=?')
-            
-        if self.id is None:
+        
+        if not self.id:
             cursor.execute('''
             INSERT INTO {} ({}) VALUES ({})
             '''.format(self.__class__.table_name,",".join(self.__class__.columns), ','.join(string)), values)
@@ -79,3 +100,4 @@ class DbObject:
             UPDATE {} SET {} WHERE rowid = ?
             '''.format(self.__class__.table_name,','.join(update_string)), values)
         connection.commit()
+        return self
