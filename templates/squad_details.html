@@ -56,7 +56,7 @@
 				</form>
 			{% end if %}
 
-			{% if current_user!=leader %}
+			{% if current_user!=leader and current_user%}
 				<a href='/squads/{{ Squad }}/apply/'>Join Squad</a>
 
 			{% end if%}
