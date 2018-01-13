@@ -112,7 +112,7 @@ def show_create_squad_page(request):
     >>> html = tornadotesting.run(show_create_squad_page)
     >>> assert 'name' in html, html
     """
-    context={}
+    context={'current_user':get_current_user(request)}
     request.write(render_file("create_squad.html", context))
 
 def create_squad(request):
