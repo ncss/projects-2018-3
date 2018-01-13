@@ -1,0 +1,10 @@
+		{% include header.html %}
+		<article id='login_pane'>
+			<form method='POST' action='/login/'>
+				<h3>Enter login info:</h3>
+				<input name='username' type='text' placeholder='Username' required>
+				<input name='password' type='password' placeholder='Password' required>
+				<input type='submit' value='Login'>
+			</form>
+		</article>
+		{% include footer.html %}
