@@ -5,6 +5,7 @@ from .squad import Squad
 
 class SquadMembers(DbObject):
 
+
     def __init__(self, squadname='game', username='James', status=0):
         self.id = 0
         self.squadname = squadname
@@ -43,8 +44,9 @@ class SquadMembers(DbObject):
             User.create(username='James',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png'),
             User.create(username='Tim',password='5678',description='Hi my name is Tim',location='Syd',birthdate='DD/MM/YYYY',image='/file/imag.png')
         ]
-        
-    def change_status(self, username : str, new_status : int, squadname : str):
+    
+    @staticmethod    
+    def change_status(username : str, new_status : int, squadname : str):
         ''' This method changes the status of the user in a specific squad. 
         
         arguments
@@ -55,10 +57,11 @@ class SquadMembers(DbObject):
         returns
             the new status (int)
         '''
-        self.status = new_status
-        return self.status
+        status = new_status
+        return status
     
-    def apply(self, squadname : str, username : str):
+    @staticmethod
+    def apply(squadname : str, username : str):
         ''' This method puts in an application to become a member of a squad.
         
         arguments
@@ -68,5 +71,5 @@ class SquadMembers(DbObject):
         returns
             status of the application (int)
         '''
-        self.status = 0
-        return self.status
+        status = 0
+        return status
