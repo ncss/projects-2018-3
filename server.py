@@ -63,16 +63,6 @@ def create_profile(request):
     ...     'birthdate': 'test', 'image': 'test'})
     'You created a user called alice'
     """
-    '''user_data = {}
-    user_data["username"] = request.get_field("username")
-    user_data["password"] = request.get_field("password")
-    user_data["description"] = request.get_field("description")
-    user_data["location"] = request.get_field("location")
-    user_data["birthdate"] = request.get_field("birthdate")
-    user_data["image"] = request.get_field("image")
-    #print(user_data)'''
-
-
     accept_fields = ['username', 'password', 'description', 'location', 'birthdate', 'image']
     data = get_form_data(request, accept_fields)
     if not data:
@@ -124,7 +114,7 @@ def show_create_squad_page(request):
 def create_squad(request):
     """
     >>> tornadotesting.run(create_squad)
-    'Go Away!'
+    'You must complete all fields.'
     >>> tornadotesting.run(create_squad, fields={
     ...     'squadname': 'alice', 'capacity': '4', 'squad_date': date.today(),
     ...     'description': 'blah', 'location': 'Australia', 'leader': 'sandy',
@@ -132,10 +122,11 @@ def create_squad(request):
     'squad created with name alice'
 
     """
-    data = request.get_fields()
+
     accept_fields = ['squadname', 'capacity', 'squad_date', 'description', 'location', 'leader', 'squad_time']
-    if sorted(data.keys()) != sorted(accept_fields):
-        request.write('Go Away!')
+    data = get_form_data(request, accept_fields)
+    if not data:
+        request.write('You must complete all fields.')
         return
     squad = Squad.create(**data)
     request.write('squad created with name {}'.format(squad.squadname))
@@ -152,10 +143,10 @@ def accept_squad_member(request, name):
 
     squad = Squad.get_by_squadname(name)
 
-    data = request.get_fields()
     accept_fields = ['username']
-    if sorted(data.keys()) != sorted(accept_fields):
-        request.write('Go Away!')
+    data = get_form_data(request, accept_fields)
+    if not data:
+        request.write('Must post username')
         return
 
     if squad.leader.username != data['username']:
@@ -175,10 +166,11 @@ def reject_squad_member(request, name):
 
     squad = Squad.get_by_squadname(name)
 
-    data = request.get_fields()
-    reject_fields = ['username']
-    if sorted(data.keys()) != sorted(reject_fields):
-        request.write('Go Away!')
+
+    accept_fields = ['username']
+    data = get_form_data(request, accept_fields)
+    if not data:
+        request.write('Must post username')
         return
 
     if squad.leader.username != data['username']:
@@ -194,10 +186,10 @@ def apply_to_squad(request, name):
     >>> tornadotesting.run(apply_to_squad, 'ateam', fields={'username': 'alice'})
     '0'
     """
-    data = request.get_fields()
     accept_fields = ['username']
-    if sorted(data.keys()) != sorted(accept_fields):
-        request.write('Go Away!')
+    data = get_form_data(request, accept_fields)
+    if not data:
+        request.write('You must post username.')
         return
     status = SquadMembers.apply(squadname=name, **data)
     request.write(str(status))
