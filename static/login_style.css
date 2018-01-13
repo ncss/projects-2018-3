@@ -1,0 +1,11 @@
+#login_pane{
+	box-shadow: -3px 3px 10px black;
+	width:500px;
+	padding:5px;
+	margin-left:5px;
+	margin-top:5px;
+}
+body{
+	display:grid;
+	grid-template-column:repeat(3,1fr);
+}

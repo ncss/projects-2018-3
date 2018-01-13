@@ -23,7 +23,19 @@ INSERT INTO squads VALUES (
     '25/1/2018',
     'This is a squad',
     'IT Labs',
-    0
+    0,
+    '12:00'
+);
+
+INSERT INTO squads VALUES (
+    'ateam',
+    10,
+    '20/1/2018',
+    '25/1/2018',
+    'This is a team',
+    'IT Labs',
+    0,
+    '12:00'
 );
 
 INSERT INTO squad_members VALUES (
