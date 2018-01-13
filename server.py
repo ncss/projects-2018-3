@@ -1,8 +1,9 @@
 from tornado.ncss import Server, ncssbook_log
 import tornadotesting
 from template import render_template
-from db import User, Squad, DbObject, SquadMembers
+from db import User, Squad, DbObject, SquadMembers, SquadMessages
 from datetime import date
+import re
 
 def get_form_data(request, fields):
     output = {}
@@ -28,10 +29,10 @@ def render_file(filename, context):
 
 def view_profile(request, username):
     """
-    >>> html = tornadotesting.run(view_profile, 'alice')
+    >>> html = tornadotesting.run(view_profile, 'James')
     >>> assert "James" in html, html
     >>> assert "42" in html, html
-    >>> assert "Sydney" in html, html
+    >>> assert "NSW" in html, html
     """
 
     user = User.get_by_username(username)
@@ -39,35 +40,51 @@ def view_profile(request, username):
     #Age code for when DB sends an actual date object
     #age = date.today().year - user.birthdate.year
 
-
-    context = {'username':user.username, 'age':'42', 'loc':user.location, 'description':user.description }
+    logged_in = get_current_user(request)
+    if logged_in:
+        logged_in_user = User.get_by_username(logged_in)
+        profile_image = logged_in_user.image
+    else:
+        profile_image = ''
+    context = {'username':user.username,
+               'age':str(user.birthdate),
+               'loc':user.location,
+               'description':user.description,
+               'current_user': logged_in,
+               'profile_image': profile_image,
+               'image': user.image,
+               }
 
 
     request.write(render_file('profile.html', context))
-
 def create_profile_page(request):
     """
     >>> html = tornadotesting.run(create_profile_page)
     >>> assert "description" in html, html
     >>> assert "submit" in html, html
     """
-    context={}
+    context={'message':'', 'current_user':get_current_user(request)}
+    if request.get_field('failure'):
+        context['message'] = "Oh dear, it looks like you've tried to use a unsupported character. Try using lower case ^_^"
     request.write(render_file("register.html", context))
 
 def create_profile(request):
     """
-    >>> tornadotesting.run(create_profile, fields={'username': 'alice',
-    ...     'password': 'test', 'description': 'test', 'location': 'test',
-    ...     'birthdate': 'test'})
-    Redirect('/profiles/alice/')
+    >>> tornadotesting.run(create_profile, fields={'username': 'james',
+    ...     'password': 'password', 'description': 'My name is James', 'location': 'NSW',
+    ...     'birthdate': '15/1/2018'})
+    Redirect('/profiles/james/')
     """
-    accept_fields = ['username', 'password', 'description', 'location', 'birthdate']
+    accept_fields = ['username', 'password', 'description', 'location', 'birthdate', 'image']
     data = get_form_data(request, accept_fields)
     if not data:
-        request.write('You must complete all fields.')
+        request.redirect('/register/?failure=1')
         return
-    data['image'] = ''
+    if re.match(r'^([a-z]+)$', data['username']) == None:
+        request.redirect('/register/?failure=1')
+        return
     user = User.create(**data)
+    request.set_secure_cookie('squadify-login', user.username)
     request.redirect('/profiles/{}/'.format(user.username))
 
 def list_squads(request):
@@ -76,20 +93,18 @@ def list_squads(request):
     >>> assert 'Squads' in html, html
     """
     all_squads = Squad.get_all()
-    context = {"squads":all_squads}
+    logged_in = get_current_user(request)
+    if logged_in:
+        logged_in_user = User.get_by_username(logged_in)
+        profile_image = logged_in_user.image
+    else:
+        profile_image = ''
+    context = {"squads":all_squads,
+    'current_user': logged_in,
+    'profile_image': profile_image,
+    }
+
     request.write(render_file("list_squads.html", context))
-
-
-    #names = []
-    #capacity = []
-    #event_date = []
-    #description = []
-    #for squad in all_squads:
-        #names.append(squad.name)
-        #capacity.append(str(squad.capacity))
-        #event_date.append(str(squad.event_date))
-        #description.append(squad.description)
-    #request.write(','.join(names) +' '+ ','.join(capacity) +' '+ ','.join(event_date) +' '+ ','.join(description))
 
 def view_squad(request, name):
     """
@@ -97,16 +112,43 @@ def view_squad(request, name):
     >>> assert 'ateam' in html, html
     """
     squad = Squad.get_by_squadname(name)
-    context = {'Squad':name, 'leader':squad.leader, 'date':squad.squad_date, 'time':squad.squad_time, 'location':squad.location, 'required_numbers': str(squad.capacity), 'description':squad.description, 'current_user':'alice'}
+    squad_messages = SquadMessages.get_by_squadname(name)
+    logged_in = get_current_user(request)
+    if logged_in:
+        logged_in_user = User.get_by_username(logged_in)
+        profile_image = logged_in_user.image
+    else:
+        profile_image = ''
+    applicants = SquadMembers.get_all(squad.squadname)
+
+    context = {'Squad':name,
+                'leader':squad.leader,
+                'date':squad.squad_date,
+                'time':squad.squad_time,
+                'location':squad.location,
+                'required_numbers': str(squad.capacity),
+                'description':squad.description,
+                'messages':squad_messages,
+                'current_user': logged_in,
+                'profile_image': profile_image,
+                'applicants':applicants,
+                }
     request.write(render_file('squad_details.html', context))
 
 def show_create_squad_page(request):
     """
-    >>> tornadotesting.run(show_create_squad_page)
-    'This page creates a "create a squad" form'
+    >>> html = tornadotesting.run(show_create_squad_page)
+    >>> assert 'name' in html, html
     """
-
-    request.write('This page creates a "create a squad" form')
+    logged_in = get_current_user(request)
+    if logged_in:
+        logged_in_user = User.get_by_username(logged_in)
+        profile_image = logged_in_user.image
+    else:
+        profile_image = ''
+    context={'current_user': logged_in,
+    'profile_image': profile_image}
+    request.write(render_file("create_squad.html", context))
 
 def create_squad(request):
     """
@@ -114,79 +156,60 @@ def create_squad(request):
     'You must complete all fields.'
     >>> tornadotesting.run(create_squad, fields={
     ...     'squadname': 'alice', 'capacity': '4', 'squad_date': date.today(),
-    ...     'description': 'blah', 'location': 'Australia', 'leader': 'sandy',
-    ...     'squad_time': '6:33' })
+    ...     'description': 'blah', 'location': 'Australia'})
     'squad created with name alice'
 
     """
 
-    accept_fields = ['squadname', 'capacity', 'squad_date', 'description', 'location', 'leader', 'squad_time']
+    accept_fields = ['squadname', 'capacity', 'squad_date', 'description', 'location']
     data = get_form_data(request, accept_fields)
+    data['squad_time'] = 'EST'
+
+    if not get_current_user(request):
+        request.redirect('/login/')
+        return
+
+    data['leader'] = get_current_user(request)
     if not data:
         request.write('You must complete all fields.')
         return
     squad = Squad.create(**data)
-    request.write('squad created with name {}'.format(squad.squadname))
+    request.redirect('/squads/{}/'.format(squad.squadname))
 
-def accept_squad_member(request, name):
+def accept_reject_squad_member(request, name):
     """
-    >>> tornadotesting.run(accept_squad_member, 'ateam', fields={'username': 'James'})
-    'Accepted'
-    >>> tornadotesting.run(accept_squad_member, 'ateam', fields={'username': 'bruce'})
-    'Insufficient permissions'
-    """
+    >>> tornadotesting.run(accept_reject_squad_member, 'ateam', fields={'username': 'James'})
+    Redirect('/squads/ateam/')
 
-    squad = Squad.get_by_squadname(name)
-
-    accept_fields = ['username']
-    data = get_form_data(request, accept_fields)
-    if not data:
-        request.write('Must post username')
-        return
-
-    if squad.leader != data['username']:
-        request.write('Insufficient permissions')
-        return
-
-    status = SquadMembers.change_status(new_status=2, squadname=name, **data)
-    request.write("Accepted")
-
-def reject_squad_member(request, name):
-    """
-    >>> tornadotesting.run(reject_squad_member, 'ateam', fields={'username': 'James'})
-    'Rejected'
-    >>> tornadotesting.run(reject_squad_member, 'ateam', fields={'username': 'bruce'})
-    'Insufficient permissions'
     """
 
     squad = Squad.get_by_squadname(name)
 
+    form_data = request.get_fields()
 
-    accept_fields = ['username']
-    data = get_form_data(request, accept_fields)
-    if not data:
-        request.write('Must post username')
-        return
+    username = sorted(form_data.keys())[0]
 
-    if squad.leader != data['username']:
-        request.write('Insufficient permissions')
-        return
+    status = 0
 
-    status = SquadMembers.change_status(new_status=1, squadname=name, **data)
-    request.write("Rejected")
+    if form_data[username][0] == "accept":
+        status = 2
+
+    if form_data[username][0] == "reject":
+        status = 1
+
+
+    SquadMembers.change_status(new_status=status, squadname=name, username=username)
+    request.redirect('/squads/{}/'.format(squad.squadname))
+
 
 def apply_to_squad(request, name):
     """
     >>> tornadotesting.run(apply_to_squad, 'ateam', fields={'username': 'alice'})
-    '0'
+    Redirect('/squads/ateam/')
     """
-    accept_fields = ['username']
-    data = get_form_data(request, accept_fields)
-    if not data:
-        request.write('You must post username.')
-        return
-    status = SquadMembers.apply(squadname=name, **data)
-    request.write(str(status))
+    user = get_current_user(request)
+    SquadMembers.apply(squadname=name, username=user)
+    request.redirect('/squads/{}/'.format(name))
 
 def redirect_root(request):
     """
@@ -195,13 +218,14 @@ def redirect_root(request):
     """
     request.redirect('/squads/')
 
-
 def login_page(request):
-    if is_logged_in(request):
+    if get_current_user(request):
         request.redirect(r'/squads/')
     else:
-        context = {}
-        request.write(render_file('test-login.html', context))
+        context = {'message':'', 'current_user': '', 'profile_image': ''}
+        if request.get_field('failure'):
+            context['message']="Aww, too bad, your username or password was incorrect, maybe try agian? or sign up if you're trying to sign up on the login page like a gumbo."
+        request.write(render_file('login.html', context))
 
 def process_login(request):
     luser = request.get_field('username')
@@ -213,16 +237,21 @@ def process_login(request):
             if user.password ==lpass:
                 is_valid_user = True
     if is_valid_user:
-        request.set_secure_cookie('squadify-login', 'Logged In')
-        request.write('You have successfully logged in! Well done! Good on you! Is the sarcasm obvious yet?')
+        request.set_secure_cookie('squadify-login', luser)
+        request.redirect(r'/squads/')
     else:
-        request.write("Aww, too bad, your username or password was incorrect, maybe try agian? or sign up if you're trying to sign up on the login page like a gumbo.")
+        request.redirect(r'/login/?failure=1')
 
-def is_logged_in(request):
+def get_current_user(request):
     if request.get_secure_cookie('squadify-login'):
-        return True
+        return request.get_secure_cookie('squadify-login').decode('utf-8')
     else:
-        return False
+        return None
+
+def logout_page(request):
+    request.set_secure_cookie('squadify-login', '')
+    request.redirect('/')
+
 
 server = Server()
 server.register(r'/profiles/([a-z]+)/?', view_profile)
@@ -230,11 +259,12 @@ server.register(r'/register/?', create_profile_page, post=create_profile)
 server.register(r'/squads/?', list_squads, post=create_squad)
 server.register(r'/squads/([a-z]+)/?', view_squad)
 server.register(r'/create-squad/?', show_create_squad_page)
-server.register(r'/squads/([a-z]+)/accept/?', accept_squad_member)
-server.register(r'/squads/([a-z]+)/reject/?', reject_squad_member)
+server.register(r'/squads/([a-z]+)/accept-reject/?', accept_reject_squad_member)
 server.register(r'/squads/([a-z]+)/apply/?', apply_to_squad)
 server.register(r'/', redirect_root)
 server.register(r'/login/?', login_page, post=process_login )
+server.register(r'/logout/?', logout_page)
+
 
 DbObject.start_database()
 

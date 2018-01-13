@@ -1,11 +1,30 @@
-#login_pane{
-	box-shadow: -3px 3px 10px black;
-	width:500px;
-	padding:5px;
-	margin-left:5px;
-	margin-top:5px;
+.wrapper {
+		border-radius: 5px;
+		color: #33343A;
+		border: 3px;
+		box-shadow: 0 0 10px 5px #70D8A6;
+
 }
-body{
-	display:grid;
-	grid-template-column:repeat(3,1fr);
+
+
+
+h2 {
+	color: #33343A;
+}
+
+#submit{
+	width:150px;
+	height:40;
+	background-color:#336370;
+	color:#70D8A6;
+	font-family:Kanit;
+	font-weight:bold;
+	font-size:100%;
+	border-radius:5px;
+	border-color:#336370;
+	margin-top: 10px;
+}
+
+.details {
+	margin-bottom: 10px;
 }

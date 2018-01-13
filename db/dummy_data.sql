@@ -1,5 +1,5 @@
 INSERT INTO users VALUES (
-    'James',
+    'james',
     'password',
     'My name is James',
     'NSW',
@@ -8,7 +8,7 @@ INSERT INTO users VALUES (
 );
 
 INSERT INTO users VALUES (
-    'Jack',
+    'jack',
     '123456',
     'My name is Jack',
     'NSW',
@@ -17,13 +17,13 @@ INSERT INTO users VALUES (
 );
 
 INSERT INTO squads VALUES (
-    'ABCD',
-    10,
+    'jenga',
+    6,
     '20/1/2018',
     '25/1/2018',
-    'This is a squad',
+    'Come play jenga with me!',
     'IT Labs',
-    'James',
+    'james',
     '12:00'
 );
 
@@ -34,20 +34,41 @@ INSERT INTO squads VALUES (
     '25/1/2018',
     'This is a team',
     'IT Labs',
-    'James',
+    'james',
     '12:00'
 );
 
 INSERT INTO squad_members VALUES (
-    'James', --Event id
-    'aaa', --User id
+    'jenga', --Event id
+    'james', --User id
     0,
     '1/1/2018'
 );
 
 INSERT INTO squad_members VALUES (
-    'Jack',
-    'aaa',
+    'ateam',
+    'jack',
     1,
     '1/1/2018'
+);
+
+INSERT INTO squad_messages VALUES (
+    'jenga',
+    'james',
+    'hello everyone.',
+    '05:00'
+);
+
+INSERT INTO squad_messages VALUES (
+    'jenga',
+    'emily',
+    'I love Jenga too!',
+    '05:01'
+);
+
+INSERT INTO squad_messages VALUES (
+    'jenga',
+    'james',
+    'omg I have friend',
+    '05:02'
 );
