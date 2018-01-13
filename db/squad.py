@@ -1,11 +1,12 @@
 from .dbObject import DbObject
 from .user import User
+from .errors.squadDoesNotExist import SquadDoesNotExist
 
 
 class Squad(DbObject):
-    columns = ['squadname', 'capacity', 'squad_date', 'description','location','leader']
+    columns = ['squadname', 'capacity', 'squad_date', 'description','location','leader', 'squad_time']
     table_name = 'squads'
-    def __init__(self, squadname='aaa', capacity=10, squad_date='15/1/2018', description='This is a squad', location='Australia', leader='James'):
+    def __init__(self, squadname='aaa', capacity=10, squad_date='15/1/2018', description='This is a squad', location='Australia', leader='James', squad_time = '12:00'):
         '''
         Initialiser for squad object
         '''
@@ -17,7 +18,7 @@ class Squad(DbObject):
         self.description = description
         self.location = location
         self.leader = leader
-        #self.squad_time = squad_time
+        self.squad_time = squad_time
 
     @staticmethod
     def get_all():
@@ -36,10 +37,13 @@ class Squad(DbObject):
         returns 
             Squad object
         '''
-        return Squad.get_by_column('squadname', squadname)[0]
+        try:
+             return Squad.get_by_column('squadname', squadname)[0]
+        except IndexError:
+             raise SquadDoesNotExist()
 
     @staticmethod
-    def create(squadname: str, capacity: int, squad_date:str, description: str, location: str, leader: str):
+    def create(squadname: str, capacity: int, squad_date:str, description: str, location: str, leader: str, squad_time: str):
         ''' This creates a new squad
         arguments
             - squadname(str)
@@ -54,7 +58,7 @@ class Squad(DbObject):
             squad object with inserted parameters (Squad)
 
         '''
-        new_squad = Squad(squadname, capacity, squad_date, description, location, leader)
+        new_squad = Squad(squadname, capacity, squad_date, description, location, leader, squad_time)
         new_squad.save()
         return new_squad 
 

@@ -213,7 +213,7 @@ server.register(r'/squads/([a-z]+)/accept/', accept_squad_member)
 server.register(r'/squads/([a-z]+)/reject/', reject_squad_member)
 server.register(r'/squads/([a-z]+)/apply/', apply_to_squad)
 server.register(r'/', redirect_root)
+DbObject.start_database()
 
 if __name__ == '__main__':
-    DbObject.start_database()
     server.run()

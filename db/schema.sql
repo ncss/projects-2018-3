@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS squads (
     squad_date TEXT, 
     description TEXT, 
     location TEXT, 
-    leader TEXT, 
+    leader TEXT,
+    squad_time TEXT, 
     PRIMARY KEY(squadname), 
     FOREIGN KEY(leader) REFERENCES users (username)
 );
