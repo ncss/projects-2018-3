@@ -56,7 +56,7 @@ INSERT INTO squad_messages VALUES (
     'jenga',
     'james',
     'hello everyone.',
-    '05:00:00'
+    '05:05:00'
 );
 
 INSERT INTO squad_messages VALUES (
@@ -70,5 +70,5 @@ INSERT INTO squad_messages VALUES (
     'jenga',
     'james',
     'omg I have friend',
-    '05:02:00'
+    '05:00:00'
 );

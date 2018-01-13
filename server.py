@@ -111,9 +111,12 @@ def view_squad(request, name):
     >>> html = tornadotesting.run(view_squad, 'ateam')
     >>> assert 'ateam' in html, html
     """
-    squad_messages = SquadMessages.get_most_recent_5()
+    squad_messages = SquadMessages.get_most_recent_5(name)
+
+    print(squad_messages)
 
     squad = Squad.get_by_squadname(name)
+
     logged_in = get_current_user(request)
     if logged_in:
         logged_in_user = User.get_by_username(logged_in)
@@ -146,7 +149,7 @@ def send_message(request, name):
         return
     sender = get_current_user(request)
     request.redirect('/squads/{}/'.format(name))
-    sent_message = SquadMessages.create(name,sender,data['message'], datetime.now())
+    sent_message = SquadMessages.create(name,sender,data['message-text'], datetime.now())
 
 def show_create_squad_page(request):
     """
