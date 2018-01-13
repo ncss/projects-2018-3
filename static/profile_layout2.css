@@ -1,34 +1,15 @@
-
-.wrapper {
-	display: grid;
-	grid-template-column: repeat(3, 1fr);
-	grid-gap: 50px;
-	grid-auto-rows: minmax(100px, auto)
-	margin: 0 auto;
-	width: 900px;
-	align-content: center;
+.profile.wrapper {
+	text-align: center;
 }
 
-.box {
-	background-colors: #444;
-}
 #user_img{
+	min-height: 200px;
+	min-width: 200px;
 	max-height: 200px;
 	max-width: 200px;
 }
+
 .user_img {
-	grid-column: 1;
-	grid-row: 1;
 	max-height: 200px;
 	max-width: 200px;
-}
-
-.user_bio {
-	grid-column: 1;
-	grid-row: 2/5;
-}
-
-.user_desc {
-	grid-column: 2;
-	grid-row: 2/5;
 }

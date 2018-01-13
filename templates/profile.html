@@ -8,22 +8,20 @@
 	</head>
 	<body>
 	{% include header.html %}
-	<div class="wrapper" align="center">
-		<div class="box user_img">
-		<img src='http://mjhs.ca/adopt-a-cat_files/slideshowImage_186563.jpg' id='user_img' alt='Profile picture'>
-		</div>
-	<div class="box user_bio">
-		<h2>{{ age }}</h2>
-		<h2>{{ loc }}</h2>
-	</div>
+
+	<div class="profile wrapper">
 		<h2>{{ username }}</h2>
-		<div class='box user_desc'><h2>Description:</h2>
-		<br>
-			<p>
-				{{ description }}
-			</p>
+		<h3>{{ loc }}</h3>
+		<h3>{{ age }}</h3>
+		<p>
+			{{ description }}
+		</p>
+		<div class="box user_img">
+			<img src='http://mjhs.ca/adopt-a-cat_files/slideshowImage_186563.jpg' id='user_img' alt='Profile picture'>
 		</div>
+		
 	</div>
+
 	{% include footer.html %}
 	</body>
 </html>
