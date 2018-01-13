@@ -6,24 +6,25 @@
 <link href="https://fonts.googleapis.com/css?family=Audiowide|Encode+Sans+Expanded:600|Kanit:300" rel="stylesheet">
 </head>
 <body>
-{% include /templates/header.html %}
-	<div class="wrapper" align="center">
+{% include header.html %}
+	<div class="wrapper">
+
 		<h2> Create Squad </h2>
-		<form class="form">
-			<label for="name">Name:</label> <input id="name" type="text" name="name">
+		<form class="form" method="POST" action="/create_squad/">
+			<label> Name: </label> <input id="name" type="text" name="name">
 			<br>
-			<label for="date/time">Date/Time:</label> <input id="date" type="text" name="date">
+			<label> Date/Time: </label><input id="date" type="text" name="date">
 			<br>
-			<label for="location">Location:</label> <input id="location" type="text" name="location">
+			<label> Location: </label><input id="location" type="text" name="location">
 			<br>
-			<label for="players">Player number required:</label> <input id="player_number_required" type="text" name="player number required">
+			<label> Requred Number of Players: </label><input id="player_number_required" type="number" min="2" name="player number required">
 			<br>
-			<label for="description">Description:</label> <input id="description" type="text">
+			<label> Description: </label><input id="description" type="text">
 			<br>
 			<input type = "submit" value = "create">
 			<input type = "reset" value = "clear" >
 		</form>
 	</div>
-{% include /templates/footer.html %}
+{% include footer.html %}
 </body>
 </html>

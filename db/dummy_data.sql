@@ -4,7 +4,7 @@ INSERT INTO users VALUES (
     'My name is James',
     'NSW',
     '15/1/2018',
-    ''
+    '/file/img.png'
 );
 
 INSERT INTO users VALUES (
@@ -17,25 +17,37 @@ INSERT INTO users VALUES (
 );
 
 INSERT INTO squads VALUES (
-    'aaa',
+    'ABCD',
     10,
     '20/1/2018',
     '25/1/2018',
     'This is a squad',
     'IT Labs',
-    0
+    'James',
+    '12:00'
+);
+
+INSERT INTO squads VALUES (
+    'ateam',
+    10,
+    '20/1/2018',
+    '25/1/2018',
+    'This is a team',
+    'IT Labs',
+    'James',
+    '12:00'
 );
 
 INSERT INTO squad_members VALUES (
     'James', --Event id
     'aaa', --User id
-    'owner',
+    0,
     '1/1/2018'
 );
 
 INSERT INTO squad_members VALUES (
     'Jack',
     'aaa',
-    'ACCEPTED',
+    1,
     '1/1/2018'
 );

@@ -4,7 +4,8 @@ from .squad import Squad
 
 
 class SquadMembers(DbObject):
-
+    columns = ['squadname', 'username', 'status']
+    table_name = 'squad_members'
 
     def __init__(self, squadname='game', username='James', status=0):
         self.id = 0
