@@ -76,8 +76,8 @@ class DbObject:
             values.append(getattr(self, column))
             string.append('?')
             update_string.append(column + '=?')
-            
-        if self.id is None:
+        
+        if not self.id:
             cursor.execute('''
             INSERT INTO {} ({}) VALUES ({})
             '''.format(self.__class__.table_name,",".join(self.__class__.columns), ','.join(string)), values)
@@ -88,3 +88,4 @@ class DbObject:
             UPDATE {} SET {} WHERE rowid = ?
             '''.format(self.__class__.table_name,','.join(update_string)), values)
         connection.commit()
+        return self

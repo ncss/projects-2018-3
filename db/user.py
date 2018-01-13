@@ -44,8 +44,8 @@ class User(DbObject):
     
     @staticmethod
     def create(username : str, password : str, description : str, location : str, birthdate : str, image : str):
-        ''' This method creates a new user with its profile information
-            arguments
+        ''' This method creates a new user with its profile information and saves it to the database
+            arguments 
                 - username (str)
                 - password (str)
                 - description (str)
@@ -55,12 +55,9 @@ class User(DbObject):
             returns
                 user object with inserted parameters (User)
         '''
-        conn = sqlite3.connect('squadify.db')
-        cur = conn.cursor()
-        new_user = cur.execute('INSERT INTO users VALUES (username=?, password=?, description=?, location=?, birthdate=?, image=?);',(username,password,description,location,birthdate,image))
-        cur.close()
-        conn.close()
-        return new_user
+        user = User(username, password, description, location, birthdate, image)
+        user.save()
+        return user
         
     
     
