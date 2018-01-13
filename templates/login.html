@@ -12,9 +12,10 @@
 		<article>
 			<form method='POST' action='/login/'>
 				<h3>Enter login info:</h3>
-				<label>Username: </label><input name='username' type='text' required> <br>
-				<label>Password: </label> <input name='password' type='password' required> <br>
-				<input type='submit' id="submit" value='Login'>
+				<p> {{ message }} </p>
+				<input name='username' type='text' placeholder='Username' required>
+				<input name='password' type='password' placeholder='Password' required>
+				<input type='submit' value='Login'>
 			</form>
 		</article>
 	</div>
