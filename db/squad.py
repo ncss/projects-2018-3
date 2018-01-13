@@ -3,6 +3,7 @@ from .user import User
 
 
 class Squad(DbObject):
+    columns = ['name', 'capacity', 'creation_date']
     def __init__(self, squadname='aaa', capacity=10, squad_date='15/1/2018', description='This is a squad', location='Australia', leader=User(),squad_time='12:12:12'):
         '''
         Initialiser for squad object
