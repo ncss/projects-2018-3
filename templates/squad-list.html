@@ -6,25 +6,28 @@
 <title>Squads </title>	
 </head>
 <body>
-<h2> Events </h2>
+{% include header.html %}
+<h2> Squads </h2>
 	<div>
-		<h2> {% for event in events%}
-				execute
-			{% end for %}
-		</h2>
-		<p> Date: {% for date in events%}
-					execute
-					{% end for %}, 
-			Time: {% for time in events%}
-					execute
-				  {% end for %} </p>
-		<p> Squad needed: {% for squad_number in events%}
-							 execute
-							{% end for %} </p>
-		<p> { % for desciption in events %}
-				execute
-				{% end for % }
+		 {% for event in events %}
+				<h3> {{ squad.leader }} </h3>
+		<p> Host:
+			{{ squad.leader }} </p>
+		<p> Date: 
+			{{ squad.event_date }}	
 		</p>
+		<p> Squad needed: 
+			{{ squad.capacity }}				 
+							 
+		</p>
+		<p> Location:
+			{{ squad.location }} </p>
+		<p> 
+			Description:
+			{{ squad.description }}
+		</p>
+			{% end for %}
 	</div>
+	{% include footer.html %}
 </body>
 </html>
