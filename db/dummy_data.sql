@@ -29,7 +29,7 @@ INSERT INTO squads VALUES (
 INSERT INTO squad_members VALUES (
     'James', --Event id
     'aaa', --User id
-    'OWNER',
+    'owner',
     '1/1/2018'
 );
 
