@@ -40,7 +40,12 @@ def view_profile(request, username):
     #age = date.today().year - user.birthdate.year
 
 
-    context = {'username':user.username, 'age':'42', 'loc':user.location, 'description':user.description }
+    context = {'username':user.username,
+               'age':'42',
+               'loc':user.location,
+               'description':user.description,
+               'current_user':get_current_user(request),
+               }
 
 
     request.write(render_file('profile.html', context))
@@ -51,7 +56,7 @@ def create_profile_page(request):
     >>> assert "description" in html, html
     >>> assert "submit" in html, html
     """
-    context={}
+    context={'current_user':get_current_user(request)}
     request.write(render_file("register.html", context))
 
 def create_profile(request):
@@ -76,7 +81,7 @@ def list_squads(request):
     >>> assert 'Squads' in html, html
     """
     all_squads = Squad.get_all()
-    context = {"squads":all_squads}
+    context = {"squads":all_squads, 'current_user':get_current_user(request)}
     request.write(render_file("list_squads.html", context))
 
 
@@ -97,7 +102,14 @@ def view_squad(request, name):
     >>> assert 'ateam' in html, html
     """
     squad = Squad.get_by_squadname(name)
-    context = {'Squad':name, 'leader':squad.leader, 'date':squad.squad_date, 'time':squad.squad_time, 'location':squad.location, 'required_numbers': str(squad.capacity), 'description':squad.description, 'current_user':'alice'}
+    context = {'Squad':name,
+                'leader':squad.leader,
+                'date':squad.squad_date,
+                'time':squad.squad_time,
+                'location':squad.location,
+                'required_numbers': str(squad.capacity),
+                'description':squad.description,
+                'current_user':get_current_user(request)}
     request.write(render_file('squad_details.html', context))
 
 def show_create_squad_page(request):
@@ -197,10 +209,10 @@ def redirect_root(request):
 
 
 def login_page(request):
-    if is_logged_in(request):
+    if get_current_user(request):
         request.redirect(r'/squads/')
     else:
-        context = {}
+        context = {'current_user':get_current_user(request)}
         request.write(render_file('login.html', context))
 
 def process_login(request):
@@ -218,11 +230,11 @@ def process_login(request):
     else:
         request.write("Aww, too bad, your username or password was incorrect, maybe try agian? or sign up if you're trying to sign up on the login page like a gumbo.")
 
-def is_logged_in(request):
+def get_current_user(request):
     if request.get_secure_cookie('squadify-login'):
-        return True
+        return "James"
     else:
-        return False
+        return None
 
 server = Server()
 server.register(r'/profiles/([a-z]+)/?', view_profile)
