@@ -136,6 +136,11 @@ def create_squad(request):
     accept_fields = ['squadname', 'capacity', 'squad_date', 'description', 'location']
     data = get_form_data(request, accept_fields)
     data['squad_time'] = 'EST'
+
+    if not get_current_user(request):
+        request.redirect('/login/')
+        return
+
     data['leader'] = get_current_user(request)
     if not data:
         request.write('You must complete all fields.')
