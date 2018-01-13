@@ -85,7 +85,7 @@ class Testing(unittest.TestCase):
         self.assertEqual(result, status)
 
 
-     def test_db_save(self):
+    def test_db_save(self):
         user = User()
         user.username = 'saam'
 
@@ -98,6 +98,6 @@ class Testing(unittest.TestCase):
 
         user2[0].password = "hello"
         user2[0].save()
-        
+
 if __name__ == '__main__':
     unittest.main()
