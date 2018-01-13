@@ -184,6 +184,15 @@ def apply_to_squad(request, name):
     status = SquadMembers.apply(squadname=name, **data)
     request.write(str(status))
 
+
+def redirect_root(request):
+    """
+    >>> tornadotesting.run(redirect_root)
+    Redirect('/squads/')
+    """
+    request.redirect('/squads/')
+
+
 server = Server()
 server.register(r'/profiles/([a-z]+)/', view_profile)
 server.register(r'/register/', create_profile_page, post=create_profile)
@@ -193,6 +202,7 @@ server.register(r'/create-squad/', show_create_squad_page)
 server.register(r'/squads/([a-z]+)/accept/', accept_squad_member)
 server.register(r'/squads/([a-z]+)/reject/', reject_squad_member)
 server.register(r'/squads/([a-z]+)/apply/', apply_to_squad)
+server.register(r'/', redirect_root)
 
 if __name__ == '__main__':
     DbObject.start_database()
