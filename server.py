@@ -91,11 +91,8 @@ def view_squad(request, name):
     'This is the squad page for aaa'
     """
     squad = Squad.get_by_name(name)
-
-
-
-
-    request.write('This is the squad page for {}'.format(squad.name))
+    context = {'Squad':name, 'host':squad.leader, 'date':squad.squad_date, 'time':squad.squad_time, 'location':squad.location, 'required_numbers': str(squad.capacity), 'description':squad.description}
+    request.write(render_file('squad_details.html', context))
 
 
 def show_create_squad_page(request):
