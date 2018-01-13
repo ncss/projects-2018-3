@@ -1,5 +1,6 @@
 from .dbObject import DbObject
 
+
 class User(DbObject):
     columns = ['username', 'password']
     table_name = 'users'

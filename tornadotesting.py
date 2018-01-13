@@ -31,7 +31,7 @@ class RequestHandler:
 
 def run(fn, *args, **kwargs):
     fields = kwargs.pop('fields', {})
-    if fields:
+    if kwargs:
         raise ValueError('invalid keyword arguments: {}'.format(kwargs))
     request = RequestHandler(fields)
     fn(request, *args)
