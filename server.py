@@ -1,7 +1,7 @@
 from tornado.ncss import Server, ncssbook_log
 import tornadotesting
 from template import render_template
-from db import User, Squad, SquadMembers
+from db import User, Squad, DbObject, SquadMembers
 from datetime import date
 
 def render_file(filename, context):
@@ -84,7 +84,7 @@ def list_squads(request):
         #event_date.append(str(squad.event_date))
         #description.append(squad.description)
     #request.write(','.join(names) +' '+ ','.join(capacity) +' '+ ','.join(event_date) +' '+ ','.join(description))
-    
+
 def view_squad(request, name):
     """
     >>> tornadotesting.run(view_squad, 'ateam')
@@ -167,4 +167,5 @@ server.register(r'/squads/([a-z]+)/reject/', reject_squad_member)
 server.register(r'/squads/([a-z]+)/apply/', apply_to_squad)
 
 if __name__ == '__main__':
+    DbObject.start_database()
     server.run()
