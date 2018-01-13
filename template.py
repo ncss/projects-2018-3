@@ -62,6 +62,8 @@ def render_template(string, context):
     >>> a = {4:3,2:1}
     >>> render_template("{{ a.get(4) }}",{"a":a})
     '3'
+    >>> render_template("{% if x == True %} true {% else %} false {% end if %}", {'x': False})
+    ' false '
     """
     node = Parser(string)._parse_group()
     return node.render(context)
@@ -161,11 +163,20 @@ class Parser():
         body = self._parse_group()
 
         endTag = re.match(r"^{%\s*end\s+if\s*%}", self.remaining_text())
+        elseTag = re.match(r"^{%\s*else\s*%}", self.remaining_text())
         #checking for an end tag
-        if endTag is None:
+        if endTag:
+            self.nextn(endTag.end())
+            return IfNode(condition,body)
+        elif elseTag:
+            self.nextn(elseTag.end())
+            elseBody = self._parse_group()
+            endTag = re.match(r"^{%\s*end\s+if\s*%}", self.remaining_text())
+            self.nextn(endTag.end())
+            return IfNode(condition, body, elseBody)
+            
+        else:
             raise TemplateException('Syntax Error', 'Expecting an "end if" tag')
-        self.nextn(endTag.end())
-        return IfNode(condition,body)
 
     def _parse_for(self):
 
