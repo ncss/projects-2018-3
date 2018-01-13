@@ -1,12 +1,22 @@
 from db.user import User
 from db.squad import Squad
 from db.squad_members import SquadMembers
-import unittest
+from db.dbObject import DbObject
+import db.dbObject
+import unittest, sqlite3
 
 class Testing(unittest.TestCase):
-    #def __init__(self):
-    #    super(unittest.TestCase).__init__()
-    #    pass
+    # def __init__(self):
+    # 	super(unittest.TestCase).__init__()
+    # 	self.connection = None
+
+    def setUp(self):
+        db.dbObject.connection = connection = sqlite3.connect(':memory:')
+        connection.row_factory = sqlite3.Row
+        cursor = connection.cursor()
+        with open('db/schema.sql') as f: 
+            cursor.executescript(f.read())
+    
     def test_db_object(self):
         '''
         Makes sure that __eq__ method overide works
@@ -72,6 +82,20 @@ class Testing(unittest.TestCase):
         result = SquadMembers.change_status(0,1,0)
         self.assertEqual(result, status)
     
+
+    def test_db_save(self):
+        user = User()
+        user.username = 'saam'
+
+        # user.save()
+        user.password = '123456'
+        user.save()
+        user2 = User.get_by_column("username", user.username)
+        self.assertEqual(user.id, user2[0].id)
+        self.assertEqual(user.password, user2[0].password)
+
+        user2[0].password = "hello"
+        user2[0].save()
 
 if __name__ == '__main__':
     unittest.main()

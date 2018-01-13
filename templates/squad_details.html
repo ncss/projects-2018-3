@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel='stylesheet' href="../static/styleguide.css">
+		<link href="https://fonts.googleapis.com/css?family=Audiowide|Encode+Sans+Expanded:600|Kanit:300" rel="stylesheet">
+	</head>
+	<body>
+		{% include /templates/header.html %}
+		<h2> Squads </h2>
+		<div>
+			<h3>{{ Squad }}</h3>
+			<p> Host: {{ host }} </p>
+			<p> Date: {{ date }} Time: {{ time }} </p>
+			<p> Location: {{ location }} </p>
+			<p> Required number of players: {{ required_numbers }} </p>
+			<p> Description: {{ description }} </p>
+			<button name = "Join"/>
+		</div>
+		{% if host == current_user %}
+			<h3 class='heading'>Applicants:</h3>
+			{% for applicant in applicants %}
+				<a href=''>{{applicant.name}}</a>:
+				<input type='radio' value='accept' name={{applicant.name}}> Accept
+				<input type='radio' value='reject' name={{applicant.name}}>	Reject
+				<input type='radio' value='pending' name={{applicant.name}}> Pending
+			{% end for %}
+			<br><input type='submit' value='Submit'>
+		{% end if %}
+		{% include /templates/footer.html %}
+	</body>
+</html>
