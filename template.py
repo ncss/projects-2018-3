@@ -222,7 +222,7 @@ class Parser():
         path = match.group(1)
         self.nextn(match.end())
         try:
-            open(path, 'r').close()
+            open("./templates/"+path, 'r').close()
         except OSError:
             raise FileException('FileException', 'file not found', path)
         return IncludeNode(path,render_template)
