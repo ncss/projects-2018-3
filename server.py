@@ -66,9 +66,8 @@ def create_profile(request):
 
 def list_squads(request):
     """
-    >>> tornadotesting.run(list_squads)
-    'aaa 10 15/1/2018 This is a squad'
-    
+    >>> html = tornadotesting.run(list_squads)
+    assert 'Squads' in html, html
     """
     all_squads = Squad.get_all()
     context = {"events":all_squads}
@@ -111,17 +110,20 @@ def create_squad(request):
     """
     >>> tornadotesting.run(create_squad)
     'Go Away!'
-    >>> tornadotesting.run(create_squad, fields={'name': 'alice', 'capacity': '4', 'event_date': date.today(), 'description': 'blah', 'location': 'Australia', 'leader': 'sandy'})
+    >>> tornadotesting.run(create_squad, fields={
+    ...     'squadname': 'alice', 'capacity': '4', 'squad_date': date.today(),
+    ...     'description': 'blah', 'location': 'Australia', 'leader': 'sandy',
+    ...     'squad_time': '6:33' })
     'squad created with name alice'
 
     """
     data = request.get_fields()
-    accept_fields = ['name', 'capacity', 'event_date', 'description', 'location', 'leader']
+    accept_fields = ['squadname', 'capacity', 'squad_date', 'description', 'location', 'leader', 'squad_time']
     if sorted(data.keys()) != sorted(accept_fields):
         request.write('Go Away!')
         return
     squad = Squad.create(**data)
-    request.write('squad created with name {}'.format(squad.name))
+    request.write('squad created with name {}'.format(squad.squadname))
 
 
 
