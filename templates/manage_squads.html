@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel='stylesheet' href="../static/styleguide.css">
+<link href="https://fonts.googleapis.com/css?family=Audiowide|Encode+Sans+Expanded:600|Kanit:300" rel="stylesheet">
+</head>
+<body>
+{% include /templates/header.html %}
+
+	<div class="wrapper" align="center">
+		<h2> Your Squads </h2>
+				 {% for squad in squads %}
+						<h3> {{ squad.name }} </h3>
+				<p> Date: 
+					{{ squad.event_date }}	
+				</p>
+				<p> Squad needed: 
+					{{ squad.capacity }}				 				 
+				</p>
+				<p> Location:
+					{{ squad.location }} </p>
+				<p> 
+					Description:
+					{{ squad.description }}
+				</p>
+
+					{% end for %}
+	</div>
+
+{% include /templates/footer.html %}
+</body>
+</html>
