@@ -64,6 +64,10 @@ def render_template(string, context):
     '3'
     >>> render_template("{% if x == True %} true {% else %} false {% end if %}", {'x': False})
     ' false '
+    >>> render_template("{% for i in chicken %} {{ i }} {% end for %}", {"chicken":['yes', 'no', 'yes']})
+    ' yes  no  yes '
+    >>> render_template("{% for i in chicken %} {{ i }} {% end for %}", {"chicken":[[1,2],[3,4]]})
+    ' [1, 2]  [3, 4] '
     """
     node = Parser(string)._parse_group()
     return node.render(context)
@@ -216,16 +220,44 @@ class Parser():
         #>>> print(node.path)
         #folder/file.html
         #'''
+        '''
+        >>> parser = Parser("{% include /templateTesting/templateTest.html x = 1 y = 9 a = 100 %}")
+        >>> node = parser._parse_include()
+        >>> node.render({})
+        '<p> 1 9 100 </p>\\n'
+        >>> parser = Parser("{% include /templateTesting/templateTest.html %}")
+        >>> node = parser._parse_include()
+        >>> node.render({'x':1, 'y':9, 'a':100})
+        '<p> 1 9 100 </p>\\n'
+        >>> parser = Parser("{% include /templateTesting/templateTest.html x = 1 %}")
+        >>> node = parser._parse_include()
+        >>> node.render({'x':10000,'y':9,'a':100})
+        '<p> 1 9 100 </p>\\n'
+        '''
         
         #This functions assumes we are on the "{" of a block like this {% include fi.le %}
-        match = re.match(r'^{%\s*include\s+([\w\/]+\.[\w]+)\s*%}', self.remaining_text())
+        
+        match = re.match(r'^{%\s*include\s+([\w\/]+\.[\w]+)\s+((\s*\w+\s*=\s*\w+\s*)*)\s*%}', self.remaining_text())
         path = match.group(1)
         self.nextn(match.end())
+        all_var = match.group(2)
+        include_context = {}
+        
+        while len(all_var) > 0:
+            assignment = re.match(r'(\s*\w+\s*=\s*\w+\s*)', all_var)
+            all_var = all_var[assignment.end():]
+            assignment = assignment.group(1).split("=")
+            var = assignment[0].strip()
+            val = assignment[1].strip()
+            include_context[var] = val
+        
+        match = re.match(r'', self.remaining_text())
         try:
             open("./templates/"+path, 'r').close()
         except OSError:
             raise FileException('FileException', 'file not found', path)
-        return IncludeNode(path,render_template)
+        
+        return IncludeNode(path,render_template,include_context)
 
     def _parse_comment(self):
         #This function assumes that we are on the first character of a block like this
@@ -261,6 +293,7 @@ if __name__ == '__main__':
     import doctest
     doctest.testmod()
     print("All tests done, you are awesome :)")
+    
 
     
 
