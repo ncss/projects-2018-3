@@ -22,7 +22,7 @@ h3 h4{
 	items: end;
 	padding: 0;
 	margin-right: 10px;
-	
+
 	}
 
 header {
@@ -31,7 +31,7 @@ header {
 	display: grid;
 	height:70%;
 	grid-template-columns: repeat(24, 1fr);
-	
+
 
 }
 a {
@@ -53,7 +53,7 @@ footer{
 h1{
 	color: #70D8A6;
 	font-family: Audiowide, cursive;
-
+	padding-left: 30px;
 }
 nav{
 	grid-column: 9 /16;
