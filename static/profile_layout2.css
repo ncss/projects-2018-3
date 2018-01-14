@@ -2,7 +2,7 @@
 .wrapper {
 	display: grid;
 	grid-template-column: repeat(3, 1fr);
-	grid-gap: 50px;
+	grid-gap: 1px;
 	grid-auto-rows: minmax(100px, auto)
 	margin: 0 auto;
 	width: 900px;
@@ -10,25 +10,40 @@
 }
 
 .box {
-	background-colors: #444;
+	background-color: #fff;
 }
 #user_img{
-	max-height: 200px;
-	max-width: 200px;
+	/*max-height: 300px;
+	max-width: 300px;*/
+
 }
 .user_img {
 	grid-column: 1;
-	grid-row: 1;
-	max-height: 200px;
-	max-width: 200px;
+	grid-row: 2;
+	/*max-height: 300px;
+	max-width: 300px;*/
 }
 
 .user_bio {
 	grid-column: 1;
-	grid-row: 2/5;
+	grid-row: 3/6;
 }
 
 .user_desc {
 	grid-column: 2;
-	grid-row: 2/5;
+	grid-row: 1/6;
+	text-align: left;
+}
+
+h2 {
+	text-align: center;
+}
+
+h2.description {
+	text-align: left;
+	margin-top: 45px;
+}
+
+.user_heading {
+	font-size: 36px;
 }
