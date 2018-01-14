@@ -9,17 +9,20 @@
 	<body>
 		{% include header.html %}
 		<div class="wrapper">
-		<article>
-			<form method='POST' action='/login/'>
-				<h3>Enter login info:</h3>
-				<p> {{ message }} </p>
-				<input name='username' type='text' placeholder='Username' required>
-				<input name='password' type='password' placeholder='Password' required>
-				<input type='submit' value='Login'>
-				<p> Don't have an account? <a href="/register/">Register here!</a> </p>
-			</form>
-		</article>
-	</div>
+			<article>
+				<form method='POST' action='/login/'>
+					<h2>Enter login info</h2>
+					<p> {{ message }} </p>
+					<input name='username' type='text' placeholder='Username' class='field' required><br>
+					<input name='password' type='password' placeholder='Password' class='field' required><br>
+					<input type='submit' value='Login' id='submit'>
+					<p class='sign_in'> Don't have an account?</p>
+					<p class='sign_in'>
+						<a href='/register/' class='sign_in'>Sign up here!</a>
+					</p>
+				</form>
+			</article>
+		</div>
 		{% include footer.html %}
 	</body>
 </html>
