@@ -37,7 +37,7 @@ class Testing(unittest.TestCase):
         self.assertEqual(len(result), 3)
         
     def test_user_get_by_username(self):
-        user = User('james', 'password', 'My name is James', 'NSW', '15/1/2018')
+        user = User('james', 'password', 'My name is James', 'NSW', '15/1/2012')
         result = User.get_by_username('james')
         
         self.assertEqual(result, user)
@@ -76,14 +76,25 @@ class Testing(unittest.TestCase):
         self.assertListEqual(squad_members, result)
 
     def test_squad_members_apply(self):
-        status = 0
-        result = SquadMembers.apply(0,0)
-        self.assertEqual(result, status)
+        SquadMembers.apply('jenga','jack')
 
-    def test_squad_members_change_status(self):    
-        status = 1
-        result = SquadMembers.change_status(0,1,0)
-        self.assertEqual(result, status)
+        result = SquadMembers.get_by_username('jenga','jack')
+        self.assertEqual(result.status, 0)
+
+        SquadMembers.change_status('jack', 2 ,'jenga')
+
+        result = SquadMembers.get_by_username('jenga','jack')
+        self.assertEqual(result.status, 2)
+
+    def test_user_get_age(self):
+        user_age = User.get_age_by_username('james')
+        self.assertEqual(user_age, 5)
+
+
+
+        
+        
+
 
 
     def test_db_save(self):

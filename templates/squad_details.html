@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<link rel='stylesheet' href="/static/styleguide.css">
+		<link rel='stylesheet' href="/static/squadDetails.css">
 		<link href="https://fonts.googleapis.com/css?family=Audiowide|Encode+Sans+Expanded:600|Kanit:300" rel="stylesheet">
 	</head>
 	<body>
@@ -22,31 +23,40 @@
 				{% end for %}
 		  </ul>
 			<div class="messages">
-			{% for m in messages %}
-				<p>
-				<span class="sender">{{ m.sender_username }}</span>
-				<span class="message">{{ m.message }}</span>
-				</p>
-			{% end for %}
-			<div>
-			<input type="text" placeholder="Chat to your friends!" />
+				{% if len(messages) > 5 %}
+					{% for m in messages[:5:-1] %}
+						<p>
+						<span class="sender">{{ m.sender_username }}</span>
+						<span class="message">{{ m.message }}</span>
+						</p>
+					{% end for %}
+				{% else %}
+					{% for m in messages[::-1] %}
+						<p>
+						<span class="sender">{{ m.sender_username }}</span>
+						<span class="message">{{ m.message }}</span>
+						</p>
+					{% end for %}
+				{% end if %}
+			<form class="form" method="POST" action="/squads/{{ Squad }}/send-message/">
+			<input type="text" name="message-text" placeholder="Chat to your friends!" />
 			<input type="submit" value="Send" />
-			</div>
+			</form>
 			</div>
 		</div>
 
 		<div class="wrapper" align="center">
-			{% if current_user==leader%}
+			{% if current_user==leader %}
 				<h3 class='heading'>Applicants:</h3>
 				<form method="POST" action='/squads/{{Squad}}/accept-reject/'>
 					{% for applicant in applicants %}
 					  {% if applicant.status == 0 %}
-						<a href='/profiles/{{ applicant.username }}/'>{{ applicant.username }}</a>:
+						<a href='/profiles/{{ applicant.username }}/'><span class="applicant">{{ applicant.username }}</span></a>:
 
 
-						<input type='radio' value='accept' name='{{applicant.username}}'> Accept
+						<input type='radio' value='accept' id="accept" name='{{applicant.username}}'><span class="accept"> Accept </span></input>
 
-						<input type='radio' value='reject' name='{{applicant.username}}'>	Reject
+						<input type='radio' value='reject' id="reject" name='{{applicant.username}}'><span class="reject">	Reject </span></input>
 						<br>
 
 						{% end if %}
@@ -55,7 +65,7 @@
 				</form>
 			{% end if %}
 
-			{% if current_user!=leader%}
+			{% if current_user!=leader and current_user%}
 				<a href='/squads/{{ Squad }}/apply/'>Join Squad</a>
 
 			{% end if%}

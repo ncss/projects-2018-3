@@ -3,7 +3,7 @@ INSERT INTO users VALUES (
     'password',
     'My name is James',
     'NSW',
-    '15/1/2018',
+    '15/1/2012',
     '/file/img.png'
 );
 
@@ -24,7 +24,7 @@ INSERT INTO squads VALUES (
     'Come play jenga with me!',
     'IT Labs',
     'james',
-    '12:00'
+    '12:00:00'
 );
 
 INSERT INTO squads VALUES (
@@ -35,7 +35,7 @@ INSERT INTO squads VALUES (
     'This is a team',
     'IT Labs',
     'james',
-    '12:00'
+    '12:00:01'
 );
 
 INSERT INTO squad_members VALUES (
@@ -56,19 +56,19 @@ INSERT INTO squad_messages VALUES (
     'jenga',
     'james',
     'hello everyone.',
-    '05:00'
+    '05:05:00'
 );
 
 INSERT INTO squad_messages VALUES (
     'jenga',
     'emily',
     'I love Jenga too!',
-    '05:01'
+    '05:01:00'
 );
 
 INSERT INTO squad_messages VALUES (
     'jenga',
     'james',
     'omg I have friend',
-    '05:02'
+    '05:00:00'
 );
