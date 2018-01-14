@@ -1,5 +1,6 @@
 import sqlite3
 from .dbObject import DbObject
+import datetime
 
 
 class User(DbObject):
@@ -7,6 +8,7 @@ class User(DbObject):
     table_name = 'users'
 
     def __init__(self,username='james',password='1234',description='Hi my name is James',location='Sydney',birthdate='DD/MM/YYYY',image='/file/img.png'):
+        
         self.id = None
         self.username = username
         self.password = password
@@ -14,6 +16,7 @@ class User(DbObject):
         self.location = location
         self.birthdate = birthdate
         self.image = image
+        
     
     @staticmethod
     def get_all():
@@ -64,6 +67,22 @@ class User(DbObject):
         user = User(username, password, description, location, birthdate, image)
         user.save()
         return user
+    
+    @staticmethod
+    def get_age_by_username(username: 'str'):
+        user = User.get_by_username(username)
+        birthdate = user.birthdate
+        now = datetime.datetime.now()
+        birth_date = birthdate.split('/')
+        (day,month,year) = birth_date
 
+        age = now.year - int(year)
+        if int(month) == now.month:
+            if int(day) >=  now.day:
+                age -= 1
+        elif int(month) > now.month:
+            age -= 1
+                
+        return age
     
     
