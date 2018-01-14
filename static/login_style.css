@@ -1,20 +1,29 @@
 .wrapper {
-		border-radius: 5px;
-		color: #33343A;
-		border: 3px;
-		box-shadow: 0 0 10px 5px #70D8A6;
-
-}
-
-
-
-h2 {
+	border-radius: 5px;
 	color: #33343A;
+	border: 3px;
+	box-shadow: 0 0 10px 5px #70D8A6;
+	background-color:#33343A;
+	width:190px;
+	padding:5px;
 }
-
+h2 {
+	color: #70D8A6;
+	text-align:center;
+	margin:0px;
+	
+}
+p{
+	color: #70D8A6;
+	margin: 0 auto;
+}
+.sign_in{
+	color: #70D8A6;
+	text-align:center;
+}
 #submit{
-	width:150px;
-	height:40;
+	width:100%;
+	height:60;
 	background-color:#336370;
 	color:#70D8A6;
 	font-family:Kanit;
@@ -27,4 +36,8 @@ h2 {
 
 .details {
 	margin-bottom: 10px;
+}
+.field{
+	border-radius:5px;
+	width:97%;
 }
